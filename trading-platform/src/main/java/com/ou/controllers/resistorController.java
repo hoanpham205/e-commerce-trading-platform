@@ -5,7 +5,7 @@
 package com.ou.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -13,16 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author ADMIN
  */
 @Controller
-public class indexController {
-
-    @RequestMapping("/")
-    public String index() {
-        return "index";
+public class resistorController {
+    @RequestMapping("/resister")
+    public String resister(){
+        return "resister";
     }
-
-    @RequestMapping("/test")
-    public String test(Model model) {
-        return "index";
-    }   
-
 }
