@@ -20,9 +20,5 @@ public class indexController {
         return "index";
     }
 
-    @RequestMapping("/test")
-    public String test(Model model) {
-        return "index";
-    }   
 
 }

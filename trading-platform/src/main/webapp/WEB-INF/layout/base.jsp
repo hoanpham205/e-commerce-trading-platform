@@ -5,11 +5,9 @@
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="bootstrap.min.css" />
-        <title><tiles:insertAttribute name="title" /></title>
     </head>
-    <body>
         <tiles:insertAttribute name="header" />
         <tiles:insertAttribute name="content" />
         <tiles:insertAttribute name="footer" />
-    </body>
+    
 </html>

@@ -1,7 +1,9 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <section class="page-section clearfix">
+  
     <div class="container">
         <div class="intro">
             <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src=<c:url value="/img/Backround1.jpg" /> alt="">
