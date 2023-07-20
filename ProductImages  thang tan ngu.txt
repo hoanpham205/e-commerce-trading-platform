@@ -1,0 +1,11 @@
+Bảng "ProductImages" được tạo ra để lưu trữ thông tin về hình ảnh liên quan đến các sản phẩm trong hệ thống sàn giao dịch. Mỗi hàng trong bảng này đại diện cho một hình ảnh và có các cột để lưu trữ các thông tin như ID hình ảnh, ID sản phẩm mà hình ảnh liên quan đến và URL của hình ảnh.
+
+Việc lưu trữ hình ảnh của sản phẩm trong một bảng riêng biệt như "ProductImages" có một số lợi ích, bao gồm:
+
+1. Tách riêng thông tin hình ảnh: Bằng cách lưu trữ thông tin hình ảnh trong một bảng riêng, bạn có thể quản lý và truy xuất dữ liệu hình ảnh dễ dàng hơn. Nếu bạn lưu trữ hình ảnh trực tiếp trong bảng sản phẩm chính, kích thước của bảng có thể tăng lên và việc truy xuất thông tin sản phẩm có thể trở nên chậm chạp.
+
+2. Hỗ trợ nhiều hình ảnh cho mỗi sản phẩm: Bảng "ProductImages" cho phép lưu trữ nhiều hình ảnh cho mỗi sản phẩm. Điều này cho phép bạn hiển thị và quản lý nhiều hình ảnh liên quan đến một sản phẩm cụ thể.
+
+3. Tính linh hoạt trong việc quản lý hình ảnh: Bằng cách lưu trữ hình ảnh trong một bảng riêng, bạn có thể thực hiện các thao tác quản lý hình ảnh như thêm, sửa, xóa một cách dễ dàng và linh hoạt hơn. Ngoài ra, bạn có thể áp dụng các chính sách xử lý hình ảnh như kiểm tra kích thước, kiểu dữ liệu, xử lý và tối ưu hóa hình ảnh một cách riêng biệt.
+
+Bảng "ProductImages" giúp tăng tính mô-đun và dễ quản lý cho việc lưu trữ và hiển thị hình ảnh sản phẩm trong hệ thống sàn giao dịch của bạn.
