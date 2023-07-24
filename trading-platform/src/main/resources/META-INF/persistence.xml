@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence           http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+  <persistence-unit name="com.ou_trading-platform_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.ou.pojo.User</class>
+    <class>com.ou.pojo.Views</class>
+    <class>com.ou.pojo.Payments</class>
+    <class>com.ou.pojo.Sales</class>
+    <class>com.ou.pojo.Products</class>
+    <class>com.ou.pojo.Productimages</class>
+    <class>com.ou.pojo.Storecategories</class>
+    <class>com.ou.pojo.Comparisons</class>
+    <class>com.ou.pojo.Comments</class>
+    <class>com.ou.pojo.Reviews</class>
+    <class>com.ou.pojo.Transactiondetails</class>
+    <class>com.ou.pojo.Transactions</class>
+    <class>com.ou.pojo.Replies</class>
+    <class>com.ou.pojo.Sellers</class>
+    <class>com.ou.pojo.Categories</class>
+    <class>com.ou.pojo.Store</class>
+    <class>com.ou.pojo.Frequencies</class>
+    <class>com.ou.pojo.Users</class>
+    <class>com.ou.pojo.Orders</class>
+    <class>com.ou.pojo.Pagination</class>
+    <class>com.ou.pojo.NewEntity</class>
+    <class>com.ou.pojo.Orderdetails</class>
+    <class>com.ou.configs.SecurityWebAppInitializer</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/tradedb?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="phantan0106"/>
+    </properties>
+  </persistence-unit>
+</persistence>
