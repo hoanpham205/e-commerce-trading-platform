@@ -10,27 +10,29 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 
-<c:url value="/login/" var="action" />
+<c:url value="/create_store" var="action" />
+<c:set var="user" value="${sessionScope.currentUser}"/>
 
+<form:form method="post" modelAttribute="store" action="${action}">
 
-<form:form method="post" modelAttribute="user" action="${action}">
-
-      
+    <h1>${user.userId}</h1>
     <div class="form-group">
         <label for="usernameId">
         </label>
-        <input name="username" id="usernameId"
+        <input name="storeName" id="storeNameID"
                class="form-control" />
     </div>
     <div class="form-group">
-        <label for="passwordId">
+        <label for="description">
         </label>
-        <input id="passwordId" name="password"
-               class="form-control" type="password" />
+        <input id="descriptionID" name="description"
+               class="form-control"  />
     </div>
     <div class="form-group">
         <input type="submit"/>
+
     </div> 
 
 </form:form>
+
 

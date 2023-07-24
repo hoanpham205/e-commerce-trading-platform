@@ -35,7 +35,7 @@ public class userReponImpl implements userRepon {
         Session s = this.sessionFactory.getObject().getCurrentSession();
 
         try {
-            s.save(user);
+            s.saveOrUpdate(user);
 
             return user;
         } catch (HibernateException ex) {

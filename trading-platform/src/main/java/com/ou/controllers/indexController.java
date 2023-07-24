@@ -4,6 +4,7 @@
  */
 package com.ou.controllers;
 
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class indexController {
 
     @RequestMapping("/")
-    public String index() {
+    public String index(Model model, HttpSession session) {
+        model.addAttribute("currentUser", session.getAttribute("currentUser"));
         return "index";
     }
 

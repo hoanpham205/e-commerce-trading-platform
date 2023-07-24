@@ -11,12 +11,15 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -32,14 +35,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Products.findAll", query = "SELECT p FROM Products p"),
     @NamedQuery(name = "Products.findByProductId", query = "SELECT p FROM Products p WHERE p.productId = :productId"),
     @NamedQuery(name = "Products.findByProductName", query = "SELECT p FROM Products p WHERE p.productName = :productName"),
-    @NamedQuery(name = "Products.findByPrice", query = "SELECT p FROM Products p WHERE p.price = :price"),
-    @NamedQuery(name = "Products.findByCategory", query = "SELECT p FROM Products p WHERE p.category = :category")})
+    @NamedQuery(name = "Products.findByPrice", query = "SELECT p FROM Products p WHERE p.price = :price")})
 public class Products implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "product_id")
     private Integer productId;
     @Size(max = 255)
@@ -48,9 +50,6 @@ public class Products implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
     private BigDecimal price;
-    @Size(max = 255)
-    @Column(name = "category")
-    private String category;
     @OneToMany(mappedBy = "productId")
     private Set<Comments> commentsSet;
     @OneToMany(mappedBy = "productId")
@@ -59,12 +58,14 @@ public class Products implements Serializable {
     private Set<Orderdetails> orderdetailsSet;
     @OneToMany(mappedBy = "productId")
     private Set<Orders> ordersSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productsProductId")
-    private Set<Categories> categoriesSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productsProductId")
-    private Set<Store> storeSet;
     @OneToMany(mappedBy = "productId")
     private Set<Sales> salesSet;
+    @JoinColumn(name = "categories_category_id", referencedColumnName = "category_id")
+    @ManyToOne(optional = false)
+    private Categories categoriesCategoryId;
+    @JoinColumn(name = "store_store_id", referencedColumnName = "store_id")
+    @ManyToOne(optional = false)
+    private Store storeStoreId;
 
     public Products() {
     }
@@ -95,14 +96,6 @@ public class Products implements Serializable {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     @XmlTransient
@@ -142,30 +135,28 @@ public class Products implements Serializable {
     }
 
     @XmlTransient
-    public Set<Categories> getCategoriesSet() {
-        return categoriesSet;
-    }
-
-    public void setCategoriesSet(Set<Categories> categoriesSet) {
-        this.categoriesSet = categoriesSet;
-    }
-
-    @XmlTransient
-    public Set<Store> getStoreSet() {
-        return storeSet;
-    }
-
-    public void setStoreSet(Set<Store> storeSet) {
-        this.storeSet = storeSet;
-    }
-
-    @XmlTransient
     public Set<Sales> getSalesSet() {
         return salesSet;
     }
 
     public void setSalesSet(Set<Sales> salesSet) {
         this.salesSet = salesSet;
+    }
+
+    public Categories getCategoriesCategoryId() {
+        return categoriesCategoryId;
+    }
+
+    public void setCategoriesCategoryId(Categories categoriesCategoryId) {
+        this.categoriesCategoryId = categoriesCategoryId;
+    }
+
+    public Store getStoreStoreId() {
+        return storeStoreId;
+    }
+
+    public void setStoreStoreId(Store storeStoreId) {
+        this.storeStoreId = storeStoreId;
     }
 
     @Override

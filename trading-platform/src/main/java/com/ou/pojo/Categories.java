@@ -5,18 +5,21 @@
 package com.ou.pojo;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,16 +36,15 @@ public class Categories implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "category_id")
     private Integer categoryId;
     @Size(max = 255)
     @Column(name = "category_name")
     private String categoryName;
-    @JoinColumn(name = "products_product_id", referencedColumnName = "product_id")
-    @ManyToOne(optional = false)
-    private Products productsProductId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoriesCategoryId")
+    private Set<Products> productsSet;
 
     public Categories() {
     }
@@ -67,12 +69,13 @@ public class Categories implements Serializable {
         this.categoryName = categoryName;
     }
 
-    public Products getProductsProductId() {
-        return productsProductId;
+    @XmlTransient
+    public Set<Products> getProductsSet() {
+        return productsSet;
     }
 
-    public void setProductsProductId(Products productsProductId) {
-        this.productsProductId = productsProductId;
+    public void setProductsSet(Set<Products> productsSet) {
+        this.productsSet = productsSet;
     }
 
     @Override

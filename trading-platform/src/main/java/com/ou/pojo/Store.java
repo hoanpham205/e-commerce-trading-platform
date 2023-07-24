@@ -5,19 +5,24 @@
 package com.ou.pojo;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,14 +34,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Store.findAll", query = "SELECT s FROM Store s"),
     @NamedQuery(name = "Store.findByStoreId", query = "SELECT s FROM Store s WHERE s.storeId = :storeId"),
-    @NamedQuery(name = "Store.findByStoreName", query = "SELECT s FROM Store s WHERE s.storeName = :storeName"),
-    @NamedQuery(name = "Store.findByUserId", query = "SELECT s FROM Store s WHERE s.userId = :userId")})
+    @NamedQuery(name = "Store.findByStoreName", query = "SELECT s FROM Store s WHERE s.storeName = :storeName")})
 public class Store implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "store_id")
     private Integer storeId;
     @Size(max = 255)
@@ -46,14 +50,11 @@ public class Store implements Serializable {
     @Size(max = 65535)
     @Column(name = "description")
     private String description;
-    @Column(name = "user_id")
-    private Integer userId;
-    @JoinColumn(name = "products_product_id", referencedColumnName = "product_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
-    private Products productsProductId;
-    @JoinColumn(name = "users_user_id", referencedColumnName = "user_id")
-    @ManyToOne(optional = false)
-    private Users usersUserId;
+    private Users userId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeStoreId")
+    private Set<Products> productsSet;
 
     public Store() {
     }
@@ -86,28 +87,21 @@ public class Store implements Serializable {
         this.description = description;
     }
 
-    public Integer getUserId() {
+    public Users getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Users userId) {
         this.userId = userId;
     }
 
-    public Products getProductsProductId() {
-        return productsProductId;
+    @XmlTransient
+    public Set<Products> getProductsSet() {
+        return productsSet;
     }
 
-    public void setProductsProductId(Products productsProductId) {
-        this.productsProductId = productsProductId;
-    }
-
-    public Users getUsersUserId() {
-        return usersUserId;
-    }
-
-    public void setUsersUserId(Users usersUserId) {
-        this.usersUserId = usersUserId;
+    public void setProductsSet(Set<Products> productsSet) {
+        this.productsSet = productsSet;
     }
 
     @Override

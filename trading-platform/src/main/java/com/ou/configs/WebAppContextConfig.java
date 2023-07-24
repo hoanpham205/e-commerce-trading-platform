@@ -4,10 +4,15 @@
  */
 package com.ou.configs;
 
+import com.ou.formatters.StoreFormatter;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -25,7 +30,7 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = {
     "com.ou.controllers",
     "com.ou.repository",
-    "com.ou.service"  
+    "com.ou.service"
 })
 public class WebAppContextConfig implements WebMvcConfigurer {
 
@@ -33,33 +38,28 @@ public class WebAppContextConfig implements WebMvcConfigurer {
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
-    
-     @Override
+
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**")
                 .addResourceLocations("/resources/css/");
-        
+
         registry.addResourceHandler("/img/**")
                 .addResourceLocations("/resources/img/");
 
         registry.addResourceHandler("/js/**")
                 .addResourceLocations("/resources/js/");
     }
-    
-    @Bean
-    public InternalResourceViewResolver internalResourceViewResolver() {
-        InternalResourceViewResolver r = new InternalResourceViewResolver();
-        r.setViewClass(JstlView.class);
-        r.setPrefix("/WEB-INF/pages/");
-        r.setSuffix(".jsp");
-        
-        return r;
-    }
-    
-   
-    
-    
 
-    
+  
+
    
+
+  
+
+    @Override
+    public void addFormatters(FormatterRegistry r) {
+        r.addFormatter(new StoreFormatter());
+    }
+
 }

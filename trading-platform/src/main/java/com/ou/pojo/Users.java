@@ -1,4 +1,3 @@
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -18,9 +17,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -34,19 +35,26 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByUserId", query = "SELECT u FROM Users u WHERE u.userId = :userId"),
     @NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username"),
     @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
-    @NamedQuery(name = "Users.findByRole", query = "SELECT u FROM Users u WHERE u.role = :role"),
-    @NamedQuery(name = "Users.findByAvatar", query = "SELECT u FROM Users u WHERE u.avatar = :avatar")})
+    @NamedQuery(name = "Users.findByFullname", query = "SELECT u FROM Users u WHERE u.fullname = :fullname"),
+    @NamedQuery(name = "Users.findByPhone", query = "SELECT u FROM Users u WHERE u.phone = :phone"),
+    @NamedQuery(name = "Users.findByAddress", query = "SELECT u FROM Users u WHERE u.address = :address"),
+    @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
+    @NamedQuery(name = "Users.findBySex", query = "SELECT u FROM Users u WHERE u.sex = :sex"),
+    @NamedQuery(name = "Users.findByCountry", query = "SELECT u FROM Users u WHERE u.country = :country"),
+    @NamedQuery(name = "Users.findByAvatar", query = "SELECT u FROM Users u WHERE u.avatar = :avatar"),
+    @NamedQuery(name = "Users.findByRole", query = "SELECT u FROM Users u WHERE u.role = :role")})
 public class Users implements Serializable {
 
+    /**
+     * @return the file
+     */
     private static final long serialVersionUID = 1L;
-    public static final String ADMIN = "ADMIN";
-    public static final String CUSTOMER = "USER";
 
-    
-    
+    public static final String EMPLOYEE = "USER";
+    public static final String ADMIN = "ADMIN";
+    public static final String CUSTOMER = "EMPLOYEE";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
     @Basic(optional = false)
     @Column(name = "user_id")
     private Integer userId;
@@ -56,20 +64,42 @@ public class Users implements Serializable {
     @Size(max = 255)
     @Column(name = "password")
     private String password;
-    @Size(max = 255)
-    @Column(name = "role")
-    private String role;
+    @Size(max = 45)
+    @Column(name = "fullname")
+    private String fullname;
+    // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
+    @Size(max = 45)
+    @Column(name = "phone")
+    private String phone;
+    @Size(max = 45)
+    @Column(name = "address")
+    private String address;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Size(max = 45)
+    @Column(name = "email")
+    private String email;
+    @Size(max = 45)
+    @Column(name = "sex")
+    private String sex;
+    @Size(max = 45)
+    @Column(name = "country")
+    private String country;
     @Size(max = 255)
     @Column(name = "avatar")
     private String avatar;
+    @Size(max = 255)
+    @Column(name = "role")
+    private String role;
     @OneToMany(mappedBy = "userId")
     private Set<Comments> commentsSet;
     @OneToMany(mappedBy = "userId")
     private Set<Payments> paymentsSet;
     @OneToMany(mappedBy = "userId")
     private Set<Orders> ordersSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usersUserId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Store> storeSet;
+    @Transient
+    private MultipartFile file;
 
     public Users() {
     }
@@ -102,12 +132,52 @@ public class Users implements Serializable {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getAvatar() {
@@ -116,6 +186,25 @@ public class Users implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 
     @XmlTransient
