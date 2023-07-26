@@ -37,5 +37,12 @@ public class storeController {
         storeService.addStore(store);
         return "create_store";
     }
+    
+    @GetMapping("/store")
+    public String AdminStore(Model model) {
+//        model.addAttribute("store", new Store());
+        return "store";
+    }
+    
 
 }

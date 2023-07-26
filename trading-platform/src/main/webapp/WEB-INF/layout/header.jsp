@@ -20,25 +20,18 @@
                     <a class="nav-link" href="<c:url value="/" />">
                         <i class="fa-solid fa-house" aria-hidden="true"></i> Trang chủ</a>
                 </li>
-                   <sec:authorize access="hasAnyAuthority('EMPLOYEE')">
-                       <div class="dropdown">
-                                <li class="nav-item have_dots" data-bs-toggle="dropdown">
-                                    <span><i class="far fa-bell"></i></span>
-                                </li>
+                <sec:authorize access="hasAnyAuthority('EMPLOYEE')">
+                    <div class="dropdown">                   
+                            <li class="nav-item">
+                                <a class="nav-link text-primary" href="<c:url value="/store" />">
+                                    <i class="fa-solid fa-user-plus" aria-hidden="true"></i> Cửa Hàng</a>
+                            </li>
+                    </div>
+                </sec:authorize>
 
-                                <ul class="dropdown-menu bell">
-                                    <li><h5 class="dropdown-header">THÔNG BÁO</h5></li>
 
-                                    <div id="notifications">
 
-                                    </div>
-                                </ul>
-                            </div>
-                        </sec:authorize>
-       
-            
 
-             
             </ul>
             <ul class="navbar-nav align-center">       
                 <c:choose>
@@ -53,8 +46,12 @@
                         </li>
                     </c:when>
                     <c:when test="${pageContext.request.userPrincipal.name != null}">
-                     
-                  
+                        <li class="nav-item" >
+                            <img src="${sessionScope.currentUser.avatar}" class="rounded-circle" alt="Cinque Terre" style="height:  35px">
+
+
+                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link text-danger" href="<c:url value="/logout" />">
                                 <i class="fa-solid fa-user-minus" aria-hidden="true"></i>  Đăng xuất</a>
