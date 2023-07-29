@@ -5,6 +5,7 @@
 package com.ou.repository;
 
 import com.ou.pojo.Store;
+import com.ou.pojo.Users;
 
 /**
  *
@@ -12,4 +13,5 @@ import com.ou.pojo.Store;
  */
 public interface storeRepon {
     Store addStore(Store store);
+    Store getStoreByUserID(Users id);
 }

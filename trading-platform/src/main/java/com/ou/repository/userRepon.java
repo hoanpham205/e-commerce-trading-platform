@@ -4,6 +4,7 @@
  */
 package com.ou.repository;
 
+import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import java.util.List;
 
@@ -19,5 +20,7 @@ public interface userRepon {
 
             
     List<Users> getUsers(String username);
+        Store getStoreByUserId(int userId);
+
 
 }

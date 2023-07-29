@@ -15,7 +15,6 @@
 
 <form:form method="post" modelAttribute="store" action="${action}">
 
-    <h1>${user.userId}</h1>
     <div class="form-group">
         <label for="usernameId">
         </label>
@@ -26,7 +25,7 @@
         <label for="description">
         </label>
         <input id="descriptionID" name="description"
-               class="form-control"  />
+               class="form-control"/>
     </div>
     <div class="form-group">
         <input type="submit"/>

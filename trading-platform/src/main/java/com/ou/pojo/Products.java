@@ -47,7 +47,6 @@ public class Products implements Serializable {
     @Size(max = 255)
     @Column(name = "product_name")
     private String productName;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
     private BigDecimal price;
     @OneToMany(mappedBy = "productId")

@@ -52,6 +52,13 @@
                        value="/WEB-INF/pages/store.jsp" />
         <put-attribute name="footer" value="" />
     </definition>
+    
+          <definition name="create_product" extends="baseLayout">
+        <put-attribute name="title" value="Them San Pham" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/create_product.jsp" />
+        <put-attribute name="footer" value="" />
+    </definition>
   
 
   

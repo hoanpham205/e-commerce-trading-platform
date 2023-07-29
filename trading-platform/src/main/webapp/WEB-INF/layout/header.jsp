@@ -23,7 +23,7 @@
                 <sec:authorize access="hasAnyAuthority('EMPLOYEE')">
                     <div class="dropdown">                   
                             <li class="nav-item">
-                                <a class="nav-link text-primary" href="<c:url value="/store" />">
+                                <a class="nav-link text-primary" href="<c:url value="/store/" />">
                                     <i class="fa-solid fa-user-plus" aria-hidden="true"></i> Cửa Hàng</a>
                             </li>
                     </div>

@@ -4,23 +4,23 @@
  */
 package com.ou.service;
 
+import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-
-
 /**
  *
  * @author ADMIN
  */
-public interface userService extends UserDetailsService{
-    
+public interface userService extends UserDetailsService {
+
     Users addUser(Users user);
+
     Users getUser(int id);
-    
-    
+
     List<Users> getUsers(String username);
+    Store getStoreByUserId(int userId);
 
 }

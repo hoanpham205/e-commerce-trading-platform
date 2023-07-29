@@ -12,8 +12,8 @@ import com.ou.pojo.Users;
  * @author ADMIN
  */
 public interface storeService {
-        Store addStore(Store store);
-        
-        
+    Store addStore(Store store);
+    
+     public Store getStoreByUserID(Users id);
 
 }

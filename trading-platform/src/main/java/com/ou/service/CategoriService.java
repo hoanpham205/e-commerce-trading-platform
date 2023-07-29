@@ -4,19 +4,15 @@
  */
 package com.ou.service;
 
-import com.ou.pojo.Products;
+import com.ou.pojo.Categories;
 import java.util.List;
-import java.util.Map;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author ADMIN
  */
-public interface ProductService {
-
-    boolean addProduct(Products p);
-
-    List<Products> getProduct(Map<String, String> params);
-    int countProduct();
-
+public interface CategoriService {
+     List<Categories> getCates();
+    
 }

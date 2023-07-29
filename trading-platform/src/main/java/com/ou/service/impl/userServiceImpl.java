@@ -6,6 +6,7 @@ package com.ou.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ou.pojo.Store;
 import com.ou.service.*;
 import com.ou.pojo.Users;
 import com.ou.repository.userRepon;
@@ -83,4 +84,10 @@ public class userServiceImpl implements userService {
         return new org.springframework.security.core.userdetails.User(
                 u.getUsername(), u.getPassword(), authorities);
     }
+    
+    
+    @Override
+    public Store getStoreByUserId(int userId) {
+        return userRepon.getStoreByUserId(userId);
+        }
 }

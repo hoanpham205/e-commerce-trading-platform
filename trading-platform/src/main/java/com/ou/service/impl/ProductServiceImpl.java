@@ -5,7 +5,10 @@
 package com.ou.service.impl;
 
 import com.ou.pojo.Products;
+import com.ou.repository.ProductRepon;
 import com.ou.service.ProductService;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +20,24 @@ import org.springframework.stereotype.Service;
 public class ProductServiceImpl implements ProductService{
     
     @Autowired
-    private ProductService ProductService;
+    private ProductRepon ProductRepon;
+    
 
     @Override
     public boolean addProduct(Products p) {
-        return ProductService.addProduct(p);
+        return ProductRepon.addProduct(p);
+    }
+
+   
+
+    @Override
+    public List<Products> getProduct(Map<String, String> params) {
+        return ProductRepon.getProduct(params);
+    }
+
+    @Override
+    public int countProduct() {
+        return ProductRepon.countProduct();
     }
     
 }

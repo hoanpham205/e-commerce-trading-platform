@@ -33,4 +33,11 @@ public class storeServiceImpl implements storeService {
         return storeRepon.addStore(store);
     }
 
+    @Override
+    public Store getStoreByUserID(Users id) {
+        return storeRepon.getStoreByUserID(id);
+    }
+
+    
+
 }

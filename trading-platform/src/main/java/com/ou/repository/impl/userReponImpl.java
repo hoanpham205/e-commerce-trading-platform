@@ -4,6 +4,7 @@
  */
 package com.ou.repository.impl;
 
+import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.repository.userRepon;
 import java.util.List;
@@ -66,6 +67,12 @@ public class userReponImpl implements userRepon {
         Session session = this.sessionFactory.getObject().getCurrentSession();
 
         return session.get(Users.class, id);
+    }
+
+    @Override
+    public Store getStoreByUserId(int userId) {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+        return s.get(Store.class, userId);
     }
 
 }
