@@ -6,16 +6,39 @@
 <div class="container">
 
 
- <sec:authorize access="!isAuthenticated()">
-        <strong>Vui lòng <a href="<c:url value="/login/" />">đăng nhập</a> để phản hồi!!!</strong>
-    </sec:authorize>
-    <sec:authorize access="isAuthenticated()">
-        <div class="form-group">
-            <textarea class="form-control feedback" placeholder="Nhập nội dung để phản hồi..." id="feedbackId"></textarea>
-            <button class="btn btn-danger btn-feedback" onclick="addFeedback('${endpoint}', ${weddinghall.weddinghallId})">
-                <i class="fas fa-comments" style="margin: 5px; vertical-align: middle;"></i>   Thêm phản hồi
-            </button>
-        </div>
+    <div class="search">
+        <form action="<c:url value="/"/>" class="form-search">
+            <input name="username" type="text" placeholder="Nhập tên tài khoản để tìm..." />
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
 
-    </sec:authorize>
+
+    <c:if test="${products.size() == 0}">
+        <p><em>KHONG CO SAN PHAM NAO!!!</em></p>
+    </c:if>
+
+
+
+
+    <div class="row">
+        <c:forEach items="${products}" var="p">
+            <div class="col-md-3 col-xs-12" style="padding: 5px;">
+                <div class="card">
+                    <img class="card-img-top" class="img-fluid" src="${p.imageUrl}" alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title">${p.productName}</h4>
+                        <p class="card-text">
+                        <fmt:formatNumber type = "number" maxFractionDigits = "3" value = "${p.price}" /> VND
+                        </p>
+                        <a href="<c:url value="/products/${p.productId}" />" class="btn btn-primary">Xem chi tiet</a>
+                        <a href="<c:url value="javascript:;" />" class="btn btn-danger" onclick="addCart(${p.productId})">Them Vao Gio Hàng</a>
+
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+
+
 </div>

@@ -8,6 +8,7 @@ import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import java.util.List;
 
+
 /**
  *
  * @author ADMIN
@@ -18,9 +19,15 @@ public interface userRepon {
 
     Users getUser(int id);
 
-            
-    List<Users> getUsers(String username);
-        Store getStoreByUserId(int userId);
+    Users getUserByUsername(String username);
 
+    List<Users> getUsers(String username);
+
+    Store getStoreByUserId(int userId);
+
+    Users getUserById(int id);
+    boolean deleteAcount(int id);
+    
+    List<Users> getUserActive();
 
 }

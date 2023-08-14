@@ -4,21 +4,28 @@
  */
 package com.ou.repository.impl;
 
+import com.ou.pojo.Products;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.repository.userRepon;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpSession;
+import org.apache.http.HttpStatus;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *
@@ -36,7 +43,11 @@ public class userReponImpl implements userRepon {
         Session s = this.sessionFactory.getObject().getCurrentSession();
 
         try {
-            s.saveOrUpdate(user);
+            if (user.getUserId() == null) {
+                s.save(user);
+            } else {
+                s.update(user);
+            }
 
             return user;
         } catch (HibernateException ex) {
@@ -73,6 +84,44 @@ public class userReponImpl implements userRepon {
     public Store getStoreByUserId(int userId) {
         Session s = this.sessionFactory.getObject().getCurrentSession();
         return s.get(Store.class, userId);
+    }
+
+    @Override
+    public Users getUserByUsername(String username) {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+        Query q = s.createQuery("From Users Where username=:un");
+        q.setParameter("un", username);
+
+        return (Users) q.getSingleResult();
+    }
+
+    @Override
+    public Users getUserById(int id) {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+
+        return s.get(Users.class, id);
+    }
+
+    @Override
+    public boolean deleteAcount(int id) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        try {
+            Users p = this.getUserById(id);
+            session.delete(p);
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public List<Users> getUserActive() {
+     Session s = this.sessionFactory.getObject().getCurrentSession();
+        Query q = s.createQuery("From Users Where active=:un");
+        q.setParameter("un", true);
+
+        return  q.getResultList();
     }
 
 }

@@ -22,13 +22,20 @@
                 </li>
                 <sec:authorize access="hasAnyAuthority('EMPLOYEE')">
                     <div class="dropdown">                   
-                            <li class="nav-item">
-                                <a class="nav-link text-primary" href="<c:url value="/store/" />">
-                                    <i class="fa-solid fa-user-plus" aria-hidden="true"></i> Cửa Hàng</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-primary" href="<c:url value="/store/" />">
+                                <i class="fa-solid fa-shop" aria-hidden="true"></i> Cửa Hàng</a>
+                        </li>
                     </div>
                 </sec:authorize>
-
+                <sec:authorize access="hasAnyAuthority('USER')">
+                    <div class="dropdown">                   
+                        <li class="nav-item">
+                            <a class="nav-link text-primary" href="<c:url value="/create_store" />">
+                                Tạo Cửa Hàng</a>
+                        </li>
+                    </div>
+                </sec:authorize>
 
 
 
@@ -45,11 +52,13 @@
                                 <i class="fa fa-user" aria-hidden="true"></i>  Đăng nhập</a>
                         </li>
                     </c:when>
+
                     <c:when test="${pageContext.request.userPrincipal.name != null}">
                         <li class="nav-item" >
+                            <a href="<c:url value="/cart" />"> <h1 class="nav-link text-danger" id="cart">0</h1></a>
+                        </li>
+                        <li class="nav-item" >
                             <img src="${sessionScope.currentUser.avatar}" class="rounded-circle" alt="Cinque Terre" style="height:  35px">
-
-
                         </li>
 
                         <li class="nav-item">

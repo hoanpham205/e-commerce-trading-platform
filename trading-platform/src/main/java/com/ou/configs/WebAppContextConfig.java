@@ -52,11 +52,6 @@ public class WebAppContextConfig implements WebMvcConfigurer {
                 .addResourceLocations("/resources/js/");
     }
 
-  
-
-   
-
-  
 
     @Override
     public void addFormatters(FormatterRegistry r) {

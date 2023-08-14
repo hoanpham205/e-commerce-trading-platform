@@ -4,10 +4,10 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,7 +43,8 @@ public class Categories implements Serializable {
     @Size(max = 255)
     @Column(name = "category_name")
     private String categoryName;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoriesCategoryId")
+    @JsonIgnore
+    @OneToMany(mappedBy = "categoriesCategoryId")
     private Set<Products> productsSet;
 
     public Categories() {

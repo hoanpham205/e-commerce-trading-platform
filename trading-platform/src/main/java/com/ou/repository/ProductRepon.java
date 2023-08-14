@@ -5,6 +5,8 @@
 package com.ou.repository;
 
 import com.ou.pojo.Products;
+import com.ou.pojo.Store;
+import com.ou.pojo.Users;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +16,9 @@ import java.util.Map;
  */
 public interface ProductRepon {
     boolean addProduct(Products p);
-    List<Products> getProduct(Map<String, String> params);
-     int countProduct();
+    List<Products> getProduct(Store s, Map<String, String> params);
+     int countProduct(Store s);
+     boolean deleteProduct(int id);
+     Products getProductById(int id);
+     boolean updateOraddProduct(Products p);
 }

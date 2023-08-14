@@ -5,6 +5,7 @@
 package com.ou.repository.impl;
 
 import com.ou.pojo.Products;
+import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.repository.ProductRepon;
 import java.util.ArrayList;
@@ -54,19 +55,22 @@ public class ProductReponImpl implements ProductRepon {
     }
 
     @Override
-    public List<Products> getProduct(Map<String, String> params) {
+    public List<Products> getProduct(Store s, Map<String, String> params) {
         Session session = this.sessionFactory.getObject().getCurrentSession();
         CriteriaBuilder b = session.getCriteriaBuilder();
         CriteriaQuery<Products> query = b.createQuery(Products.class);
-        Root root = query.from(Products.class);
-        query.select(root);
+        Root<Products> root = query.from(Products.class);
+
+//        query.where(b.equal(root.get("storeStoreId"), s));
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(root.get("storeStoreId"), s));
 
         if (params != null) {
-            List<Predicate> predicates = new ArrayList<>();
 
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
-                predicates.add(b.like(root.get("productName"), String.format("%%%s%%", kw)));
+                Predicate p = b.like(root.get("productName").as(String.class), String.format("%%%s%%", kw));
+                predicates.add(p);
             }
 
             String fromPrice = params.get("fromPrice");
@@ -83,11 +87,11 @@ public class ProductReponImpl implements ProductRepon {
             if (cateId != null && !cateId.isEmpty()) {
                 predicates.add(b.equal(root.get("categoriesCategoryId"), Integer.parseInt(cateId)));
             }
-
             query.where(predicates.toArray(Predicate[]::new));
         }
-
         query.orderBy(b.desc(root.get("productId")));
+        query.select(root);
+
         Query q = session.createQuery(query);
 
         if (params != null) {
@@ -102,11 +106,47 @@ public class ProductReponImpl implements ProductRepon {
     }
 
     @Override
-    public int countProduct() {
-        Session s = this.sessionFactory.getObject().getCurrentSession();
-        Query q = s.createQuery("SELECT COUNT(*) From Products");
-
+    public int countProduct(Store s) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        Query q = session.createQuery("SELECT COUNT(*) From Products where storeStoreId=:s");
+        q.setParameter("s", s);
         return Integer.parseInt(q.getSingleResult().toString());
+    }
+
+    @Override
+    public Products getProductById(int id) {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+        return s.get(Products.class, id);
+    }
+
+    @Override
+    public boolean deleteProduct(int id) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        try {
+            Products p = this.getProductById(id);
+            session.delete(p);
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateOraddProduct(Products p) {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+        try {
+            if (p.getProductId() == null) {
+                s.save(p);
+            } else {
+                s.update(p);
+            }
+
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
 }

@@ -37,6 +37,9 @@ public class userServiceImpl implements userService {
     private userRepon userRepon;
 
     @Autowired
+    private storeService storeService;
+
+    @Autowired
     private Cloudinary cloudinary;
 
     @Autowired
@@ -44,22 +47,21 @@ public class userServiceImpl implements userService {
 
     @Override
     public Users addUser(Users user) {
-        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        user.setRole("USER");
-        try {
 
-            Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-            user.setAvatar(res.get("secure_url").toString());
+        if (user.getFile() != null) {
+            try {
+                user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+                user.setActive(Boolean.TRUE);
+                user.setRole("USER");
+                Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                user.setAvatar(res.get("secure_url").toString());
 
-        } catch (IOException ex) {
-            Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        return userRepon.addUser(user);
-    }
 
-    @Override
-    public Users getUser(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return userRepon.addUser(user);
     }
 
     @Override
@@ -84,10 +86,39 @@ public class userServiceImpl implements userService {
         return new org.springframework.security.core.userdetails.User(
                 u.getUsername(), u.getPassword(), authorities);
     }
-    
-    
+
     @Override
     public Store getStoreByUserId(int userId) {
         return userRepon.getStoreByUserId(userId);
+    }
+
+    @Override
+    public Users getUserById(int id) {
+        return userRepon.getUserById(id);
+    }
+
+    @Override
+    public boolean deleteAcount(int id) {
+        return userRepon.deleteAcount(id);
+    }
+
+    @Override
+    public List<Users> getUserActive() {
+        return userRepon.getUserActive();
+    }
+
+    @Override
+    public boolean updateRoleUser(Users u) {
+        try {
+            
+            u.setActive(Boolean.FALSE);
+            u.setRole("EMPLOYEE");
+            userRepon.addUser(u);
+            return true;
+        } catch (Exception e) {
         }
+
+        return false;
+    }
+
 }

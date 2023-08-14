@@ -18,9 +18,14 @@ public interface userService extends UserDetailsService {
 
     Users addUser(Users user);
 
-    Users getUser(int id);
-
     List<Users> getUsers(String username);
+
     Store getStoreByUserId(int userId);
 
+    Users getUserById(int id);
+
+    boolean deleteAcount(int id);
+    List<Users> getUserActive();
+    
+    boolean updateRoleUser(Users u);
 }

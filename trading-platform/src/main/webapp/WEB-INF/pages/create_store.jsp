@@ -16,13 +16,13 @@
 <form:form method="post" modelAttribute="store" action="${action}">
 
     <div class="form-group">
-        <label for="usernameId">
+        <label for="usernameId">Store Name
         </label>
         <input name="storeName" id="storeNameID"
                class="form-control" />
     </div>
     <div class="form-group">
-        <label for="description">
+        <label for="description">Description
         </label>
         <input id="descriptionID" name="description"
                class="form-control"/>

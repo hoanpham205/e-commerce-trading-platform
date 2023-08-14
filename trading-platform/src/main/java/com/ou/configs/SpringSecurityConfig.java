@@ -75,15 +75,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout().logoutSuccessHandler(this.LogoutHandler);//xử lý sau khi đăng xuất
 
         http.authorizeRequests().antMatchers("/register/").permitAll()
-                .antMatchers("/admin/").access("hasAnyAuthority('ADMIN', 'EMPLOYEE')");
+                .antMatchers("/admin/").access("hasAnyAuthority('ADMIN')");
 
         http.exceptionHandling().accessDeniedPage("/login/?accessDenied");
 
-        http.authorizeRequests().antMatchers("/register/**")
-                .access("hasAnyAuthority('ADMIN')");
+        
         http.authorizeRequests().antMatchers("/store/**")
                 .access("hasAnyAuthority('EMPLOYEE')");
-
+        http.authorizeRequests().antMatchers("/admin/**")
+                .access("hasAnyAuthority('ADMIN')");
         http.csrf().disable();
     }
 

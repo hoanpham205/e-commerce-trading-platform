@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author ADMIN
  */
 @Controller
-@RequestMapping("/store")
 @ControllerAdvice
 public class storeController {
 
@@ -42,7 +41,7 @@ public class storeController {
 
     @Autowired
     private HttpSession s;
-      
+
     @Autowired
     private Environment env;
 
@@ -55,6 +54,7 @@ public class storeController {
     @GetMapping("/create_store")
     public String store(Model model) {
         model.addAttribute("store", new Store());
+
         return "create_store";
     }
 
@@ -62,24 +62,20 @@ public class storeController {
     public String create_Store(Model model, @ModelAttribute("store") Store store) {
 
         storeService.addStore(store);
-        return "create_store";
+        return "redirect:/";
     }
 
-    @GetMapping("/")
-    public String AdminStore(Model model, @RequestParam Map<String, String> params) {
+    @GetMapping("/store/")
+    public String adminStore(Model model, @RequestParam Map<String, String> params) {
+
         model.addAttribute("store", new Store());
 
         model.addAttribute("store", this.storeService.getStoreByUserID((Users) s.getAttribute("currentUser")));
 
-        
-        model.addAttribute("product", this.ProductService.getProduct(params));
-        
-        System.out.println(params);
+        model.addAttribute("product", this.ProductService.getProduct(this.storeService.getStoreByUserID((Users) s.getAttribute("currentUser")), params));
 
-        
-        
         int countSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
-        int count = this.ProductService.countProduct();
+        int count = this.ProductService.countProduct(this.storeService.getStoreByUserID((Users) s.getAttribute("currentUser")));
         model.addAttribute("counter", Math.ceil(count * 1.0 / countSize));
 
         return "store";
