@@ -58,17 +58,16 @@ public class storeServiceImpl implements storeService {
     }
 
     @Override
-    public boolean updateActive(Store s) {
+    public boolean updateStore(Store store) {
         try {
 
-            s.setActive(Boolean.TRUE);
-            storeRepon.addStore(s);
-            return true;
+            store.setActive(Boolean.TRUE);
+          
+            return   storeRepon.updateStore(store);
         } catch (Exception e) {
         }
 
         return false;
-
     }
 
 }

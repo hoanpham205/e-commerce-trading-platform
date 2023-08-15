@@ -20,7 +20,9 @@ public interface storeRepon {
     Store getStoreByUserID(Users id);
 
     List<Store> getStore(Map<String, String> params);
+
     boolean deleteProductByUserId(Users id);
-    
+
+    boolean updateStore(Store store);
 
 }

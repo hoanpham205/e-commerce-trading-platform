@@ -49,10 +49,10 @@ public class ApiProductController {
     private ProductService ProductService;
     @Autowired
     private userService userSer;
-    
+
     @Autowired
     private storeService storeService;
-    
+
     @Autowired
     private ReceiptService receiptService;
 
@@ -100,8 +100,14 @@ public class ApiProductController {
 
     @GetMapping("/products/")
     @CrossOrigin
-    public ResponseEntity<List<Products>> getProduct( @RequestParam Map<String, String> params,HttpSession session,Store s) {
-        s=this.storeService.getStoreByUserID((Users) session.getAttribute("currentUser"));
-        return new ResponseEntity<>(this.ProductService.getProduct(s, params), HttpStatus.OK);
+    public ResponseEntity<List<Products>> getProduct(@RequestParam Map<String, String> params, HttpSession session, Store s) {
+        s = this.storeService.getStoreByUserID((Users) session.getAttribute("currentUser"));
+        return new ResponseEntity<>(this.ProductService.getProduct(null, params), HttpStatus.OK);
+    }
+
+    @PostMapping("/add-product")
+    @CrossOrigin
+    public ResponseEntity<Boolean> addProduct(@RequestBody Products p) {
+        return new ResponseEntity<>(this.ProductService.addProduct(p), HttpStatus.OK);
     }
 }

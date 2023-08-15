@@ -65,21 +65,20 @@ public class userServiceImpl implements userService {
     }
 
     @Override
-    public List<Users> getUsers(String username
-    ) {
+    public Users getUsers(String username) {
         return userRepon.getUsers(username);
     }
 
     @Override
     public UserDetails loadUserByUsername(String string) throws UsernameNotFoundException {
 
-        List<Users> users = userRepon.getUsers(string);
+        Users users = userRepon.getUsers(string);
 
-        if (users.isEmpty()) {
+        if (users ==null) {
             throw new UsernameNotFoundException("Không tồn tại!");
         }
 
-        Users u = userRepon.getUser((users.get(0)).getUserId());
+        Users u = userRepon.getUser(users.getUserId());
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(u.getRole()));

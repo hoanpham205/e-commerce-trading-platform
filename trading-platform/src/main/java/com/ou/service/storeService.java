@@ -22,6 +22,8 @@ public interface storeService {
     public Store getStoreByUserID(Users id);
 
     boolean deleteProductByUserId(Users id);
-    
-    boolean updateActive(Store s);
+
+
+    boolean updateStore(Store store);
+
 }

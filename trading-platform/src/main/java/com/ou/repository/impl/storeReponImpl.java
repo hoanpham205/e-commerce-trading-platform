@@ -4,7 +4,6 @@
  */
 package com.ou.repository.impl;
 
-import com.ou.pojo.Products;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.repository.storeRepon;
@@ -36,17 +35,13 @@ public class storeReponImpl implements storeRepon {
 
     @Override
     public Store addStore(Store store) {
-        System.out.println(store);
         Session s = this.sessionFactory.getObject().getCurrentSession();
 
         try {
-            if (store.getStoreId() == null) {
-                s.update(store);
+          
+                s.save(store);
 
-            }
-            else{
-                s.update(s);
-            }
+            
 
             return store;
         } catch (HibernateException ex) {
@@ -66,8 +61,6 @@ public class storeReponImpl implements storeRepon {
 
         Predicate p = b.equal(root.get("userId"), id);
         predicates.add(p);
-
-        
 
         query.where(predicates.toArray(Predicate[]::new));
 
@@ -119,5 +112,19 @@ public class storeReponImpl implements storeRepon {
 
     }
 
-  
+    @Override
+    public boolean updateStore(Store store) {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+
+        try {
+                s.update(store);
+
+
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
 }

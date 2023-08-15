@@ -57,20 +57,12 @@ public class userReponImpl implements userRepon {
     }
 
     @Override
-    public List<Users> getUsers(String username) {
-        Session session = this.sessionFactory.getObject().getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Users> query = builder.createQuery(Users.class);
-        Root root = query.from(Users.class);
-        query.select(root);
+    public Users getUsers(String username) {
+          Session s = this.sessionFactory.getObject().getCurrentSession();
+        Query q = s.createQuery("From Users Where username=:un");
+        q.setParameter("un", username);
 
-        if (username != null) {
-            Predicate p = builder.like(root.get("username").as(String.class), String.format("%%%s%%", username));
-            query = query.where(p);
-        }
-
-        Query q = session.createQuery(query);
-        return q.getResultList();
+        return  (Users) q.getSingleResult();
     }
 
     @Override

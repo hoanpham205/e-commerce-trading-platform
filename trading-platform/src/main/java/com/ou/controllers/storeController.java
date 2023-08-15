@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
@@ -68,7 +69,6 @@ public class storeController {
     @GetMapping("/store/")
     public String adminStore(Model model, @RequestParam Map<String, String> params) {
 
-        model.addAttribute("store", new Store());
 
         model.addAttribute("store", this.storeService.getStoreByUserID((Users) s.getAttribute("currentUser")));
 

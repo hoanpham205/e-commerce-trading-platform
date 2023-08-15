@@ -18,7 +18,7 @@ public interface userService extends UserDetailsService {
 
     Users addUser(Users user);
 
-    List<Users> getUsers(String username);
+    Users getUsers(String username);
 
     Store getStoreByUserId(int userId);
 

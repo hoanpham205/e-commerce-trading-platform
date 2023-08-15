@@ -95,6 +95,7 @@ public class Users implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "userId")
     private Set<Store> storeSet;
+    @JsonIgnore 
     @Transient
     private MultipartFile file;
 

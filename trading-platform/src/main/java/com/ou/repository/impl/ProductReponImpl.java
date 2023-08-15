@@ -62,10 +62,13 @@ public class ProductReponImpl implements ProductRepon {
         Root<Products> root = query.from(Products.class);
 
 //        query.where(b.equal(root.get("storeStoreId"), s));
-        List<Predicate> predicates = new ArrayList<>();
-        predicates.add(b.equal(root.get("storeStoreId"), s));
-
         if (params != null) {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (s != null) {
+                predicates.add(b.equal(root.get("storeStoreId"), s));
+
+            }
 
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {

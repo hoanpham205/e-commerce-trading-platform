@@ -54,9 +54,10 @@ public class Store implements Serializable {
     @Column(name = "active")
     private Boolean active;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JsonIgnore
     @ManyToOne
     private Users userId;
-    @JsonIgnore
+    @JsonIgnore 
     @OneToMany(mappedBy = "storeStoreId")
     private Set<Products> productsSet;
 

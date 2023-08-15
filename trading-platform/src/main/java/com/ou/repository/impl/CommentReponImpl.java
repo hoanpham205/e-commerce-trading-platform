@@ -6,16 +6,34 @@ package com.ou.repository.impl;
 
 import com.ou.pojo.Comments;
 import com.ou.repository.CommentRepon;
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 /**
  *
  * @author ADMIN
  */
-public class CommentReponImpl implements CommentRepon{
+public class CommentReponImpl implements CommentRepon {
+
+    @Autowired
+    private LocalSessionFactoryBean sessionFactory;
 
     @Override
     public boolean addComment(Comments c) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        Comments f = new Comments();
+        try {
+            
+            session.save(f);
+
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return false;
     }
-    
+
 }
