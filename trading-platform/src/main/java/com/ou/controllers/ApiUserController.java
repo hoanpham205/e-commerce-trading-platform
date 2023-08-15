@@ -70,7 +70,7 @@ public class ApiUserController {
         Users u = userService.getUsers(username);
 
         if (u == null || !password.equals(u.getPassword())) {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(null, HttpStatus.OK);
 
         }
 
