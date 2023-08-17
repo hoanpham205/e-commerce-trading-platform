@@ -59,19 +59,19 @@ public class storeController {
         return "create_store";
     }
 
-    @PostMapping("/create_store")
-    public String create_Store(Model model, @ModelAttribute("store") Store store) {
-
-        storeService.addStore(store);
-        return "redirect:/";
-    }
+//    @PostMapping("/create_store")
+//    public String create_Store(Model model, @ModelAttribute("store") Store store) {
+//
+//        storeService.addStore(store);
+//        return "redirect:/";
+//    }
 
     @GetMapping("/store/")
     public String adminStore(Model model, @RequestParam Map<String, String> params) {
 
-
+        //ok
         model.addAttribute("store", this.storeService.getStoreByUserID((Users) s.getAttribute("currentUser")));
-
+        //ok
         model.addAttribute("product", this.ProductService.getProduct(this.storeService.getStoreByUserID((Users) s.getAttribute("currentUser")), params));
 
         int countSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));

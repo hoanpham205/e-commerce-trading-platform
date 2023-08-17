@@ -41,7 +41,6 @@ public class userController {
     public String resister1(Model model,
             @ModelAttribute(value = "user") Users user) {
         userService.addUser(user);
-        userService.getUsers("tan");
         return "redirect:/";
     }
 

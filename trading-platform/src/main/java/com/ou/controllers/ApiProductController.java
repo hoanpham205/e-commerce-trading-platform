@@ -61,7 +61,7 @@ public class ApiProductController {
     public void delete(@PathVariable(value = "id") int id) {
         this.ProductService.deleteProduct(id);
     }
-
+    
     @GetMapping("/cart/{productId}")
     public ResponseEntity<Integer> cart(@PathVariable(value = "productId") Integer productId, HttpSession session) {
         Map<Integer, cart> cart = (Map<Integer, cart>) session.getAttribute("cart");

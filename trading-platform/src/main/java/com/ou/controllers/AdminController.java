@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -34,25 +36,22 @@ public class AdminController {
     private storeService storeService;
 
     @GetMapping("/")
-    public String homeAdmin(Model model, @RequestParam(required = false) Map<String, String> params, HttpSession session) {
-        model.addAttribute("user", session.getAttribute("currentUser"));
+    public ResponseEntity<?> getAllUSer(Model model, @RequestParam(required = false) Map<String, String> params, HttpSession session) {
 
         String username = params.getOrDefault("username", null);
-        model.addAttribute("user", userService.getUsers(username));
 
-        return "admin";
+        return new ResponseEntity<>(userService.getUsers(username),HttpStatus.OK);
     }
 
     @GetMapping("/store-manager")
-    public String adminStoreManager(Model model, @RequestParam Map<String, String> params) {
-        model.addAttribute("store", storeService.getStore(params));
-        return "storeManager";
+    public ResponseEntity<?> getAllStore( @RequestParam Map<String, String> params) {
+        return new ResponseEntity<>( storeService.getStore(params),HttpStatus.OK);
     }
     
      @GetMapping("/requestment")
-    public String requestment(Model model) {
+    public ResponseEntity<?> requestment(Model model) {
         model.addAttribute("request", userService.getUserActive());
-        return "request";
+        return new ResponseEntity<>( userService.getUserActive(),HttpStatus.OK);
     }
 
 }

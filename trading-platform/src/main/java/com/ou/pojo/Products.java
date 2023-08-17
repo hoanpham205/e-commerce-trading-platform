@@ -71,19 +71,19 @@ public class Products implements Serializable {
     @ManyToOne
     private Store storeStoreId;
 
-    @Transient
-    private MultipartFile file;
-
-    public MultipartFile getFile() {
-        return file;
-    }
-
-    /**
-     * * * @param file the file to set
-     */
-    public void setFile(MultipartFile file) {
-        this.file = file;
-    }
+//    @Transient
+//    private MultipartFile file;
+//
+//    public MultipartFile getFile() {
+//        return file;
+//    }
+//
+//    /**
+//     * * * @param file the file to set
+//     */
+//    public void setFile(MultipartFile file) {
+//        this.file = file;
+//    }
 
     public Products() {
     }

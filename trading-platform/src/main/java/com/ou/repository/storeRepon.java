@@ -21,7 +21,7 @@ public interface storeRepon {
 
     List<Store> getStore(Map<String, String> params);
 
-    boolean deleteProductByUserId(Users id);
+    boolean deleteStoreByUserId(Users id);
 
     boolean updateStore(Store store);
 

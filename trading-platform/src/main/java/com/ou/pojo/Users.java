@@ -95,20 +95,20 @@ public class Users implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "userId")
     private Set<Store> storeSet;
-    @JsonIgnore 
-    @Transient
-    private MultipartFile file;
-
-    public MultipartFile getFile() {
-        return file;
-    }
-
-    /**
-     * * * @param file the file to set
-     */
-    public void setFile(MultipartFile file) {
-        this.file = file;
-    }
+//    @JsonIgnore 
+//    @Transient
+//    private MultipartFile file;
+//
+//    public MultipartFile getFile() {
+//        return file;
+//    }
+//
+//    /**
+//     * * * @param file the file to set
+//     */
+//    public void setFile(MultipartFile file) {
+//        this.file = file;
+//    }
 
     public Users() {
     }

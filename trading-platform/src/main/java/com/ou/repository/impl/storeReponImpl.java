@@ -99,7 +99,7 @@ public class storeReponImpl implements storeRepon {
     }
 
     @Override
-    public boolean deleteProductByUserId(Users id) {
+    public boolean deleteStoreByUserId(Users id) {
         Session session = this.sessionFactory.getObject().getCurrentSession();
         try {
             Store s = this.getStoreByUserID(id);

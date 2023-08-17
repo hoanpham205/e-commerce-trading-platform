@@ -4,13 +4,26 @@
  */
 package com.ou.controllers;
 
+import com.ou.dto.JwtResponse;
+import com.ou.dto.logindto;
 import com.ou.pojo.Products;
 import com.ou.pojo.Users;
+import com.ou.security.JwtTokenProvider;
+import com.ou.service.impl.userServiceImpl;
 import com.ou.service.storeService;
 import com.ou.service.userService;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.apache.velocity.tools.config.ValidScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +46,13 @@ public class ApiUserController {
     private userService userService;
 
     @Autowired
+    private JwtTokenProvider tokenProvider;
+
+    @Autowired
     private storeService storeService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @DeleteMapping("/user/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -57,24 +76,45 @@ public class ApiUserController {
     @PostMapping("/register/")
     @CrossOrigin
     public ResponseEntity<Users> register(@RequestBody Users user) {
-        return new ResponseEntity<>(this.userService.addUser(user), HttpStatus.OK);
+        return new ResponseEntity<>(this.userService.addUser(user), HttpStatus.CREATED);
     }
 
-    @PostMapping("/login/")
-    @CrossOrigin
-    public ResponseEntity<Users> login(@RequestBody Users user) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody logindto logindto, HttpServletResponse response) throws Exception {
+        authenticate(logindto.getUsername(), logindto.getPassword());
+        System.out.println("com.ou.controllers.ApiUserController.login()");
+        final UserDetails userDetails = userService.loadUserByUsername(logindto.getUsername());
+        Users user = userService.getUsers(userDetails.getUsername());
+        JwtResponse jwtResponse = tokenProvider.generateToken(userDetails);
+        if (jwtResponse != null) {
+            Cookie cookie = new Cookie("JWT_TOKEN", jwtResponse.getAccessToken());
+            cookie.setPath("/");
+            cookie.setMaxAge(3600);
 
-        String username = user.getUsername();
-        String password = user.getPassword();
-
-        Users u = userService.getUsers(username);
-
-        if (u == null || !password.equals(u.getPassword())) {
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            response.addCookie(cookie);
+            return ResponseEntity.ok().body(jwtResponse);
+        } else {
+            return ResponseEntity.badRequest().body("Username or password is invalid!");
 
         }
+//        else {
+//            JwtResponse jwtResponse1 = tokenProvider.generateToken(userDetails);
+//            if (jwtResponse != null) {
+//                Cookie cookie = new Cookie("JWT_TOKEN", jwtResponse.getAccessToken());
+//                cookie.setPath("/");
+//                cookie.setMaxAge(3600);
+//
+//                response.addCookie(cookie);
+//                return ResponseEntity.ok().body(jwtResponse);
+//            } else {
+//                return ResponseEntity.badRequest().body("Username or password is invalid!");
+//            }
+//        }
+    }
 
-        return new ResponseEntity<>(u, HttpStatus.OK);
+    private void authenticate(String username, String password) throws Exception {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 }

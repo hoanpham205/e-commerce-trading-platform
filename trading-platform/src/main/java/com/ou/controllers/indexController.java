@@ -6,6 +6,7 @@ package com.ou.controllers;
 
 import com.ou.pojo.Products;
 import com.ou.pojo.cart;
+import com.ou.service.CommentService;
 import com.ou.service.ProductService;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
@@ -27,6 +28,9 @@ public class indexController {
 
     @Autowired
     private ProductService ProductService;
+    
+    @Autowired
+    private CommentService CommentService;
 
     @RequestMapping("/")
     public String index(Model model, @RequestParam Map<String, String> params, HttpSession session) {

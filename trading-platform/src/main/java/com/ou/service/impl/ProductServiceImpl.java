@@ -70,14 +70,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean updateOraddProduct(Products p) {
-        try {
-
-            Map res = this.Cloudinary.uploader().upload(p.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-            p.setImageUrl(res.get("secure_url").toString());
-
-        } catch (IOException ex) {
-            Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//
+//            Map res = this.Cloudinary.uploader().upload(p.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+//            p.setImageUrl(res.get("secure_url").toString());
+//
+//        } catch (IOException ex) {
+//            Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         return this.ProductRepon.updateOraddProduct(p);
     }
 

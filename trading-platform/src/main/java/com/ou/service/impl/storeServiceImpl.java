@@ -33,11 +33,11 @@ public class storeServiceImpl implements storeService {
     private HttpSession session;
 
     @Override
-    public Store addStore(Store store) {
-        Users u = (Users) session.getAttribute("currentUser");
-        u.setActive(Boolean.TRUE);
-        userService.addUser(u);
-        store.setUserId(u);
+    public Store addStore(Store store,Users userId) {
+    
+        userId.setActive(Boolean.TRUE);
+        userService.addUser(userId);
+        store.setUserId(userId);
         store.setActive(Boolean.FALSE);
         return storeRepon.addStore(store);
     }
@@ -54,7 +54,7 @@ public class storeServiceImpl implements storeService {
 
     @Override
     public boolean deleteProductByUserId(Users id) {
-        return storeRepon.deleteProductByUserId(id);
+        return storeRepon.deleteStoreByUserId(id);
     }
 
     @Override

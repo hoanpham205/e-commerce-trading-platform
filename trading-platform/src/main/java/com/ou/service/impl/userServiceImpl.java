@@ -48,18 +48,17 @@ public class userServiceImpl implements userService {
     @Override
     public Users addUser(Users user) {
 
-        if (user.getFile() != null) {
-            try {
+//            try {
                 user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-                user.setActive(Boolean.TRUE);
                 user.setRole("USER");
-                Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-                user.setAvatar(res.get("secure_url").toString());
+//                Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+//                user.setAvatar(res.get("secure_url").toString());
 
-            } catch (IOException ex) {
-                Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+//            } 
+//            catch (IOException ex) {
+//                Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+        
 
         return userRepon.addUser(user);
     }
