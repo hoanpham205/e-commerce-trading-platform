@@ -4,6 +4,7 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -53,6 +54,7 @@ public class Comments implements Serializable {
     @Column(name = "comment_date")
     @Temporal(TemporalType.DATE)
     private Date commentDate;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "commentsCommentId")
     private Set<Comments> commentsSet;
     @JoinColumn(name = "comments_comment_id", referencedColumnName = "comment_id")

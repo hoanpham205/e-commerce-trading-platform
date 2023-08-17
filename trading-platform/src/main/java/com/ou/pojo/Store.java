@@ -4,10 +4,10 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Store.findAll", query = "SELECT s FROM Store s"),
     @NamedQuery(name = "Store.findByStoreId", query = "SELECT s FROM Store s WHERE s.storeId = :storeId"),
-    @NamedQuery(name = "Store.findByStoreName", query = "SELECT s FROM Store s WHERE s.storeName = :storeName")})
+    @NamedQuery(name = "Store.findByStoreName", query = "SELECT s FROM Store s WHERE s.storeName = :storeName"),
+    @NamedQuery(name = "Store.findByActive", query = "SELECT s FROM Store s WHERE s.active = :active")})
 public class Store implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,10 +51,14 @@ public class Store implements Serializable {
     @Size(max = 65535)
     @Column(name = "description")
     private String description;
+    @Column(name = "active")
+    private Boolean active;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    @ManyToOne(optional = false)
+    @JsonIgnore
+    @ManyToOne
     private Users userId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeStoreId")
+    @JsonIgnore 
+    @OneToMany(mappedBy = "storeStoreId")
     private Set<Products> productsSet;
 
     public Store() {
@@ -85,6 +90,14 @@ public class Store implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Users getUserId() {

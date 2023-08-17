@@ -56,12 +56,11 @@ public class Orders implements Serializable {
     private Set<Payments> paymentsSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordersOrderId")
     private Set<Orderdetails> orderdetailsSet;
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
-    @ManyToOne
-    private Products productId;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne
     private Users userId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordersOrderId")
+    private Set<Sales> salesSet;
 
     public Orders() {
     }
@@ -112,20 +111,21 @@ public class Orders implements Serializable {
         this.orderdetailsSet = orderdetailsSet;
     }
 
-    public Products getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Products productId) {
-        this.productId = productId;
-    }
-
     public Users getUserId() {
         return userId;
     }
 
     public void setUserId(Users userId) {
         this.userId = userId;
+    }
+
+    @XmlTransient
+    public Set<Sales> getSalesSet() {
+        return salesSet;
+    }
+
+    public void setSalesSet(Set<Sales> salesSet) {
+        this.salesSet = salesSet;
     }
 
     @Override

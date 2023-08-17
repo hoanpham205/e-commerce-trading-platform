@@ -51,12 +51,9 @@ public class Sales implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "revenue")
     private BigDecimal revenue;
-    @JoinColumn(name = "orderdetaill_id", referencedColumnName = "order_detail_id")
+    @JoinColumn(name = "orders_order_id", referencedColumnName = "order_id")
     @ManyToOne(optional = false)
-    private Orderdetails orderdetaillId;
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
-    @ManyToOne
-    private Products productId;
+    private Orders ordersOrderId;
 
     public Sales() {
     }
@@ -97,20 +94,12 @@ public class Sales implements Serializable {
         this.revenue = revenue;
     }
 
-    public Orderdetails getOrderdetaillId() {
-        return orderdetaillId;
+    public Orders getOrdersOrderId() {
+        return ordersOrderId;
     }
 
-    public void setOrderdetaillId(Orderdetails orderdetaillId) {
-        this.orderdetaillId = orderdetaillId;
-    }
-
-    public Products getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Products productId) {
-        this.productId = productId;
+    public void setOrdersOrderId(Orders ordersOrderId) {
+        this.ordersOrderId = ordersOrderId;
     }
 
     @Override

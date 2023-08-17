@@ -18,5 +18,5 @@
     <tiles:insertAttribute name="header" />
     <tiles:insertAttribute name="content" />
     <tiles:insertAttribute name="footer" />
-
+    <script src="<c:url value="/js/main.js"/>"></script>
 </html>

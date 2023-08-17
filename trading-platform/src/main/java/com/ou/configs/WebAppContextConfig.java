@@ -7,6 +7,7 @@ package com.ou.configs;
 import com.ou.formatters.StoreFormatter;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ou.formatters.CategoryFormatter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -51,15 +52,11 @@ public class WebAppContextConfig implements WebMvcConfigurer {
                 .addResourceLocations("/resources/js/");
     }
 
-  
-
-   
-
-  
 
     @Override
     public void addFormatters(FormatterRegistry r) {
         r.addFormatter(new StoreFormatter());
+        r.addFormatter(new CategoryFormatter());
     }
 
 }

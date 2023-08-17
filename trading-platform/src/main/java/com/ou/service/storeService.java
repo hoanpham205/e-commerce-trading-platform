@@ -6,14 +6,24 @@ package com.ou.service;
 
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author ADMIN
  */
 public interface storeService {
-        Store addStore(Store store);
-        
-        
+
+    Store addStore(Store store,Users userId);
+
+    List<Store> getStore(Map<String, String> params);
+
+    public Store getStoreByUserID(Users id);
+
+    boolean deleteProductByUserId(Users id);
+
+
+    boolean updateStore(Store store);
 
 }
