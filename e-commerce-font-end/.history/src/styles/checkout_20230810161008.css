@@ -1,0 +1,9 @@
+.billing__form .form__group input{
+    border: 1px solid var(--primary-bg-2);
+}
+.checkout__cart{
+    padding: 20px;
+    background: var(--primary-color);
+    color: #fff;
+    
+}
