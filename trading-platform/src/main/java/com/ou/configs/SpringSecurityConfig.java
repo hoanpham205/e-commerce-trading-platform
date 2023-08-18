@@ -88,9 +88,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().defaultSuccessUrl("/")
                 .failureUrl("/login/?error");
 
-        http.formLogin().successHandler(this.loginSuccessHandler); //xử lý sau khi đăng nhập
-
-        http.logout().logoutSuccessHandler(this.LogoutHandler);//xử lý sau khi đăng xuất
+      
 
         http.exceptionHandling().accessDeniedPage("/login/?accessDenied");
 
@@ -99,7 +97,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/admin/**")
                 .access("hasAnyAuthority('ADMIN')");
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
         http.csrf().disable();
     }
 

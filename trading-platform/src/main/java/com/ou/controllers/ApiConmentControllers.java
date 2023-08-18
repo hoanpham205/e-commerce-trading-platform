@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -6,6 +6,7 @@ package com.ou.controllers;
 
 import com.ou.pojo.Comments;
 import com.ou.pojo.Products;
+import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.service.CommentService;
 import com.ou.service.ProductService;
@@ -20,6 +21,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,26 +56,32 @@ public class ApiConmentControllers {
 
     @PostMapping("/product/{id}/comment")
     public ResponseEntity<?> createCommentToProduct(@RequestBody @Valid Comments c, @PathVariable("id") int id) {
-        Users u = (Users) session.getAttribute("currentUser");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-//        if (u != null ) {
-        Comments comment = CommentService.addComment(c, u, id,0);
-        return new ResponseEntity<>(comment, HttpStatus.CREATED);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//        }
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUsers(userDetails.getUsername());
+            Comments comment = CommentService.addComment(c, currentUser, id, 0);
+            return new ResponseEntity<>(comment, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @PostMapping("/product/{Proid}/comment/{id}/comments")
     public ResponseEntity<?> replyToComent(@RequestBody @Valid Comments c, @PathVariable("Proid") int proId, @PathVariable("id") int id) {
-        Users u = (Users) session.getAttribute("currentUser");
-
-//        if (u != null ) {
-        Comments comment = CommentService.addComment(c, u, proId,id);
-        return new ResponseEntity<>(comment, HttpStatus.CREATED);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUsers(userDetails.getUsername());
+            Comments comment = CommentService.addComment(c, currentUser, proId, id);
+            return new ResponseEntity<>(comment == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED) : comment, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
+    
+    
+//    @DeleteMapping("/product/{Proid}/comment/{id}/")
 
 }

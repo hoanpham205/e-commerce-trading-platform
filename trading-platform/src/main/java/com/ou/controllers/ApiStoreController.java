@@ -52,7 +52,7 @@ public class ApiStoreController {
     }
 
     @PostMapping("/create-store/")
-    public ResponseEntity<?> creareStore0(@RequestBody @Valid Store s, HttpSession session) {
+    public ResponseEntity<?> creareStore(@RequestBody @Valid Store s, HttpSession session) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {

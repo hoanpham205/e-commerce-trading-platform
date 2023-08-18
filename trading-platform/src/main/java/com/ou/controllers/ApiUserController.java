@@ -31,15 +31,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
  * @author ADMIN
  */
 @RestController
-@RequestMapping("/api")
 public class ApiUserController {
 
     @Autowired
@@ -75,14 +76,13 @@ public class ApiUserController {
 
     @PostMapping("/register/")
     @CrossOrigin
-    public ResponseEntity<Users> register(@RequestBody Users user) {
+    public ResponseEntity<Users> register(@RequestBody Users user) throws Exception {
         return new ResponseEntity<>(this.userService.addUser(user), HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login/")
     public ResponseEntity<?> login(@RequestBody logindto logindto, HttpServletResponse response) throws Exception {
         authenticate(logindto.getUsername(), logindto.getPassword());
-        System.out.println("com.ou.controllers.ApiUserController.login()");
         final UserDetails userDetails = userService.loadUserByUsername(logindto.getUsername());
         Users user = userService.getUsers(userDetails.getUsername());
         JwtResponse jwtResponse = tokenProvider.generateToken(userDetails);
@@ -117,4 +117,6 @@ public class ApiUserController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
+    
+    
 }

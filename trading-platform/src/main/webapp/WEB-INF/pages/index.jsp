@@ -12,8 +12,8 @@
             <button type="submit"><i class="fas fa-search"></i></button>
         </form>
     </div>
+    <h1>${comment}</h1>
 
-            <h1>${comment}</h1>
     <c:if test="${products.size() == 0}">
         <p><em>KHONG CO SAN PHAM NAO!!!</em></p>
     </c:if>
