@@ -26,4 +26,14 @@ public class CategoriServiceImpl implements CategoriService {
         return CategoriRepon.getcate();
     }
 
+    @Override
+    public Categories getCateById(int id) {
+       return  CategoriRepon.getCateById(id);
+    }
+
+    @Override
+    public boolean addCate(Categories cate) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

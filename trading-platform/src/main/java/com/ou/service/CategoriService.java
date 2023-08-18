@@ -13,6 +13,12 @@ import org.springframework.stereotype.Service;
  * @author ADMIN
  */
 public interface CategoriService {
-     List<Categories> getCates();
+
+    List<Categories> getCates();
+
+    Categories getCateById(int id);
     
+    
+    boolean addCate(Categories cate);
+
 }

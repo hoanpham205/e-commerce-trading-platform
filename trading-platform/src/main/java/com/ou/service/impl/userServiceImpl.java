@@ -51,6 +51,7 @@ public class userServiceImpl implements userService {
 //            try {
                 user.setPassword(this.passwordEncoder.encode(user.getPassword()));
                 user.setRole("USER");
+                user.setActive(Boolean.FALSE);
 //                Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
 //                user.setAvatar(res.get("secure_url").toString());
 

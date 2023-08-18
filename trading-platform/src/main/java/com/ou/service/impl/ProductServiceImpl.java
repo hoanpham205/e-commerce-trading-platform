@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +80,28 @@ public class ProductServiceImpl implements ProductService {
 //            Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 //        }
         return this.ProductRepon.updateOraddProduct(p);
+    }
+
+    @Override
+    public boolean updateProduct(Products p, int id) {
+        Products product = ProductRepon.getProductById(id);
+
+        if (p != null) {
+            if (product == null) {
+                throw new ResourceNotFoundException("ko tim thay product");
+
+            }
+
+            product.setCategoriesCategoryId(p.getCategoriesCategoryId());
+            product.setImageUrl(p.getImageUrl());
+            product.setProductName(p.getProductName());
+            product.setPrice(p.getPrice());
+            return ProductRepon.updateOraddProduct(product);
+        }
+        else{
+            return false;
+        }
+
     }
 
 }

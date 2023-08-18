@@ -28,20 +28,22 @@ public class indexController {
 
     @Autowired
     private ProductService ProductService;
-    
+
     @Autowired
     private CommentService CommentService;
 
     @RequestMapping("/")
     public String index(Model model, @RequestParam Map<String, String> params, HttpSession session) {
+        System.out.println(CommentService.findCommentById(1));
+
         model.addAttribute("currentUser", session.getAttribute("currentUser"));
         model.addAttribute("products", ProductService.getProduct(null, null));
-        System.out.println(ProductService.getProduct(null, null));
         return "index";
     }
 
     @GetMapping("/products/{productId}")
     public String productDetails(Model model, @PathVariable(value = "productId") int id) {
+
         model.addAttribute("product", this.ProductService.getProductById(id));
         return "details";
     }
@@ -57,6 +59,5 @@ public class indexController {
 
         return "cart";
     }
-    
-  
+
 }
