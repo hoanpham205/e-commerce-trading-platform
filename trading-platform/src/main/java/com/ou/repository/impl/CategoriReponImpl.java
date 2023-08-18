@@ -33,4 +33,10 @@ public class CategoriReponImpl implements CategoriRepon {
         return q.getResultList();
     }
 
+    @Override
+    public Categories getCateById(int id) {
+        Session session=this.factory.getObject().getCurrentSession();
+        return session.get(Categories.class, id);
+    }
+
 }

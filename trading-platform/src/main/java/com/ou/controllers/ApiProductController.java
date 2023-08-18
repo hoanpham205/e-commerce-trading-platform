@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.Caret;
+import javax.validation.Valid;
 import static jdk.internal.org.jline.utils.Colors.s;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -41,7 +43,6 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author ADMIN
  */
 @RestController
-@RequestMapping("/api")
 @ControllerAdvice
 public class ApiProductController {
 
@@ -56,13 +57,13 @@ public class ApiProductController {
     @Autowired
     private ReceiptService receiptService;
 
-    @DeleteMapping("/store/product/{id}")
+    @DeleteMapping("/product/{id}/")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "id") int id) {
         this.ProductService.deleteProduct(id);
     }
-    
-    @GetMapping("/cart/{productId}")
+
+    @GetMapping("/cart/{productId}/")
     public ResponseEntity<Integer> cart(@PathVariable(value = "productId") Integer productId, HttpSession session) {
         Map<Integer, cart> cart = (Map<Integer, cart>) session.getAttribute("cart");
         if (cart == null) {
@@ -89,7 +90,7 @@ public class ApiProductController {
         this.receiptService.addReceipt(carts);
     }
 
-    @DeleteMapping("/cart/delete/{id}")
+    @DeleteMapping("/cart/delete/{id}/")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCart(Model model, HttpSession session, @PathVariable(value = "id") Integer id) {
         Map<Integer, cart> cart = (Map<Integer, cart>) session.getAttribute("cart");
@@ -105,9 +106,20 @@ public class ApiProductController {
         return new ResponseEntity<>(this.ProductService.getProduct(null, params), HttpStatus.OK);
     }
 
-    @PostMapping("/add-product")
+    @PostMapping("/add-product/")
     @CrossOrigin
     public ResponseEntity<Boolean> addProduct(@RequestBody Products p) {
         return new ResponseEntity<>(this.ProductService.addProduct(p), HttpStatus.OK);
+    }
+
+    @PutMapping("/product/{id}/")
+    public ResponseEntity<?> productDetails(@RequestBody @Valid Products p,@PathVariable(value = "id") int id) {
+
+        if (p != null) {
+            return new ResponseEntity<>(ProductService.updateProduct(p, id), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("You do not have permission to update this comment",HttpStatus.UNAUTHORIZED);   
+        }
+
     }
 }

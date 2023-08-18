@@ -44,8 +44,10 @@ public class CommentReponImpl implements CommentRepon {
 
     @Override
     public Comments findCommentById(int id) {
-         Session s = this.sessionFactory.getObject().getCurrentSession();
-        return s.get(Comments.class, id);
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        Query query = session.createQuery("SELECT c FROM Comments c WHERE c.commentId = :commentId");
+        query.setParameter("commentId", id);
+        return (Comments) query.uniqueResult();
     }
 
     @Override

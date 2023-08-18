@@ -118,8 +118,8 @@ public class ProductReponImpl implements ProductRepon {
 
     @Override
     public Products getProductById(int id) {
-        Session s = this.sessionFactory.getObject().getCurrentSession();
-        return s.get(Products.class, id);
+         Session session = this.sessionFactory.getObject().getCurrentSession();
+        return session.get(Products.class, id);
     }
 
     @Override
