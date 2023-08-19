@@ -1,0 +1,15 @@
+.product__infor h3{
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-top: 15px;
+}
+.product__infor span {
+    font-size: .9rem;
+}
+.product__card-bottom .price{
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+.product

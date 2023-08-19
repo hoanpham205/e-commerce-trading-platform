@@ -33,8 +33,9 @@ public class ProductServiceImpl implements ProductService {
     private Cloudinary Cloudinary;
 
     @Override
-    public boolean addProduct(Products p) {
+    public Products addProduct(Products p, Store s) {
 
+        p.setStoreStoreId(s);
 //        try {
 //
 //            Map res = this.Cloudinary.uploader().upload(p.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
@@ -97,11 +98,17 @@ public class ProductServiceImpl implements ProductService {
             product.setProductName(p.getProductName());
             product.setPrice(p.getPrice());
             return ProductRepon.updateOraddProduct(product);
-        }
-        else{
+        } else {
             return false;
         }
 
     }
+
+    @Override
+    public List<Products> findPostsByUserId(String Dir) {
+        String direction = Dir != null ? Dir.toLowerCase() : "asc";
+        List<Products> prodcutList = ProductRepon.findPostsByUserId(direction);
+        return prodcutList;
+                }
 
 }

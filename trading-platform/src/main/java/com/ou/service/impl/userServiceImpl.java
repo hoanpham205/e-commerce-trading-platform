@@ -120,18 +120,26 @@ public class userServiceImpl implements userService {
     }
 
     @Override
-    public Users addUsers(Users user, MultipartFile file) {
+    public Users addUsers(Map<String, String> params, MultipartFile file) {
+        Users u = new Users();
+        u.setUsername(params.get("username"));
+        u.setPassword(this.passwordEncoder.encode(params.get("password")));
+
+        u.setPhone(params.get("fullname"));
+        u.setEmail(params.get("phone"));
+        u.setEmail(params.get("email"));
+        u.setSex(params.get("sex"));
+        u.setCountry(params.get("country"));
+        u.setActive(Boolean.FALSE);
+        u.setRole("USER");
         try {
-            user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-            user.setRole("USER");
-            user.setActive(Boolean.FALSE);
             Map res = this.cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-            user.setAvatar(res.get("secure_url").toString());
+            u.setAvatar(res.get("secure_url").toString());
 
         } catch (IOException ex) {
             Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return userRepon.addUser(user);
+        return userRepon.addUser(u);
     }
 
 }

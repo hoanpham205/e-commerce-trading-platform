@@ -15,10 +15,11 @@ import java.util.Map;
  * @author ADMIN
  */
 public interface ProductRepon {
-    boolean addProduct(Products p);
+    Products addProduct(Products p);
     List<Products> getProduct(Store s, Map<String, String> params);
      int countProduct(Store s);
      boolean deleteProduct(int id);
      Products getProductById(int id);
      boolean updateOraddProduct(Products p);
+     List<Products> findPostsByUserId(String Dir);
 }

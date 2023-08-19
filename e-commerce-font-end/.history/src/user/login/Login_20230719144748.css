@@ -1,0 +1,104 @@
+/* Login.css */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .card {
+    background-color: #f9f9f9;
+    max-width: 400px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .password-input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px;
+  }
+  
+  .password-input-container input[type="password"] {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    outline: none;
+  }
+  
+  .password-toggle-icon {
+    color: #ccc;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .password-toggle-icon svg {
+    font-size: 16px;
+  }
+  
+  .password-toggle-icon:hover {
+    color: #333;
+  }
+  
+  input {
+    margin-bottom: 10px;
+    padding: 18px;
+    margin: 10px;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  
+  .signup-link {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+  }
+  
+  .signup-link p {
+    margin-bottom: 10px;
+  }
+  
+  .signup-link a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  /* Media Query for small screens */
+  @media screen and (max-width: 600px) {
+    .card {
+      max-width: 300px;
+    }
+  }
+  
