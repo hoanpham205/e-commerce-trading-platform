@@ -81,6 +81,7 @@ public class ApiUserController {
     }
 
     @PostMapping("/login/")
+    @CrossOrigin
     public ResponseEntity<?> login(@RequestBody logindto logindto, HttpServletResponse response) throws Exception {
         authenticate(logindto.getUsername(), logindto.getPassword());
         final UserDetails userDetails = userService.loadUserByUsername(logindto.getUsername());

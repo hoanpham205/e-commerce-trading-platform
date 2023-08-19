@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -49,9 +50,9 @@ public class userServiceImpl implements userService {
     public Users addUser(Users user) {
 
 //            try {
-                user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-                user.setRole("USER");
-                user.setActive(Boolean.FALSE);
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+        user.setRole("USER");
+        user.setActive(Boolean.FALSE);
 //                Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
 //                user.setAvatar(res.get("secure_url").toString());
 
@@ -59,8 +60,6 @@ public class userServiceImpl implements userService {
 //            catch (IOException ex) {
 //                Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 //            }
-        
-
         return userRepon.addUser(user);
     }
 
@@ -74,7 +73,7 @@ public class userServiceImpl implements userService {
 
         Users users = userRepon.getUsers(string);
 
-        if (users ==null) {
+        if (users == null) {
             throw new UsernameNotFoundException("Không tồn tại!");
         }
 
@@ -109,7 +108,7 @@ public class userServiceImpl implements userService {
     @Override
     public boolean updateRoleUser(Users u) {
         try {
-            
+
             u.setActive(Boolean.FALSE);
             u.setRole("EMPLOYEE");
             userRepon.addUser(u);
@@ -118,6 +117,21 @@ public class userServiceImpl implements userService {
         }
 
         return false;
+    }
+
+    @Override
+    public Users addUsers(Users user, MultipartFile file) {
+        try {
+            user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+            user.setRole("USER");
+            user.setActive(Boolean.FALSE);
+            Map res = this.cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+            user.setAvatar(res.get("secure_url").toString());
+
+        } catch (IOException ex) {
+            Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return userRepon.addUser(user);
     }
 
 }
