@@ -16,14 +16,20 @@ import java.util.Map;
  */
 public interface ProductService {
 
-    boolean addProduct(Products p);
-    boolean updateProduct(Products p,int id);
+    Products addProduct(Products p, Store s);
 
-    public List<Products> getProduct(Store s,Map<String, String> params);
+    boolean updateProduct(Products p, int id);
+
+    public List<Products> getProduct(Store s, Map<String, String> params);
+
     int countProduct(Store s);
+
     boolean deleteProduct(int id);
+
     Products getProductById(int id);
+
     boolean updateOraddProduct(Products p);
-    
+
+    List<Products> findPostsByUserId(String Dir);
 
 }

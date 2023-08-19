@@ -39,29 +39,31 @@ public class ProductReponImpl implements ProductRepon {
     private Environment env;
 
     @Override
-    public boolean addProduct(Products p) {
+    public Products addProduct(Products p) {
         Session session = this.sessionFactory.getObject().getCurrentSession();
 
         try {
 
             session.save(p);
 
-            return true;
+            return p;
         } catch (HibernateException e) {
             System.err.println("Có lỗi xảy ra! Cập nhật thao tác thất bại==" + e.getMessage());
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     @Override
     public List<Products> getProduct(Store s, Map<String, String> params) {
         Session session = this.sessionFactory.getObject().getCurrentSession();
         CriteriaBuilder b = session.getCriteriaBuilder();
-        CriteriaQuery<Products> query = b.createQuery(Products.class);
-        Root<Products> root = query.from(Products.class);
+        CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
+        CriteriaQuery<Store> queryStore = b.createQuery(Store.class);
 
-//        query.where(b.equal(root.get("storeStoreId"), s));
+        Root<Products> root = query.from(Products.class);
+        Root<Store> rootStore = query.from(Store.class);
+
         if (params != null) {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -72,13 +74,20 @@ public class ProductReponImpl implements ProductRepon {
 
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
-                Predicate p = b.like(root.get("productName").as(String.class), String.format("%%%s%%", kw));
-                predicates.add(p);
+                predicates.add(b.like(root.get("productName").as(String.class), String.format("%%%s%%", kw)));
             }
 
             String fromPrice = params.get("fromPrice");
             if (fromPrice != null && !fromPrice.isEmpty()) {
                 predicates.add(b.greaterThanOrEqualTo(root.get("price"), Double.parseDouble(fromPrice)));
+            }
+
+            String storeName = params.get("storeName");
+            if (storeName != null && !storeName.isEmpty()) {
+                predicates.add(b.equal( rootStore.get("storeId"),root.get("storeStoreId")));
+
+                predicates.add(b.like(rootStore.get("storeName").as(String.class), 
+                        String.format("%%%s%%", storeName)));
             }
 
             String toPrice = params.get("toPrice");
@@ -93,7 +102,7 @@ public class ProductReponImpl implements ProductRepon {
             query.where(predicates.toArray(Predicate[]::new));
         }
         query.orderBy(b.desc(root.get("productId")));
-        query.select(root);
+        query.multiselect(root);
 
         Query q = session.createQuery(query);
 
@@ -118,7 +127,7 @@ public class ProductReponImpl implements ProductRepon {
 
     @Override
     public Products getProductById(int id) {
-         Session session = this.sessionFactory.getObject().getCurrentSession();
+        Session session = this.sessionFactory.getObject().getCurrentSession();
         return session.get(Products.class, id);
     }
 
@@ -152,5 +161,22 @@ public class ProductReponImpl implements ProductRepon {
         }
     }
 
+    @Override
+    public List<Products> findPostsByUserId(String Dir) {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+        String queryString = "SELECT p FROM Products p ORDER BY ";
+        if ("asc".equalsIgnoreCase(Dir)) {
+            queryString += "p.productName ASC";
+        } else if ("desc".equalsIgnoreCase(Dir)) {
+            queryString += "p.productName DESC";
+        } else {
+            queryString += "p.productName DESC";
+        }
+
+        Query q = s.createQuery(queryString);
+
+        List<Products> posts = q.getResultList();
+        return posts;
+    }
 
 }

@@ -27,6 +27,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -102,24 +106,50 @@ public class ApiProductController {
     @GetMapping("/products/")
     @CrossOrigin
     public ResponseEntity<List<Products>> getProduct(@RequestParam Map<String, String> params, HttpSession session, Store s) {
-        s = this.storeService.getStoreByUserID((Users) session.getAttribute("currentUser"));
-        return new ResponseEntity<>(this.ProductService.getProduct(null, params), HttpStatus.OK);
-    }
 
-    @PostMapping("/add-product/")
-    @CrossOrigin
-    public ResponseEntity<Boolean> addProduct(@RequestBody Products p) {
-        return new ResponseEntity<>(this.ProductService.addProduct(p), HttpStatus.OK);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users userCuren = userSer.getUsers(userDetails.getUsername());
+            return new ResponseEntity<>(this.ProductService.getProduct(null, params), HttpStatus.OK);
+        }
+        return null;
+    
+}
+
+@PostMapping("/add-product/")
+@CrossOrigin
+public ResponseEntity<?> addProduct(@RequestBody Products p
+    ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users userCuren = userSer.getUsers(userDetails.getUsername());
+            Store s = storeService.getStoreByUserID(userCuren);
+            Products product = ProductService.addProduct(p, s);
+            return new ResponseEntity<>(product == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED) : product, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
     }
 
     @PutMapping("/product/{id}/")
-    public ResponseEntity<?> productDetails(@RequestBody @Valid Products p,@PathVariable(value = "id") int id) {
+public ResponseEntity<?> productDetails(@RequestBody
+@Valid Products p, @PathVariable(value = "id") int id
+    ) {
 
         if (p != null) {
             return new ResponseEntity<>(ProductService.updateProduct(p, id), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("You do not have permission to update this comment",HttpStatus.UNAUTHORIZED);   
+            return new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED);
         }
 
+    }
+
+    @GetMapping("/products/dir/")
+public ResponseEntity<List<Products>> getAllPostsByUserId(@RequestParam(value = "order", defaultValue = "desc") String Dir
+    ) {
+        return ResponseEntity.ok(ProductService.findPostsByUserId(Dir));
     }
 }

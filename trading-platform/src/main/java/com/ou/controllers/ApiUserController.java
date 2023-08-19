@@ -12,12 +12,14 @@ import com.ou.security.JwtTokenProvider;
 import com.ou.service.impl.userServiceImpl;
 import com.ou.service.storeService;
 import com.ou.service.userService;
+import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.velocity.tools.config.ValidScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,6 +57,9 @@ public class ApiUserController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    
+    @Autowired
+    private HttpServletResponse response;
 
     @DeleteMapping("/user/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -74,15 +80,18 @@ public class ApiUserController {
         userService.updateRoleUser(userService.getUserById(id));
     }
 
-    @PostMapping("/register/")
+    @PostMapping(path ="/register/",
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
     @CrossOrigin
-    public ResponseEntity<Users> register(@RequestBody Users user) throws Exception {
-        return new ResponseEntity<>(this.userService.addUser(user), HttpStatus.CREATED);
+    public ResponseEntity<Users> register(@RequestParam Map<String, String> params ,@RequestPart MultipartFile file) throws Exception {
+        return new ResponseEntity<>(this.userService.addUsers(params,file), HttpStatus.CREATED);
     }
 
     @PostMapping("/login/")
     @CrossOrigin
-    public ResponseEntity<?> login(@RequestBody logindto logindto, HttpServletResponse response) throws Exception {
+    public ResponseEntity<?> login(@RequestBody  logindto logindto ) throws Exception {
         authenticate(logindto.getUsername(), logindto.getPassword());
         final UserDetails userDetails = userService.loadUserByUsername(logindto.getUsername());
         Users user = userService.getUsers(userDetails.getUsername());

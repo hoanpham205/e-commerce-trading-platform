@@ -8,6 +8,7 @@ import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +32,6 @@ public interface userService extends UserDetailsService {
 
     boolean updateRoleUser(Users u);
 
-    Users addUsers(Users user,MultipartFile file);
+    Users addUsers(Map<String, String> params,MultipartFile file);
 
 }
