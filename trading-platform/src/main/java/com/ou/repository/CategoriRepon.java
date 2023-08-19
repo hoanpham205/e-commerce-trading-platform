@@ -14,5 +14,5 @@ import java.util.List;
 public interface CategoriRepon {
     List<Categories> getcate(); 
     Categories getCateById(int id);
-    boolean addOrUpdate()
+    boolean addOrUpdate();
 }

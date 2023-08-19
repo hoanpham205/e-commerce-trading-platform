@@ -9,6 +9,7 @@ import com.ou.pojo.Users;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -25,7 +26,11 @@ public interface userService extends UserDetailsService {
     Users getUserById(int id);
 
     boolean deleteAcount(int id);
+
     List<Users> getUserActive();
-    
+
     boolean updateRoleUser(Users u);
+
+    Users addUsers(Users user,MultipartFile file);
+
 }
