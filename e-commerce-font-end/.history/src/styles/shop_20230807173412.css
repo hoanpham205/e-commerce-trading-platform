@@ -1,0 +1,11 @@
+.filter__widget select{
+    padding: 8px 20px;
+    border: 1px solid var(--primary-color);
+    cursor: pointer;
+    border-radius: 5px;
+}
+.search__box input {
+    width: 100%;
+    border: none;
+    outline: ;
+}
