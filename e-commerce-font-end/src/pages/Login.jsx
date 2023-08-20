@@ -9,7 +9,7 @@ import '../styles/login.css';
 
 
 const Login = () => {
-    const [email,setEmail] = useState('');
+    const [username,setEmail] = useState('');
     const [password,setPassword] = useState('');
     const [loading,setLoading] = useState(false);
     const navigate = useNavigate()
@@ -17,7 +17,7 @@ const Login = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password)
+            const userCredential = await signInWithEmailAndPassword(auth, username, password)
             const user = userCredential.user
             console.log(user);
             setLoading(false);
@@ -39,7 +39,7 @@ const Login = () => {
                         <h3 className='fw-bold mb-4'>Login</h3>
                         <Form className='auth__form' onSubmit={signIn}>
                             <FormGroup className='form__group'>
-                                <input type="email" placeholder='Enter your email...' value={email} onChange={e=>setEmail(e.target.value)} />
+                                <input type="text" placeholder='Enter your username...' value={username} onChange={e=>setEmail(e.target.value)} />
                             </FormGroup>
                             <FormGroup className='form__group'>
                                 <input type="password" placeholder='Enter your password...' value={password} onChange={e=>setPassword(e.target.value)}/>

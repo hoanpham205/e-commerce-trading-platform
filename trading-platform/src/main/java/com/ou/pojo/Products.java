@@ -21,11 +21,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -58,32 +56,20 @@ public class Products implements Serializable {
     @Column(name = "image_url")
     private String imageUrl;
     @JsonIgnore
+
     @OneToMany(mappedBy = "productId")
     private Set<Comments> commentsSet;
     @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productsProductId")
     private Set<Orderdetails> orderdetailsSet;
     @JoinColumn(name = "categories_category_id", referencedColumnName = "category_id")
-    
     @ManyToOne
     private Categories categoriesCategoryId;
     @JoinColumn(name = "store_store_id", referencedColumnName = "store_id")
+    @JsonIgnore
     @ManyToOne
     private Store storeStoreId;
-
-//    @Transient
-//    private MultipartFile file;
-//
-//    public MultipartFile getFile() {
-//        return file;
-//    }
-//
-//    /**
-//     * * * @param file the file to set
-//     */
-//    public void setFile(MultipartFile file) {
-//        this.file = file;
-//    }
 
     public Products() {
     }

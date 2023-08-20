@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Comments.findAll", query = "SELECT c FROM Comments c"),
     @NamedQuery(name = "Comments.findByCommentId", query = "SELECT c FROM Comments c WHERE c.commentId = :commentId"),
-    @NamedQuery(name = "Comments.findByCommentDate", query = "SELECT c FROM Comments c WHERE c.commentDate = :commentDate")})
+    @NamedQuery(name = "Comments.findByCommentDate", query = "SELECT c FROM Comments c WHERE c.commentDate = :commentDate"),
+    @NamedQuery(name = "Comments.findByEvaluate", query = "SELECT c FROM Comments c WHERE c.evaluate = :evaluate")})
 public class Comments implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,11 +54,14 @@ public class Comments implements Serializable {
     @Column(name = "comment_date")
     @Temporal(TemporalType.DATE)
     private Date commentDate;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "evaluate")
+    private Double evaluate;
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "commentsCommentId")
+    @OneToMany(mappedBy = "commentsCommentId")
     private Set<Comments> commentsSet;
     @JoinColumn(name = "comments_comment_id", referencedColumnName = "comment_id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Comments commentsCommentId;
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
@@ -96,6 +99,14 @@ public class Comments implements Serializable {
 
     public void setCommentDate(Date commentDate) {
         this.commentDate = commentDate;
+    }
+
+    public Double getEvaluate() {
+        return evaluate;
+    }
+
+    public void setEvaluate(Double evaluate) {
+        this.evaluate = evaluate;
     }
 
     @XmlTransient
@@ -155,5 +166,5 @@ public class Comments implements Serializable {
     public String toString() {
         return "com.ou.pojo.Comments[ commentId=" + commentId + " ]";
     }
-    
+
 }

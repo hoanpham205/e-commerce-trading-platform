@@ -114,12 +114,12 @@ public class ApiProductController {
             return new ResponseEntity<>(this.ProductService.getProduct(null, params), HttpStatus.OK);
         }
         return null;
-    
-}
 
-@PostMapping("/add-product/")
-@CrossOrigin
-public ResponseEntity<?> addProduct(@RequestBody Products p
+    }
+
+    @PostMapping("/add-product/")
+    @CrossOrigin
+    public ResponseEntity<?> addProduct(@RequestBody Products p
     ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
@@ -135,8 +135,8 @@ public ResponseEntity<?> addProduct(@RequestBody Products p
     }
 
     @PutMapping("/product/{id}/")
-public ResponseEntity<?> productDetails(@RequestBody
-@Valid Products p, @PathVariable(value = "id") int id
+    public ResponseEntity<?> productDetails(@RequestBody
+            @Valid Products p, @PathVariable(value = "id") int id
     ) {
 
         if (p != null) {
@@ -147,9 +147,13 @@ public ResponseEntity<?> productDetails(@RequestBody
 
     }
 
-    @GetMapping("/products/dir/")
-public ResponseEntity<List<Products>> getAllPostsByUserId(@RequestParam(value = "order", defaultValue = "desc") String Dir
-    ) {
-        return ResponseEntity.ok(ProductService.findPostsByUserId(Dir));
+    @GetMapping("/products/sort-productname/")
+    public ResponseEntity<List<Products>> sortProductname(@RequestParam(value = "order", defaultValue = "desc") String Dir) {
+        return ResponseEntity.ok(ProductService.sortProductname(Dir));
+    }
+
+    @GetMapping("/products/sort-price/")
+    public ResponseEntity<List<Products>> sortPrice(@RequestParam(value = "order", defaultValue = "desc") String Dir) {
+        return ResponseEntity.ok(ProductService.sortProductPrice(Dir));
     }
 }

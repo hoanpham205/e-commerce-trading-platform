@@ -12,11 +12,13 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import com.ou.dto.JwtResponse;
+import com.ou.service.userService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -34,6 +36,9 @@ public class JwtTokenProvider implements Serializable {
     @Value("${app.jwt-expiration-milliseconds}")
     private long JwtExpirationDate;
 
+    @Autowired
+    private userService userService;
+    
     private static final long REFRESH_TOKEN_EXPIRATION_DATE = 30 * 24 * 60 * 60 * 1000;
 
     // generate JWT token
@@ -57,7 +62,7 @@ public class JwtTokenProvider implements Serializable {
                 .signWith(key())
                 .compact();
 
-        JwtResponse jwtResponse = new JwtResponse(accessToken, refreshToken, "Bearer");
+        JwtResponse jwtResponse = new JwtResponse(accessToken, refreshToken, "Bearer",userService.getUsers(userDetails.getUsername()));
 
         return jwtResponse;
     }
@@ -117,7 +122,7 @@ public class JwtTokenProvider implements Serializable {
                         .signWith(key())
                         .compact();
 
-                JwtResponse jwtResponse = new JwtResponse(accessToken, refreshToken, "Bearer");
+                JwtResponse jwtResponse = new JwtResponse(accessToken, refreshToken, "Bearer",userService.getUsers(username));
                 return jwtResponse;
             } catch (Exception e) {
                 e.printStackTrace();

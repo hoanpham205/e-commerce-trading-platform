@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -53,11 +54,14 @@ public class Store implements Serializable {
     private String description;
     @Column(name = "active")
     private Boolean active;
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @JsonIgnore
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeStoreId")
+    private Set<Orders> ordersSet;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne
     private Users userId;
-    @JsonIgnore 
+    @JsonIgnore
     @OneToMany(mappedBy = "storeStoreId")
     private Set<Products> productsSet;
 
@@ -98,6 +102,15 @@ public class Store implements Serializable {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    @XmlTransient
+    public Set<Orders> getOrdersSet() {
+        return ordersSet;
+    }
+
+    public void setOrdersSet(Set<Orders> ordersSet) {
+        this.ordersSet = ordersSet;
     }
 
     public Users getUserId() {
@@ -141,5 +154,5 @@ public class Store implements Serializable {
     public String toString() {
         return "com.ou.pojo.Store[ storeId=" + storeId + " ]";
     }
-    
+
 }

@@ -4,6 +4,8 @@
  */
 package com.ou.repository.impl;
 
+import com.ou.pojo.Orderdetails;
+import com.ou.pojo.Orders;
 import com.ou.pojo.Products;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
@@ -84,9 +86,9 @@ public class ProductReponImpl implements ProductRepon {
 
             String storeName = params.get("storeName");
             if (storeName != null && !storeName.isEmpty()) {
-                predicates.add(b.equal( rootStore.get("storeId"),root.get("storeStoreId")));
+                predicates.add(b.equal(rootStore.get("storeId"), root.get("storeStoreId")));
 
-                predicates.add(b.like(rootStore.get("storeName").as(String.class), 
+                predicates.add(b.like(rootStore.get("storeName").as(String.class),
                         String.format("%%%s%%", storeName)));
             }
 
@@ -162,7 +164,7 @@ public class ProductReponImpl implements ProductRepon {
     }
 
     @Override
-    public List<Products> findPostsByUserId(String Dir) {
+    public List<Products> sortProductname(String Dir) {
         Session s = this.sessionFactory.getObject().getCurrentSession();
         String queryString = "SELECT p FROM Products p ORDER BY ";
         if ("asc".equalsIgnoreCase(Dir)) {
@@ -171,6 +173,42 @@ public class ProductReponImpl implements ProductRepon {
             queryString += "p.productName DESC";
         } else {
             queryString += "p.productName DESC";
+        }
+
+        Query q = s.createQuery(queryString);
+
+        List<Products> posts = q.getResultList();
+        return posts;
+    }
+
+    @Override
+    public List<Object[]> densityStats(Map<String, String> params) {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<Object[]> cr = builder.createQuery(Object[].class);
+
+        Root rP = cr.from(Products.class);
+        Root rOd = cr.from(Orderdetails.class);
+        cr.where(builder.equal(rOd.get("productId"), rP.get("productsProductId")),
+                builder.equal(builder.function("YEAR", Integer.class, rOd.get("paymentDate")), params.get("year")));
+
+        cr.multiselect(rP.get("productId"), rP.get("productName"), builder.count(rOd.get("productId")));
+        cr.groupBy(rP.get("productId"));
+
+        Query query = s.createQuery(cr);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Products> sortProductPrice(String Dir) {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+        String queryString = "SELECT p FROM Products p ORDER BY ";
+        if ("asc".equalsIgnoreCase(Dir)) {
+            queryString += "p.price ASC";
+        } else if ("desc".equalsIgnoreCase(Dir)) {
+            queryString += "p.price DESC";
+        } else {
+            queryString += "p.price DESC";
         }
 
         Query q = s.createQuery(queryString);

@@ -17,11 +17,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -39,7 +37,6 @@ import org.springframework.web.multipart.MultipartFile;
     @NamedQuery(name = "Users.findByPhone", query = "SELECT u FROM Users u WHERE u.phone = :phone"),
     @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
     @NamedQuery(name = "Users.findBySex", query = "SELECT u FROM Users u WHERE u.sex = :sex"),
-    @NamedQuery(name = "Users.findByCountry", query = "SELECT u FROM Users u WHERE u.country = :country"),
     @NamedQuery(name = "Users.findByAvatar", query = "SELECT u FROM Users u WHERE u.avatar = :avatar"),
     @NamedQuery(name = "Users.findByRole", query = "SELECT u FROM Users u WHERE u.role = :role"),
     @NamedQuery(name = "Users.findByActive", query = "SELECT u FROM Users u WHERE u.active = :active")})
@@ -71,9 +68,6 @@ public class Users implements Serializable {
     @Size(max = 45)
     @Column(name = "sex")
     private String sex;
-    @Size(max = 45)
-    @Column(name = "country")
-    private String country;
     @Size(max = 255)
     @Column(name = "avatar")
     private String avatar;
@@ -83,32 +77,17 @@ public class Users implements Serializable {
     @Column(name = "active")
     private Boolean active;
     @JsonIgnore
+
     @OneToMany(mappedBy = "userId")
     private Set<Comments> commentsSet;
     @JsonIgnore
 
     @OneToMany(mappedBy = "userId")
-    private Set<Payments> paymentsSet;
-    @JsonIgnore
-    @OneToMany(mappedBy = "userId")
     private Set<Orders> ordersSet;
     @JsonIgnore
+
     @OneToMany(mappedBy = "userId")
     private Set<Store> storeSet;
-//    @JsonIgnore 
-//    @Transient
-//    private MultipartFile file;
-//
-//    public MultipartFile getFile() {
-//        return file;
-//    }
-//
-//    /**
-//     * * * @param file the file to set
-//     */
-//    public void setFile(MultipartFile file) {
-//        this.file = file;
-//    }
 
     public Users() {
     }
@@ -173,14 +152,6 @@ public class Users implements Serializable {
         this.sex = sex;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public String getAvatar() {
         return avatar;
     }
@@ -212,15 +183,6 @@ public class Users implements Serializable {
 
     public void setCommentsSet(Set<Comments> commentsSet) {
         this.commentsSet = commentsSet;
-    }
-
-    @XmlTransient
-    public Set<Payments> getPaymentsSet() {
-        return paymentsSet;
-    }
-
-    public void setPaymentsSet(Set<Payments> paymentsSet) {
-        this.paymentsSet = paymentsSet;
     }
 
     @XmlTransient
