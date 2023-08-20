@@ -30,6 +30,8 @@ public interface ProductService {
 
     boolean updateOraddProduct(Products p);
 
-    List<Products> findPostsByUserId(String Dir);
+    List<Products> sortProductname(String Dir);
+
+    List<Products> sortProductPrice(String Dir);
 
 }

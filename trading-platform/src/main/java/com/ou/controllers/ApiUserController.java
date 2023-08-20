@@ -95,6 +95,7 @@ public class ApiUserController {
         authenticate(logindto.getUsername(), logindto.getPassword());
         final UserDetails userDetails = userService.loadUserByUsername(logindto.getUsername());
         Users user = userService.getUsers(userDetails.getUsername());
+        System.out.println(userDetails);
         JwtResponse jwtResponse = tokenProvider.generateToken(userDetails);
         if (jwtResponse != null) {
             Cookie cookie = new Cookie("JWT_TOKEN", jwtResponse.getAccessToken());

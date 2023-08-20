@@ -129,7 +129,6 @@ public class userServiceImpl implements userService {
         u.setEmail(params.get("phone"));
         u.setEmail(params.get("email"));
         u.setSex(params.get("sex"));
-        u.setCountry(params.get("country"));
         u.setActive(Boolean.FALSE);
         u.setRole("USER");
         try {

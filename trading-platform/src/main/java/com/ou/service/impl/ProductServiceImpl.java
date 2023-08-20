@@ -105,10 +105,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Products> findPostsByUserId(String Dir) {
+    public List<Products> sortProductname(String Dir) {
         String direction = Dir != null ? Dir.toLowerCase() : "asc";
-        List<Products> prodcutList = ProductRepon.findPostsByUserId(direction);
+        List<Products> prodcutList = ProductRepon.sortProductname(direction);
         return prodcutList;
-                }
+    }
+
+    @Override
+    public List<Products> sortProductPrice(String Dir) {
+        String direction = Dir != null ? Dir.toLowerCase() : "asc";
+        List<Products> prodcutList = ProductRepon.sortProductPrice(direction);
+        return prodcutList;
+    }
 
 }
