@@ -1,0 +1,20 @@
+import React from "react";
+import { Col, Container, ListGroup, Row } from "react-bootstrap";
+
+
+function Dashboard() {
+  return <Container>
+    <Row>
+        <Col lg='4'>
+        <ListGroup>
+            <ListGroup.Item>Hom</ListGroup.Item>
+            <ListGroup.Item>Thong Ke Ban Hang</ListGroup.Item>
+            <ListGroup.Item></ListGroup.Item>
+        </ListGroup>
+        </Col>
+        <Col lg='8'></Col>
+    </Row>
+  </Container>
+}
+
+export default Dashboard;

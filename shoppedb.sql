@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `shoppedb`.`users` (
   `active` TINYINT(1) NULL DEFAULT NULL,
   PRIMARY KEY (`user_id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 63
+AUTO_INCREMENT = 64
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
@@ -156,14 +156,12 @@ CREATE TABLE IF NOT EXISTS `shoppedb`.`orders` (
   CONSTRAINT `fk_orders_payments1`
     FOREIGN KEY (`payments_payment_id`)
     REFERENCES `shoppedb`.`payments` (`payment_id`),
-  CONSTRAINT `orders_ibfk_1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `shoppedb`.`users` (`user_id`),
   CONSTRAINT `fk_orders_store1`
     FOREIGN KEY (`store_store_id`)
-    REFERENCES `shoppedb`.`store` (`store_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `shoppedb`.`store` (`store_id`),
+  CONSTRAINT `orders_ibfk_1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `shoppedb`.`users` (`user_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
