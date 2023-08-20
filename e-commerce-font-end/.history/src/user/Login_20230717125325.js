@@ -1,5 +1,0 @@
-
-
-class Login extends Component {
-    
-}

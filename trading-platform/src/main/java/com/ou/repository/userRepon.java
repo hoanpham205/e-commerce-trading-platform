@@ -4,6 +4,7 @@
  */
 package com.ou.repository;
 
+import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import java.util.List;
 
@@ -17,7 +18,16 @@ public interface userRepon {
 
     Users getUser(int id);
 
-            
-    List<Users> getUsers(String username);
+    Users getUserByUsername(String username);
+
+    Users getUsers(String username);
+
+    Store getStoreByUserId(int userId);
+
+    Users getUserById(int id);
+
+    boolean deleteAcount(int id);
+
+    List<Users> getUserActive();
 
 }

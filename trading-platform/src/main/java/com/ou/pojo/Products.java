@@ -4,6 +4,7 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -35,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Products.findAll", query = "SELECT p FROM Products p"),
     @NamedQuery(name = "Products.findByProductId", query = "SELECT p FROM Products p WHERE p.productId = :productId"),
     @NamedQuery(name = "Products.findByProductName", query = "SELECT p FROM Products p WHERE p.productName = :productName"),
-    @NamedQuery(name = "Products.findByPrice", query = "SELECT p FROM Products p WHERE p.price = :price")})
+    @NamedQuery(name = "Products.findByPrice", query = "SELECT p FROM Products p WHERE p.price = :price"),
+    @NamedQuery(name = "Products.findByImageUrl", query = "SELECT p FROM Products p WHERE p.imageUrl = :imageUrl")})
 public class Products implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,21 +52,23 @@ public class Products implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
     private BigDecimal price;
+    @Size(max = 255)
+    @Column(name = "image_url")
+    private String imageUrl;
+    @JsonIgnore
+
     @OneToMany(mappedBy = "productId")
     private Set<Comments> commentsSet;
-    @OneToMany(mappedBy = "productId")
-    private Set<Productimages> productimagesSet;
+    @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productsProductId")
     private Set<Orderdetails> orderdetailsSet;
-    @OneToMany(mappedBy = "productId")
-    private Set<Orders> ordersSet;
-    @OneToMany(mappedBy = "productId")
-    private Set<Sales> salesSet;
     @JoinColumn(name = "categories_category_id", referencedColumnName = "category_id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Categories categoriesCategoryId;
     @JoinColumn(name = "store_store_id", referencedColumnName = "store_id")
-    @ManyToOne(optional = false)
+    @JsonIgnore
+    @ManyToOne
     private Store storeStoreId;
 
     public Products() {
@@ -98,6 +102,14 @@ public class Products implements Serializable {
         this.price = price;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     @XmlTransient
     public Set<Comments> getCommentsSet() {
         return commentsSet;
@@ -108,39 +120,12 @@ public class Products implements Serializable {
     }
 
     @XmlTransient
-    public Set<Productimages> getProductimagesSet() {
-        return productimagesSet;
-    }
-
-    public void setProductimagesSet(Set<Productimages> productimagesSet) {
-        this.productimagesSet = productimagesSet;
-    }
-
-    @XmlTransient
     public Set<Orderdetails> getOrderdetailsSet() {
         return orderdetailsSet;
     }
 
     public void setOrderdetailsSet(Set<Orderdetails> orderdetailsSet) {
         this.orderdetailsSet = orderdetailsSet;
-    }
-
-    @XmlTransient
-    public Set<Orders> getOrdersSet() {
-        return ordersSet;
-    }
-
-    public void setOrdersSet(Set<Orders> ordersSet) {
-        this.ordersSet = ordersSet;
-    }
-
-    @XmlTransient
-    public Set<Sales> getSalesSet() {
-        return salesSet;
-    }
-
-    public void setSalesSet(Set<Sales> salesSet) {
-        this.salesSet = salesSet;
     }
 
     public Categories getCategoriesCategoryId() {
@@ -183,5 +168,5 @@ public class Products implements Serializable {
     public String toString() {
         return "com.ou.pojo.Products[ productId=" + productId + " ]";
     }
-    
+
 }

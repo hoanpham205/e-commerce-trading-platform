@@ -4,6 +4,7 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -34,7 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Store.findAll", query = "SELECT s FROM Store s"),
     @NamedQuery(name = "Store.findByStoreId", query = "SELECT s FROM Store s WHERE s.storeId = :storeId"),
-    @NamedQuery(name = "Store.findByStoreName", query = "SELECT s FROM Store s WHERE s.storeName = :storeName")})
+    @NamedQuery(name = "Store.findByStoreName", query = "SELECT s FROM Store s WHERE s.storeName = :storeName"),
+    @NamedQuery(name = "Store.findByActive", query = "SELECT s FROM Store s WHERE s.active = :active")})
 public class Store implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,10 +52,17 @@ public class Store implements Serializable {
     @Size(max = 65535)
     @Column(name = "description")
     private String description;
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    @ManyToOne(optional = false)
-    private Users userId;
+    @Column(name = "active")
+    private Boolean active;
+    @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeStoreId")
+    private Set<Orders> ordersSet;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @ManyToOne
+    private Users userId;
+    @JsonIgnore
+    @OneToMany(mappedBy = "storeStoreId")
     private Set<Products> productsSet;
 
     public Store() {
@@ -85,6 +94,23 @@ public class Store implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    @XmlTransient
+    public Set<Orders> getOrdersSet() {
+        return ordersSet;
+    }
+
+    public void setOrdersSet(Set<Orders> ordersSet) {
+        this.ordersSet = ordersSet;
     }
 
     public Users getUserId() {
@@ -128,5 +154,5 @@ public class Store implements Serializable {
     public String toString() {
         return "com.ou.pojo.Store[ storeId=" + storeId + " ]";
     }
-    
+
 }

@@ -4,21 +4,24 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -46,12 +49,10 @@ public class Payments implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "amount")
     private BigDecimal amount;
-    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
-    @ManyToOne
-    private Orders orderId;
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    @ManyToOne
-    private Users userId;
+    @JsonIgnore
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentsPaymentId")
+    private Set<Orders> ordersSet;
 
     public Payments() {
     }
@@ -84,20 +85,13 @@ public class Payments implements Serializable {
         this.amount = amount;
     }
 
-    public Orders getOrderId() {
-        return orderId;
+    @XmlTransient
+    public Set<Orders> getOrdersSet() {
+        return ordersSet;
     }
 
-    public void setOrderId(Orders orderId) {
-        this.orderId = orderId;
-    }
-
-    public Users getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Users userId) {
-        this.userId = userId;
+    public void setOrdersSet(Set<Orders> ordersSet) {
+        this.ordersSet = ordersSet;
     }
 
     @Override
@@ -124,5 +118,5 @@ public class Payments implements Serializable {
     public String toString() {
         return "com.ou.pojo.Payments[ paymentId=" + paymentId + " ]";
     }
-    
+
 }

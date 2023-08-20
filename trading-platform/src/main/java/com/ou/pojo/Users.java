@@ -4,10 +4,10 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,11 +17,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -37,22 +35,14 @@ import org.springframework.web.multipart.MultipartFile;
     @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
     @NamedQuery(name = "Users.findByFullname", query = "SELECT u FROM Users u WHERE u.fullname = :fullname"),
     @NamedQuery(name = "Users.findByPhone", query = "SELECT u FROM Users u WHERE u.phone = :phone"),
-    @NamedQuery(name = "Users.findByAddress", query = "SELECT u FROM Users u WHERE u.address = :address"),
     @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
     @NamedQuery(name = "Users.findBySex", query = "SELECT u FROM Users u WHERE u.sex = :sex"),
-    @NamedQuery(name = "Users.findByCountry", query = "SELECT u FROM Users u WHERE u.country = :country"),
     @NamedQuery(name = "Users.findByAvatar", query = "SELECT u FROM Users u WHERE u.avatar = :avatar"),
-    @NamedQuery(name = "Users.findByRole", query = "SELECT u FROM Users u WHERE u.role = :role")})
+    @NamedQuery(name = "Users.findByRole", query = "SELECT u FROM Users u WHERE u.role = :role"),
+    @NamedQuery(name = "Users.findByActive", query = "SELECT u FROM Users u WHERE u.active = :active")})
 public class Users implements Serializable {
 
-    /**
-     * @return the file
-     */
     private static final long serialVersionUID = 1L;
-
-    public static final String EMPLOYEE = "USER";
-    public static final String ADMIN = "ADMIN";
-    public static final String CUSTOMER = "EMPLOYEE";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -71,9 +61,6 @@ public class Users implements Serializable {
     @Size(max = 45)
     @Column(name = "phone")
     private String phone;
-    @Size(max = 45)
-    @Column(name = "address")
-    private String address;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 45)
     @Column(name = "email")
@@ -81,25 +68,26 @@ public class Users implements Serializable {
     @Size(max = 45)
     @Column(name = "sex")
     private String sex;
-    @Size(max = 45)
-    @Column(name = "country")
-    private String country;
     @Size(max = 255)
     @Column(name = "avatar")
     private String avatar;
     @Size(max = 255)
     @Column(name = "role")
     private String role;
+    @Column(name = "active")
+    private Boolean active;
+    @JsonIgnore
+
     @OneToMany(mappedBy = "userId")
     private Set<Comments> commentsSet;
-    @OneToMany(mappedBy = "userId")
-    private Set<Payments> paymentsSet;
+    @JsonIgnore
+
     @OneToMany(mappedBy = "userId")
     private Set<Orders> ordersSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @JsonIgnore
+
+    @OneToMany(mappedBy = "userId")
     private Set<Store> storeSet;
-    @Transient
-    private MultipartFile file;
 
     public Users() {
     }
@@ -148,14 +136,6 @@ public class Users implements Serializable {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -170,14 +150,6 @@ public class Users implements Serializable {
 
     public void setSex(String sex) {
         this.sex = sex;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     public String getAvatar() {
@@ -196,15 +168,12 @@ public class Users implements Serializable {
         this.role = role;
     }
 
-    public MultipartFile getFile() {
-        return file;
+    public Boolean getActive() {
+        return active;
     }
 
-    /**
-     * @param file the file to set
-     */
-    public void setFile(MultipartFile file) {
-        this.file = file;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     @XmlTransient
@@ -214,15 +183,6 @@ public class Users implements Serializable {
 
     public void setCommentsSet(Set<Comments> commentsSet) {
         this.commentsSet = commentsSet;
-    }
-
-    @XmlTransient
-    public Set<Payments> getPaymentsSet() {
-        return paymentsSet;
-    }
-
-    public void setPaymentsSet(Set<Payments> paymentsSet) {
-        this.paymentsSet = paymentsSet;
     }
 
     @XmlTransient

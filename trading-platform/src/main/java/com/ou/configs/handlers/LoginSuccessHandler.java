@@ -29,7 +29,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest hsr,
             HttpServletResponse response, Authentication a)
             throws IOException, ServletException {
-        Users  u=this.userDetailsService.getUsers(a.getName()).get(0);
+        Users  u=this.userDetailsService.getUsers(a.getName());
         hsr.getSession().setAttribute("currentUser", u);
         response.sendRedirect("/trading-platform/");
     }

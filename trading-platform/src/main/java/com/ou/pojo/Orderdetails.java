@@ -5,9 +5,8 @@
 package com.ou.pojo;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.math.BigDecimal;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,10 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -32,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Orderdetails.findAll", query = "SELECT o FROM Orderdetails o"),
     @NamedQuery(name = "Orderdetails.findByOrderDetailId", query = "SELECT o FROM Orderdetails o WHERE o.orderDetailId = :orderDetailId"),
-    @NamedQuery(name = "Orderdetails.findByTransactionId", query = "SELECT o FROM Orderdetails o WHERE o.transactionId = :transactionId"),
+    @NamedQuery(name = "Orderdetails.findByPrice", query = "SELECT o FROM Orderdetails o WHERE o.price = :price"),
     @NamedQuery(name = "Orderdetails.findByQuantity", query = "SELECT o FROM Orderdetails o WHERE o.quantity = :quantity")})
 public class Orderdetails implements Serializable {
 
@@ -42,8 +39,8 @@ public class Orderdetails implements Serializable {
     @Basic(optional = false)
     @Column(name = "order_detail_id")
     private Integer orderDetailId;
-    @Column(name = "transaction_id")
-    private Integer transactionId;
+    @Column(name = "price")
+    private BigDecimal price;
     @Column(name = "quantity")
     private Integer quantity;
     @JoinColumn(name = "orders_order_id", referencedColumnName = "order_id")
@@ -52,8 +49,6 @@ public class Orderdetails implements Serializable {
     @JoinColumn(name = "products_product_id", referencedColumnName = "product_id")
     @ManyToOne(optional = false)
     private Products productsProductId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderdetaillId")
-    private Set<Sales> salesSet;
 
     public Orderdetails() {
     }
@@ -70,12 +65,12 @@ public class Orderdetails implements Serializable {
         this.orderDetailId = orderDetailId;
     }
 
-    public Integer getTransactionId() {
-        return transactionId;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setTransactionId(Integer transactionId) {
-        this.transactionId = transactionId;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public Integer getQuantity() {
@@ -100,15 +95,6 @@ public class Orderdetails implements Serializable {
 
     public void setProductsProductId(Products productsProductId) {
         this.productsProductId = productsProductId;
-    }
-
-    @XmlTransient
-    public Set<Sales> getSalesSet() {
-        return salesSet;
-    }
-
-    public void setSalesSet(Set<Sales> salesSet) {
-        this.salesSet = salesSet;
     }
 
     @Override

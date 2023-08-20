@@ -9,10 +9,14 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.ou.configs.handlers.LoginSuccessHandler;
 import com.ou.configs.handlers.LogoutHandler;
+import com.ou.security.JwtAuthenticationFilter;
+import com.ou.service.userService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,6 +27,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  *
@@ -32,10 +37,21 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 @EnableWebSecurity
 @EnableTransactionManagement
 @ComponentScan(basePackages = {
-    "com.ou.repository",
-    "com.ou.service"
+    "com.ou.*"
 })
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Autowired
+    private userService userService;
+
+    @Bean
+    @Override
+    public AuthenticationManager  authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -63,25 +79,24 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin().loginPage("/login/")
+        http.cors().and().csrf().disable();
+
+        http.formLogin()
                 .usernameParameter("username")
                 .passwordParameter("password");
 
         http.formLogin().defaultSuccessUrl("/")
                 .failureUrl("/login/?error");
 
-        http.formLogin().successHandler(this.loginSuccessHandler); //xử lý sau khi đăng nhập
-
-        http.logout().logoutSuccessHandler(this.LogoutHandler);//xử lý sau khi đăng xuất
-
-        http.authorizeRequests().antMatchers("/register/").permitAll()
-                .antMatchers("/admin/").access("hasAnyAuthority('ADMIN', 'EMPLOYEE')");
+      
 
         http.exceptionHandling().accessDeniedPage("/login/?accessDenied");
 
-        http.authorizeRequests().antMatchers("/register/**")
+        http.authorizeRequests().antMatchers("/store/**")
+                .access("hasAnyAuthority('EMPLOYEE')");
+        http.authorizeRequests().antMatchers("/admin/**")
                 .access("hasAnyAuthority('ADMIN')");
-
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.csrf().disable();
     }
 
@@ -108,6 +123,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         resolver.setDefaultEncoding("UTF-8");
         return resolver;
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+        auth.setUserDetailsService(userService);
+        auth.setPasswordEncoder(passwordEncoder());
+        return auth;
     }
 
 }
