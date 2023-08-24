@@ -4,6 +4,7 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -52,15 +53,19 @@ public class Orders implements Serializable {
     @Column(name = "order_date")
     @Temporal(TemporalType.DATE)
     private Date orderDate;
-    @OneToMany(mappedBy = "orderId")
-    private Set<Payments> paymentsSet;
+    @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordersOrderId")
     private Set<Orderdetails> orderdetailsSet;
+    @JoinColumn(name = "payments_payment_id", referencedColumnName = "payment_id")
+    @ManyToOne(optional = false)
+    private Payments paymentsPaymentId;
+    @JoinColumn(name = "store_store_id", referencedColumnName = "store_id")
+    @ManyToOne(optional = false)
+    private Store storeStoreId;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne
     private Users userId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordersOrderId")
-    private Set<Sales> salesSet;
 
     public Orders() {
     }
@@ -94,15 +99,6 @@ public class Orders implements Serializable {
     }
 
     @XmlTransient
-    public Set<Payments> getPaymentsSet() {
-        return paymentsSet;
-    }
-
-    public void setPaymentsSet(Set<Payments> paymentsSet) {
-        this.paymentsSet = paymentsSet;
-    }
-
-    @XmlTransient
     public Set<Orderdetails> getOrderdetailsSet() {
         return orderdetailsSet;
     }
@@ -111,21 +107,28 @@ public class Orders implements Serializable {
         this.orderdetailsSet = orderdetailsSet;
     }
 
+    public Payments getPaymentsPaymentId() {
+        return paymentsPaymentId;
+    }
+
+    public void setPaymentsPaymentId(Payments paymentsPaymentId) {
+        this.paymentsPaymentId = paymentsPaymentId;
+    }
+
+    public Store getStoreStoreId() {
+        return storeStoreId;
+    }
+
+    public void setStoreStoreId(Store storeStoreId) {
+        this.storeStoreId = storeStoreId;
+    }
+
     public Users getUserId() {
         return userId;
     }
 
     public void setUserId(Users userId) {
         this.userId = userId;
-    }
-
-    @XmlTransient
-    public Set<Sales> getSalesSet() {
-        return salesSet;
-    }
-
-    public void setSalesSet(Set<Sales> salesSet) {
-        this.salesSet = salesSet;
     }
 
     @Override
@@ -152,5 +155,5 @@ public class Orders implements Serializable {
     public String toString() {
         return "com.ou.pojo.Orders[ orderId=" + orderId + " ]";
     }
-    
+
 }
