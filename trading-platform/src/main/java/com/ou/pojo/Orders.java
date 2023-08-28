@@ -4,12 +4,10 @@
  */
 package com.ou.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -53,13 +51,11 @@ public class Orders implements Serializable {
     @Column(name = "order_date")
     @Temporal(TemporalType.DATE)
     private Date orderDate;
-    @JsonIgnore
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordersOrderId")
+    @OneToMany(mappedBy = "ordersOrderId")
     private Set<Orderdetails> orderdetailsSet;
     @JoinColumn(name = "payments_payment_id", referencedColumnName = "payment_id")
     @ManyToOne(optional = false)
-    private Payments paymentsPaymentId;
+    private Payment paymentsPaymentId;
     @JoinColumn(name = "store_store_id", referencedColumnName = "store_id")
     @ManyToOne(optional = false)
     private Store storeStoreId;
@@ -107,11 +103,11 @@ public class Orders implements Serializable {
         this.orderdetailsSet = orderdetailsSet;
     }
 
-    public Payments getPaymentsPaymentId() {
+    public Payment getPaymentsPaymentId() {
         return paymentsPaymentId;
     }
 
-    public void setPaymentsPaymentId(Payments paymentsPaymentId) {
+    public void setPaymentsPaymentId(Payment paymentsPaymentId) {
         this.paymentsPaymentId = paymentsPaymentId;
     }
 
@@ -155,5 +151,5 @@ public class Orders implements Serializable {
     public String toString() {
         return "com.ou.pojo.Orders[ orderId=" + orderId + " ]";
     }
-
+    
 }

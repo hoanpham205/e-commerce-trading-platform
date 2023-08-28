@@ -10,8 +10,10 @@ import com.ou.pojo.Users;
 import com.ou.repository.CommentRepon;
 import com.ou.service.CommentService;
 import com.ou.service.ProductService;
+import com.ou.service.userService;
 import java.util.List;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private ProductService ProductService;
+
+    @Autowired
+    private userService userService;
 
     @Override
     public Comments addComment(Comments c, Users userId, int proId, int reply) {
@@ -56,6 +61,33 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comments> findAllCommentsByProductId(Products id) {
         return this.CommentRepon.findAllCommentsByProductId(id);
+    }
+
+    @Override
+    public boolean deleteComment(Comments id) {
+        return this.CommentRepon.deleteComment(id);
+    }
+
+    @Override
+    public boolean deleteComment(int id, int userId) {
+        Users u = this.userService.getUserById(userId);
+        Comments com = this.getComment(u);
+        List<Comments> c = this.getAllByCommentId(com);
+        for (Comments comment : c) {
+            this.deleteComment((Comments) c);
+        }
+
+        return this.CommentRepon.deleteComment(com);
+    }
+
+    @Override
+    public Comments getComment(Users user) {
+        return this.CommentRepon.getComment(user);
+    }
+
+    @Override
+    public List<Comments> getAllByCommentId(Comments c) {
+        return this.getAllByCommentId(c);
     }
 
 }

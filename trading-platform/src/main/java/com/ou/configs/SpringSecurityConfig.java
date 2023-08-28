@@ -7,24 +7,22 @@ package com.ou.configs;
 //import com.ou.configs.handlers.LoginSuccessHandler;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.ou.configs.handlers.LoginSuccessHandler;
-import com.ou.configs.handlers.LogoutHandler;
-import com.ou.security.JwtAuthenticationFilter;
+
 import com.ou.service.userService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -41,41 +39,28 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 })
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
 
     @Autowired
     private userService userService;
 
     @Bean
     @Override
-    public AuthenticationManager  authenticationManagerBean() throws Exception {
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
+    
+    
     @Autowired
     private UserDetailsService userDetailsService;
-
-    @Autowired
-    private AuthenticationSuccessHandler loginSuccessHandler;
-
-    @Autowired
-    private LogoutSuccessHandler LogoutHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    @Bean
-    public AuthenticationSuccessHandler loginSuccessHandler() {
-        return new LoginSuccessHandler();
-    }
-
-    @Bean
-    public LogoutSuccessHandler logoutHandler() {
-        return new LogoutHandler();
-    }
+    
+ 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -88,15 +73,19 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().defaultSuccessUrl("/")
                 .failureUrl("/login/?error");
 
-      
+//        http.csrf().ignoringAntMatchers("/api/**");
+//        http.authorizeRequests().antMatchers("/api/login/").permitAll();
+//        http.authorizeRequests().antMatchers("/api/products/").permitAll();
+//        http.authorizeRequests().antMatchers("/api/categories/").permitAll();
+//        http.authorizeRequests().antMatchers("/api/users/").permitAll();
+//        http.antMatcher("/api/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+//                .antMatchers(HttpMethod.GET, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+//                .antMatchers(HttpMethod.POST, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+//                .antMatchers(HttpMethod.DELETE, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')").and()
+//                .addFilterBefore(jwtL(), UsernamePasswordAuthenticationFilter.class)
+//                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
 
-        http.exceptionHandling().accessDeniedPage("/login/?accessDenied");
-
-        http.authorizeRequests().antMatchers("/store/**")
-                .access("hasAnyAuthority('EMPLOYEE')");
-        http.authorizeRequests().antMatchers("/admin/**")
-                .access("hasAnyAuthority('ADMIN')");
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.csrf().disable();
     }
 

@@ -1,4 +1,4 @@
-    /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -80,8 +80,11 @@ public class ApiConmentControllers {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-    
-    
-//    @DeleteMapping("/product/{Proid}/comment/{id}/")
 
+    @DeleteMapping("/comment/{id}/")
+    public ResponseEntity<?> replyToComent(@PathVariable("Proid") int proId,@RequestBody int userId) {
+        
+        return new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.OK);
+
+    }
 }

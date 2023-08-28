@@ -4,6 +4,8 @@
  */
 package com.ou.controllers;
 
+import com.ou.dto.ProductDto;
+import com.ou.pojo.Categories;
 import com.ou.pojo.Products;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
@@ -41,6 +43,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -89,18 +93,22 @@ public class ApiProductController {
         return new ResponseEntity<>(Ultill.countCart(cart), HttpStatus.OK);
     }
 
-    @PostMapping("/pay")
-    public void add(@RequestBody Map<String, cart> carts) {
-        this.receiptService.addReceipt(carts);
+    @PostMapping("/pay/")
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin
+    public void add(@RequestBody Map<String, cart> carts, String payname) {
+        this.receiptService.addReceipt(carts, payname);
     }
 
     @DeleteMapping("/cart/delete/{id}/")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCart(Model model, HttpSession session, @PathVariable(value = "id") Integer id) {
+    public ResponseEntity<?> deleteCart(Model model, HttpSession session, @PathVariable(value = "id") Integer id) {
         Map<Integer, cart> cart = (Map<Integer, cart>) session.getAttribute("cart");
         if (cart.containsKey(id) == true) {
             cart c = cart.remove(id);
         }
+        return new ResponseEntity<>(Ultill.countCart(cart), HttpStatus.OK);
+
     }
 
     @GetMapping("/products/")
@@ -117,16 +125,15 @@ public class ApiProductController {
 
     }
 
-    @PostMapping("/add-product/")
+    @PostMapping("/product/")
     @CrossOrigin
-    public ResponseEntity<?> addProduct(@RequestBody Products p
-    ) {
+    public ResponseEntity<?> addProduct(@RequestParam Map<String, String> params, @RequestPart MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users userCuren = userSer.getUsers(userDetails.getUsername());
             Store s = storeService.getStoreByUserID(userCuren);
-            Products product = ProductService.addProduct(p, s);
+            ProductDto product = ProductService.addProduct(params, s, file);
             return new ResponseEntity<>(product == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED) : product, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

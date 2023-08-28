@@ -5,15 +5,17 @@
 package com.ou.service;
 
 import com.ou.pojo.Payment;
-import com.ou.pojo.cart;
-import java.util.Map;
+import java.util.List;
 
 /**
  *
  * @author ADMIN
  */
-public interface ReceiptService {
+public interface paymentService {
 
-    boolean addReceipt(Map<String, cart> carts,String payName);
+    public List<Payment> getListPayment();
+
+    public Payment getPaymentsById(int id);
+    public Payment getPaymentsByName(String name);
 
 }

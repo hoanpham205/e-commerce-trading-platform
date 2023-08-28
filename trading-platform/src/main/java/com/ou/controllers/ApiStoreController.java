@@ -8,6 +8,7 @@ import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.service.storeService;
 import com.ou.service.userService;
+import java.security.Principal;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -38,28 +39,29 @@ public class ApiStoreController {
     @Autowired
     private userService userService;
 
-    @GetMapping("/stores/")
-    public ResponseEntity<?> getStore(HttpSession session) {
+    @GetMapping("/store/")
+    public ResponseEntity<?> getStore() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Users currentUser = userService.getUsers(userDetails.getUsername());
-        Store store = this.storeService.getStoreByUserID(currentUser);
-        return new ResponseEntity<>(store == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED) : store, HttpStatus.OK);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUsers(userDetails.getUsername());
+            Store store = this.storeService.getStoreByUserID(currentUser);
+            return new ResponseEntity<>(store == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED) : store, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
-    @PostMapping("/create-store/")
-    public ResponseEntity<?> creareStore(@RequestBody @Valid Store s, HttpSession session) {
+    @PostMapping("/store/")
+    public ResponseEntity<?> creareStore(@RequestBody
+            @Valid Store s) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Users currentUser = userService.getUsers(userDetails.getUsername());
-        Store store = storeService.addStore(s, currentUser);
-        return new ResponseEntity<>(store == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED) : store, HttpStatus.OK);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUsers(userDetails.getUsername());
+            Store store = storeService.addStore(s, currentUser);
+            return new ResponseEntity<>(store == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED) : store, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

@@ -2,18 +2,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ou.service;
+package com.ou.repository;
 
 import com.ou.pojo.Payment;
-import com.ou.pojo.cart;
-import java.util.Map;
+import java.util.List;
 
 /**
  *
  * @author ADMIN
  */
-public interface ReceiptService {
+public interface PayMentRespon {
 
-    boolean addReceipt(Map<String, cart> carts,String payName);
+    public List<Payment> getListPayment();
+
+    public Payment getPaymentsById(int id);
+    
+    public Payment getPaymentsByName(String name );
 
 }

@@ -6,6 +6,7 @@ package com.ou.repository.impl;
 
 import com.ou.pojo.Orderdetails;
 import com.ou.pojo.Orders;
+import com.ou.pojo.Payment;
 import com.ou.pojo.cart;
 import com.ou.repository.ProductRepon;
 import com.ou.repository.ReceiptRepository;
@@ -46,12 +47,14 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public boolean addReceipt(Map<String, cart> carts) {
+    public boolean addReceipt(Map<String, cart> carts,Payment method) {
         Session s = this.factory.getObject().getCurrentSession();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
             Orders order = new Orders();
             order.setUserId(this.userRepo.getUserByUsername(authentication.getName()));
+            order.setPaymentsPaymentId(method);
+            order.setOrderDate(new Date());
             s.save(order);
 
             for (cart c : carts.values()) {
@@ -60,6 +63,7 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
                 d.setPrice(c.getPrice());
                 d.setOrdersOrderId(order);
                 d.setProductsProductId(this.productRepo.getProductById(c.getProductId()));
+                d.setOrdersOrderId(order);
                 s.save(d);
             }
 

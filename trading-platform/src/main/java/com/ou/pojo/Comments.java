@@ -4,7 +4,6 @@
  */
 package com.ou.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -23,6 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -47,17 +47,20 @@ public class Comments implements Serializable {
     @Basic(optional = false)
     @Column(name = "comment_id")
     private Integer commentId;
+    @Basic(optional = false)
+    @NotNull
     @Lob
-    @Size(max = 65535)
+    @Size(min = 1, max = 65535)
     @Column(name = "comment_text")
     private String commentText;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "comment_date")
     @Temporal(TemporalType.DATE)
     private Date commentDate;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "evaluate")
     private Double evaluate;
-    @JsonIgnore
     @OneToMany(mappedBy = "commentsCommentId")
     private Set<Comments> commentsSet;
     @JoinColumn(name = "comments_comment_id", referencedColumnName = "comment_id")
@@ -75,6 +78,12 @@ public class Comments implements Serializable {
 
     public Comments(Integer commentId) {
         this.commentId = commentId;
+    }
+
+    public Comments(Integer commentId, String commentText, Date commentDate) {
+        this.commentId = commentId;
+        this.commentText = commentText;
+        this.commentDate = commentDate;
     }
 
     public Integer getCommentId() {
@@ -166,5 +175,5 @@ public class Comments implements Serializable {
     public String toString() {
         return "com.ou.pojo.Comments[ commentId=" + commentId + " ]";
     }
-
+    
 }

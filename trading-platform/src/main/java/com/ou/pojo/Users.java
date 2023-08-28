@@ -17,6 +17,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -36,7 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByFullname", query = "SELECT u FROM Users u WHERE u.fullname = :fullname"),
     @NamedQuery(name = "Users.findByPhone", query = "SELECT u FROM Users u WHERE u.phone = :phone"),
     @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
-    @NamedQuery(name = "Users.findBySex", query = "SELECT u FROM Users u WHERE u.sex = :sex"),
     @NamedQuery(name = "Users.findByAvatar", query = "SELECT u FROM Users u WHERE u.avatar = :avatar"),
     @NamedQuery(name = "Users.findByRole", query = "SELECT u FROM Users u WHERE u.role = :role"),
     @NamedQuery(name = "Users.findByActive", query = "SELECT u FROM Users u WHERE u.active = :active")})
@@ -48,44 +49,52 @@ public class Users implements Serializable {
     @Basic(optional = false)
     @Column(name = "user_id")
     private Integer userId;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @NotNull(message="{notNullMsg}")
+    @Size(min = 1, max = 50)
     @Column(name = "username")
     private String username;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @JsonIgnore
     @Column(name = "password")
     private String password;
-    @Size(max = 45)
+    @Basic(optional = false)
+    @Size(min = 1, max = 45)
     @Column(name = "fullname")
     private String fullname;
     // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
-    @Size(max = 45)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 10)
     @Column(name = "phone")
     private String phone;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 45)
+    @Basic(optional = false)
+    @NotNull
+    @Email
+    @Size(min = 1, max = 45)
     @Column(name = "email")
     private String email;
-    @Size(max = 45)
-    @Column(name = "sex")
-    private String sex;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @Size(min = 1, max = 255)
     @Column(name = "avatar")
     private String avatar;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @Size(min = 1, max = 255)
     @Column(name = "role")
     private String role;
+    @Basic(optional = false)
     @Column(name = "active")
-    private Boolean active;
+    private boolean active;
     @JsonIgnore
-
     @OneToMany(mappedBy = "userId")
     private Set<Comments> commentsSet;
     @JsonIgnore
-
     @OneToMany(mappedBy = "userId")
     private Set<Orders> ordersSet;
     @JsonIgnore
-
     @OneToMany(mappedBy = "userId")
     private Set<Store> storeSet;
 
@@ -94,6 +103,18 @@ public class Users implements Serializable {
 
     public Users(Integer userId) {
         this.userId = userId;
+    }
+
+    public Users(Integer userId, String username, String password, String fullname, String phone, String email, String avatar, String role, boolean active) {
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+        this.fullname = fullname;
+        this.phone = phone;
+        this.email = email;
+        this.avatar = avatar;
+        this.role = role;
+        this.active = active;
     }
 
     public Integer getUserId() {
@@ -144,14 +165,6 @@ public class Users implements Serializable {
         this.email = email;
     }
 
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
     public String getAvatar() {
         return avatar;
     }
@@ -168,11 +181,11 @@ public class Users implements Serializable {
         this.role = role;
     }
 
-    public Boolean getActive() {
+    public boolean getActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 
@@ -227,5 +240,5 @@ public class Users implements Serializable {
     public String toString() {
         return "com.ou.pojo.Users[ userId=" + userId + " ]";
     }
-
+    
 }

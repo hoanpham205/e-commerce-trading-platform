@@ -12,7 +12,13 @@ import java.util.List;
  * @author ADMIN
  */
 public interface CategoriRepon {
-    List<Categories> getcate(); 
+
+    List<Categories> getcate();
+
     Categories getCateById(int id);
-    boolean addOrUpdate();
+
+    boolean addOrUpdate(Categories cate);
+
+    Categories getCateByName(String name);
+
 }

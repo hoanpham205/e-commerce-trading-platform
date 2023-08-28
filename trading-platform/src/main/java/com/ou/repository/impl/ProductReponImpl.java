@@ -47,6 +47,7 @@ public class ProductReponImpl implements ProductRepon {
         try {
 
             session.save(p);
+            session.flush();
 
             return p;
         } catch (HibernateException e) {
@@ -182,24 +183,6 @@ public class ProductReponImpl implements ProductRepon {
     }
 
     @Override
-    public List<Object[]> densityStats(Map<String, String> params) {
-        Session s = this.sessionFactory.getObject().getCurrentSession();
-        CriteriaBuilder builder = s.getCriteriaBuilder();
-        CriteriaQuery<Object[]> cr = builder.createQuery(Object[].class);
-
-        Root rP = cr.from(Products.class);
-        Root rOd = cr.from(Orderdetails.class);
-        cr.where(builder.equal(rOd.get("productId"), rP.get("productsProductId")),
-                builder.equal(builder.function("YEAR", Integer.class, rOd.get("paymentDate")), params.get("year")));
-
-        cr.multiselect(rP.get("productId"), rP.get("productName"), builder.count(rOd.get("productId")));
-        cr.groupBy(rP.get("productId"));
-
-        Query query = s.createQuery(cr);
-        return query.getResultList();
-    }
-
-    @Override
     public List<Products> sortProductPrice(String Dir) {
         Session s = this.sessionFactory.getObject().getCurrentSession();
         String queryString = "SELECT p FROM Products p ORDER BY ";
@@ -215,6 +198,64 @@ public class ProductReponImpl implements ProductRepon {
 
         List<Products> posts = q.getResultList();
         return posts;
+    }
+
+    @Override
+    public List<Object[]> quarterStats(int quarter, int year) {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<Object[]> cr = builder.createQuery(Object[].class);
+
+        Root rP = cr.from(Products.class);
+        Root rOd = cr.from(Orderdetails.class);
+
+        cr.where(builder.equal(rOd.get("productId"), rP.get("productsProductId")),
+                builder.equal(builder.function("YEAR", Integer.class, rOd.get("paymentDate")), year));
+
+        cr.multiselect(rP.get("productId"), rP.get("productName"), builder.count(rOd.get("productId")));
+        cr.groupBy(rP.get("productId"));
+
+        Query query = s.createQuery(cr);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Object[]> monthStats(int m, int y) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> cr = builder.createQuery(Object[].class);
+
+        Root rP = cr.from(Products.class);
+        Root rOd = cr.from(Orderdetails.class);
+
+        cr.where(builder.equal(rP.get("productsProductId"), rOd.get("productId")),
+                builder.equal(builder.function("MONTH", Integer.class, rOd.get("paymentDate")), m),
+                builder.equal(builder.function("YEAR", Integer.class, rOd.get("paymentDate")), y));
+
+        cr.multiselect(rP.get("productId"), rP.get("productName"), builder.count(rOd.get("productId")));
+        cr.groupBy(rP.get("productId"));
+
+        Query query = session.createQuery(cr);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Object[]> yearStats(int y) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> cr = builder.createQuery(Object[].class);
+
+        Root rP = cr.from(Products.class);
+        Root rOd = cr.from(Orderdetails.class);
+
+        cr.where(builder.equal(rP.get("productsProductId"), rOd.get("productId")),
+                builder.equal(builder.function("YEAR", Integer.class, rOd.get("paymentDate")), y),
+                builder.equal(builder.function("YEAR", Integer.class, rOd.get("paymentDate")), y));
+        
+        cr.multiselect(rP.get("productId"), rP.get("productName"), builder.count(rOd.get("productId")));
+        cr.groupBy(rP.get("productId"));
+        Query query = session.createQuery(cr);
+        return query.getResultList();
     }
 
 }
