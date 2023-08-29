@@ -34,16 +34,14 @@ const Header=()=> {
 
     useEffect(() => {
         // Gửi yêu cầu API để lấy dữ liệu người dùng
-        axios.get('http://localhost:8080/trading-platform/login/')
+        axios.get('/api/current-user')
           .then(response => {
-            setCurrentUser(response.data); 
-            console.log(response.data)// Cập nhật state với dữ liệu người dùng
+            setCurrentUser(response.data); // Cập nhật state với dữ liệu người dùng
           })
           .catch(error => {
             console.error('Lỗi khi lấy dữ liệu người dùng:', error);
           });
       }, []);
-      
     
     const dispatch = useDispatch();
     const stickyHeaderFunc = () =>{
@@ -102,7 +100,7 @@ const Header=()=> {
 
                     <div className='profile'>
                         <motion.img whileTap={{scale:1.1}} 
-                        src={currentUser ? currentUser.avatar :   userIcon } alt='' onClick={toggleProfileAction} />
+                        src={currentUser? currentUser.photoURL:userIcon} alt='' onClick={toggleProfileAction} />
                         
                         <div className="profile__actions" ref={profileActionRef} onClick={toggleProfileAction}>
                         {

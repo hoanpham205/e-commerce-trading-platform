@@ -14,7 +14,7 @@ const DashboardHeader = () => {
       <div className="container">
         <Link to="/dashboard" className="navbar-brand">
           <img
-            src="../assets/img/github-logo.png"
+            src="../assets/img/"
             alt=""
           />
         </Link>

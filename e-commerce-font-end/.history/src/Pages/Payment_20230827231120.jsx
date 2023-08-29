@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +19,7 @@ function Payment() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
+  
   return (
     <div>Payment</div>
   )

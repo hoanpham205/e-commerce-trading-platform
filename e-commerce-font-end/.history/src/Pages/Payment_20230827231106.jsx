@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
+import React, { useState } from 'react'
+import style from "../../styles/styles";
+import { Country, State } from "country-state-city";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import axios from "axios";
 
+import { toast } from "react-toastify";
 
 function Payment() {
 
@@ -12,14 +17,11 @@ function Payment() {
   const [userInfo, setUserInfo] = useState(false);
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
+  
   const [couponCode, setCouponCode] = useState("");
+
   const [discountPrice, setDiscountPrice] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <div>Payment</div>
   )

@@ -1,11 +1,11 @@
-import axios from 'axios'
 import { motion } from 'framer-motion'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Container, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import logo from '../../assets/img/github-logo.png'
 import userIcon from '../../assets/img/user-icon.png'
+import useAuth from '../../custom-hooks/useAuth'
 import { logOut } from '../../redux/slices/authSlice'
 import './header.css'
 
@@ -31,19 +31,6 @@ const Header=()=> {
     const headerRef = useRef(null)
     const navigate = useNavigate()
     const profileActionRef = useRef(null)
-
-    useEffect(() => {
-        // Gửi yêu cầu API để lấy dữ liệu người dùng
-        axios.get('http://localhost:8080/trading-platform/login/')
-          .then(response => {
-            setCurrentUser(response.data); 
-            console.log(response.data)// Cập nhật state với dữ liệu người dùng
-          })
-          .catch(error => {
-            console.error('Lỗi khi lấy dữ liệu người dùng:', error);
-          });
-      }, []);
-      
     
     const dispatch = useDispatch();
     const stickyHeaderFunc = () =>{
@@ -102,7 +89,7 @@ const Header=()=> {
 
                     <div className='profile'>
                         <motion.img whileTap={{scale:1.1}} 
-                        src={currentUser ? currentUser.avatar :   userIcon } alt='' onClick={toggleProfileAction} />
+                        src={currentUser? currentUser.photoURL:userIcon} alt='' onClick={toggleProfileAction} />
                         
                         <div className="profile__actions" ref={profileActionRef} onClick={toggleProfileAction}>
                         {

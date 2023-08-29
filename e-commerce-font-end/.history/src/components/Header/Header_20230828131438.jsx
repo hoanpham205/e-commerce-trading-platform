@@ -31,19 +31,24 @@ const Header=()=> {
     const headerRef = useRef(null)
     const navigate = useNavigate()
     const profileActionRef = useRef(null)
+    const [loading,setLoading] = useState(false)
 
     useEffect(() => {
         // Gửi yêu cầu API để lấy dữ liệu người dùng
         axios.get('http://localhost:8080/trading-platform/login/')
           .then(response => {
-            setCurrentUser(response.data); 
-            console.log(response.data)// Cập nhật state với dữ liệu người dùng
+            setCurrentUser(response.data); // Cập nhật state với dữ liệu người dùng
           })
           .catch(error => {
             console.error('Lỗi khi lấy dữ liệu người dùng:', error);
           });
       }, []);
-      
+      useEffect(() => {
+        setLoading(true)
+        setUserName(user?.name)
+        setUserAvatar(user?.avatar)
+        setLoading(false)
+      }, [user?.name, user?.avatar])
     
     const dispatch = useDispatch();
     const stickyHeaderFunc = () =>{

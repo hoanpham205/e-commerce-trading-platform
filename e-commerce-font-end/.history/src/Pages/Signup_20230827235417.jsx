@@ -3,16 +3,17 @@ import React, { useState } from "react";
 import { Col, Container, Form, FormGroup, Row } from "react-bootstrap";
 import { ProgressBar } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
-import Helmet from "../Helmet/Helmet";
-//import "../style/login.css";
+import Helmet from "../components/Helmet/Helmet";
+import "../styles/login.css";
 
-const ShopCreate = () => {
-  const [shopname, setShopname] = useState("");
+const Signup = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [phone, setPhone] = useState('');
+  const [role, setRole] = useState("individual");
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
@@ -23,13 +24,13 @@ const ShopCreate = () => {
     e.preventDefault();
     setLoading(true);
     let body = new FormData();
-    body.append("shopname", shopname);
+    body.append("username", username);
+    body.append("email", email);
     body.append("phone", phone);
     body.append("password", password);
-    body.append("email", email);
     body.append("file", file);
     const res = await axios({
-      url: "http://localhost:8080/trading-platform/create_store/",
+      url: "http://localhost:8080/trading-platform/register/",
       method: "POST",
       data: body,
       headers: { "Content-Type": "multipart/form-data" },
@@ -56,38 +57,30 @@ const ShopCreate = () => {
               </Col>
             ) : (
               <Col lg="6" className="m-auto text-center">
-                <h3 className="fw-bold mb-4"> Register as a seller</h3>
+                <h3 className="fw-bold mb-4">Signup</h3>
                 <Form className="auth__form" onSubmit={handleSubmit}>
                   <FormGroup className="form__group">
                     <input
                       type="text"
-                      placeholder="Shop Name"
-                      value={shopname}
-                      onChange={(e) => setShopname(e.target.value)}
+                      placeholder="User Name"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                     />
                   </FormGroup>
-                  <FormGroup className="form__group">
+                  {/* <FormGroup className="form__group">
                     <input
                       type="email"
                       placeholder="Enter your email..."
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
-                  </FormGroup>
+                  </FormGroup> */}
                   <FormGroup className="form__group">
                     <input
                       type="password"
                       placeholder="Enter your password..."
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </FormGroup>
-                  <FormGroup className="form__group">
-                    <input
-                      type="number"
-                      placeholder="Enter your number phone..."
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
                     />
                   </FormGroup>
                   {/* <FormGroup className='form__group'>
@@ -112,7 +105,7 @@ const ShopCreate = () => {
                   </button>
                   {/* <button type='submit' className="buy__btn auth__btn">Submit</button> */}
                   <p>
-                    Already have account? <Link to="/shop-login">Login</Link>
+                    Already have account? <Link to="/login">Login</Link>
                   </p>
                 </Form>
               </Col>
@@ -124,4 +117,4 @@ const ShopCreate = () => {
   );
 };
 
-export default ShopCreate;
+export default Signup;

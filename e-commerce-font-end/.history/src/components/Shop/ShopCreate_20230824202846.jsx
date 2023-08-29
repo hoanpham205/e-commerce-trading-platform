@@ -13,6 +13,7 @@ const ShopCreate = () => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState('');
+  const [role, setRole] = useState("individual");
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {

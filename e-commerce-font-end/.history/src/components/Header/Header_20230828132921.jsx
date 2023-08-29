@@ -102,7 +102,7 @@ const Header=()=> {
 
                     <div className='profile'>
                         <motion.img whileTap={{scale:1.1}} 
-                        src={currentUser ? currentUser.avatar :   userIcon } alt='' onClick={toggleProfileAction} />
+                        src={isLoo ? currentUser.avatar :   userIcon } alt='' onClick={toggleProfileAction} />
                         
                         <div className="profile__actions" ref={profileActionRef} onClick={toggleProfileAction}>
                         {
