@@ -15,9 +15,18 @@ import java.util.List;
  */
 public interface CommentService {
 
-    Comments addComment(Comments c, Users userId, int proId,int reply);
+    Comments addComment(Comments c, Users userId, int proId, int reply);
 
     Comments findCommentById(int id);
 
     List<Comments> findAllCommentsByProductId(Products id);
+
+    boolean deleteComment(Comments id);
+
+    Comments getComment(Users user);
+
+    boolean deleteComment(int id, int userId);
+
+    List<Comments> getAllByCommentId(Comments c);
+
 }

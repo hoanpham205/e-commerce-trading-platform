@@ -6,11 +6,17 @@ package com.ou.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ou.dto.ProductDto;
+import com.ou.dto.Stats;
+import com.ou.pojo.Categories;
 import com.ou.pojo.Products;
 import com.ou.pojo.Store;
 import com.ou.repository.ProductRepon;
+import com.ou.service.CategoriService;
 import com.ou.service.ProductService;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -18,6 +24,8 @@ import java.util.logging.Logger;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -32,19 +40,39 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private Cloudinary Cloudinary;
 
-    @Override
-    public Products addProduct(Products p, Store s) {
+    @Autowired
+    private CategoriService CategoriService;
 
-        p.setStoreStoreId(s);
-//        try {
-//
-//            Map res = this.Cloudinary.uploader().upload(p.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-//            p.setImageUrl(res.get("secure_url").toString());
-//
-//        } catch (IOException ex) {
-//            Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        return ProductRepon.addProduct(p);
+    @Override
+    public ProductDto addProduct(@RequestParam Map<String, String> params, Store s, MultipartFile file) {
+        Products products = new Products();
+
+        try {
+
+            products.setProductName(params.get("productName"));
+            BigDecimal price = new BigDecimal(params.get("price"));
+            System.out.println(price);
+            products.setPrice(price);
+            Map res = this.Cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+            products.setImageUrl(res.get("secure_url").toString());
+            products.setCategoriesCategoryId(CategoriService.getCateByName(params.get("categories")));
+            products.setStoreStoreId(s);
+
+        } catch (IOException ex) {
+            Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.ProductRepon.addProduct(products);
+
+        Products productPart = this.ProductRepon.getProductById(products.getProductId());
+        ProductDto productDto = ProductDto.builder()
+                .id(productPart.getProductId())
+                .productName(productPart.getProductName())
+                .price(productPart.getPrice())
+                .imageUrl(productPart.getImageUrl())
+                .categories(productPart.getCategoriesCategoryId().getCategoryName())
+                .build();
+
+        return productDto;
 
     }
 
@@ -117,5 +145,7 @@ public class ProductServiceImpl implements ProductService {
         List<Products> prodcutList = ProductRepon.sortProductPrice(direction);
         return prodcutList;
     }
+
+  
 
 }

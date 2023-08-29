@@ -7,6 +7,11 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 -- -----------------------------------------------------
 -- Schema shoppedb
 -- -----------------------------------------------------
@@ -15,6 +20,17 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- Schema shoppedb
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `shoppedb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `mydb` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`payment_method`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `shoppedb`.`payment_method` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `discount` DOUBLE NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
 USE `shoppedb` ;
 
 -- -----------------------------------------------------
@@ -40,13 +56,12 @@ CREATE TABLE IF NOT EXISTS `shoppedb`.`users` (
   `fullname` VARCHAR(45) NULL DEFAULT NULL,
   `phone` VARCHAR(45) NULL DEFAULT NULL,
   `email` VARCHAR(45) NULL DEFAULT NULL,
-  `sex` VARCHAR(45) NULL DEFAULT NULL,
   `avatar` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
   `role` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
   `active` TINYINT(1) NULL DEFAULT NULL,
   PRIMARY KEY (`user_id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 64
+AUTO_INCREMENT = 65
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
@@ -127,13 +142,19 @@ COLLATE = utf8mb4_unicode_ci;
 
 
 -- -----------------------------------------------------
--- Table `shoppedb`.`payments`
+-- Table `shoppedb`.`payment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shoppedb`.`payments` (
+CREATE TABLE IF NOT EXISTS `shoppedb`.`payment` (
   `payment_id` INT NOT NULL AUTO_INCREMENT,
-  `payment_method` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  `amount` DECIMAL(10,2) NULL DEFAULT NULL,
-  PRIMARY KEY (`payment_id`))
+  `payment` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
+  `payment_method_id` INT NOT NULL,
+  PRIMARY KEY (`payment_id`),
+  INDEX `fk_payment_payment_method1_idx` (`payment_method_id` ASC) VISIBLE,
+  CONSTRAINT `fk_payment_payment_method1`
+    FOREIGN KEY (`payment_method_id`)
+    REFERENCES `mydb`.`payment_method` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
@@ -155,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `shoppedb`.`orders` (
   INDEX `fk_orders_store1_idx` (`store_store_id` ASC) VISIBLE,
   CONSTRAINT `fk_orders_payments1`
     FOREIGN KEY (`payments_payment_id`)
-    REFERENCES `shoppedb`.`payments` (`payment_id`),
+    REFERENCES `shoppedb`.`payment` (`payment_id`),
   CONSTRAINT `fk_orders_store1`
     FOREIGN KEY (`store_store_id`)
     REFERENCES `shoppedb`.`store` (`store_id`),

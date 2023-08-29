@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -120,15 +121,15 @@ public class userServiceImpl implements userService {
     }
 
     @Override
-    public Users addUsers(Map<String, String> params, MultipartFile file) {
+    public Users addUsers( Map<String, String> params, MultipartFile file) {
         Users u = new Users();
         u.setUsername(params.get("username"));
         u.setPassword(this.passwordEncoder.encode(params.get("password")));
+        u.setFullname(params.get("fullname"));
 
-        u.setPhone(params.get("fullname"));
+        u.setPhone(params.get("phone"));
         u.setEmail(params.get("phone"));
         u.setEmail(params.get("email"));
-        u.setSex(params.get("sex"));
         u.setActive(Boolean.FALSE);
         u.setRole("USER");
         try {

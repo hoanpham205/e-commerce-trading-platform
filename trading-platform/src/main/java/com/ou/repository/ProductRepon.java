@@ -31,8 +31,11 @@ public interface ProductRepon {
     List<Products> sortProductname(String Dir);
 
     List<Products> sortProductPrice(String Dir);
-    
 
-    public List<Object[]> densityStats(Map<String, String> params);
 
+    List<Object[]> monthStats(int month, int year);
+
+    List<Object[]> quarterStats(int quarter, int year);
+
+    List<Object[]> yearStats(int year);
 }

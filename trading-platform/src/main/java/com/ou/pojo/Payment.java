@@ -4,9 +4,7 @@
  */
 package com.ou.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -19,6 +17,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -28,14 +27,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author ADMIN
  */
 @Entity
-@Table(name = "payments")
+@Table(name = "payment")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Payments.findAll", query = "SELECT p FROM Payments p"),
-    @NamedQuery(name = "Payments.findByPaymentId", query = "SELECT p FROM Payments p WHERE p.paymentId = :paymentId"),
-    @NamedQuery(name = "Payments.findByPaymentMethod", query = "SELECT p FROM Payments p WHERE p.paymentMethod = :paymentMethod"),
-    @NamedQuery(name = "Payments.findByAmount", query = "SELECT p FROM Payments p WHERE p.amount = :amount")})
-public class Payments implements Serializable {
+    @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p"),
+    @NamedQuery(name = "Payment.findByPaymentId", query = "SELECT p FROM Payment p WHERE p.paymentId = :paymentId"),
+    @NamedQuery(name = "Payment.findByPayment", query = "SELECT p FROM Payment p WHERE p.payment = :payment"),
+    @NamedQuery(name = "Payment.findByPaymentMethodId", query = "SELECT p FROM Payment p WHERE p.paymentMethodId = :paymentMethodId")})
+public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -43,22 +42,29 @@ public class Payments implements Serializable {
     @Basic(optional = false)
     @Column(name = "payment_id")
     private Integer paymentId;
-    @Size(max = 255)
-    @Column(name = "payment_method")
-    private String paymentMethod;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "amount")
-    private BigDecimal amount;
-    @JsonIgnore
-
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "payment")
+    private String payment;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "payment_method_id")
+    private int paymentMethodId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentsPaymentId")
     private Set<Orders> ordersSet;
 
-    public Payments() {
+    public Payment() {
     }
 
-    public Payments(Integer paymentId) {
+    public Payment(Integer paymentId) {
         this.paymentId = paymentId;
+    }
+
+    public Payment(Integer paymentId, String payment, int paymentMethodId) {
+        this.paymentId = paymentId;
+        this.payment = payment;
+        this.paymentMethodId = paymentMethodId;
     }
 
     public Integer getPaymentId() {
@@ -69,20 +75,20 @@ public class Payments implements Serializable {
         this.paymentId = paymentId;
     }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
+    public String getPayment() {
+        return payment;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    public void setPayment(String payment) {
+        this.payment = payment;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public int getPaymentMethodId() {
+        return paymentMethodId;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setPaymentMethodId(int paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
     }
 
     @XmlTransient
@@ -104,10 +110,10 @@ public class Payments implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Payments)) {
+        if (!(object instanceof Payment)) {
             return false;
         }
-        Payments other = (Payments) object;
+        Payment other = (Payment) object;
         if ((this.paymentId == null && other.paymentId != null) || (this.paymentId != null && !this.paymentId.equals(other.paymentId))) {
             return false;
         }
@@ -116,7 +122,7 @@ public class Payments implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ou.pojo.Payments[ paymentId=" + paymentId + " ]";
+        return "com.ou.pojo.Payment[ paymentId=" + paymentId + " ]";
     }
-
+    
 }

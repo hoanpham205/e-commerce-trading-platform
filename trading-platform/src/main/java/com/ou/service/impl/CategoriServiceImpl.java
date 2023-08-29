@@ -36,4 +36,9 @@ public class CategoriServiceImpl implements CategoriService {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    @Override
+    public Categories getCateByName(String name) {
+        return this.CategoriRepon.getCateByName(name);
+    }
+
 }

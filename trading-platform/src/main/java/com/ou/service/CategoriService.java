@@ -18,7 +18,7 @@ public interface CategoriService {
 
     Categories getCateById(int id);
     
-    
+    Categories getCateByName(String name);
     boolean addCate(Categories cate);
 
 }

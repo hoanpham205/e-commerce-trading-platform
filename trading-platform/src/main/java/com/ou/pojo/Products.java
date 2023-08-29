@@ -4,12 +4,10 @@
  */
 package com.ou.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +19,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -46,28 +45,28 @@ public class Products implements Serializable {
     @Basic(optional = false)
     @Column(name = "product_id")
     private Integer productId;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "product_name")
     private String productName;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "price")
     private BigDecimal price;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @Size(min = 1, max = 255)
     @Column(name = "image_url")
     private String imageUrl;
-    @JsonIgnore
-
     @OneToMany(mappedBy = "productId")
     private Set<Comments> commentsSet;
-    @JsonIgnore
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productsProductId")
+    @OneToMany(mappedBy = "productsProductId")
     private Set<Orderdetails> orderdetailsSet;
     @JoinColumn(name = "categories_category_id", referencedColumnName = "category_id")
     @ManyToOne
     private Categories categoriesCategoryId;
     @JoinColumn(name = "store_store_id", referencedColumnName = "store_id")
-    @JsonIgnore
     @ManyToOne
     private Store storeStoreId;
 
@@ -76,6 +75,13 @@ public class Products implements Serializable {
 
     public Products(Integer productId) {
         this.productId = productId;
+    }
+
+    public Products(Integer productId, String productName, BigDecimal price, String imageUrl) {
+        this.productId = productId;
+        this.productName = productName;
+        this.price = price;
+        this.imageUrl = imageUrl;
     }
 
     public Integer getProductId() {
@@ -168,5 +174,5 @@ public class Products implements Serializable {
     public String toString() {
         return "com.ou.pojo.Products[ productId=" + productId + " ]";
     }
-
+    
 }

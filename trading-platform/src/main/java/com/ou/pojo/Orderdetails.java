@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -39,15 +40,19 @@ public class Orderdetails implements Serializable {
     @Basic(optional = false)
     @Column(name = "order_detail_id")
     private Integer orderDetailId;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "price")
     private BigDecimal price;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "quantity")
-    private Integer quantity;
+    private int quantity;
     @JoinColumn(name = "orders_order_id", referencedColumnName = "order_id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Orders ordersOrderId;
     @JoinColumn(name = "products_product_id", referencedColumnName = "product_id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Products productsProductId;
 
     public Orderdetails() {
@@ -55,6 +60,12 @@ public class Orderdetails implements Serializable {
 
     public Orderdetails(Integer orderDetailId) {
         this.orderDetailId = orderDetailId;
+    }
+
+    public Orderdetails(Integer orderDetailId, BigDecimal price, int quantity) {
+        this.orderDetailId = orderDetailId;
+        this.price = price;
+        this.quantity = quantity;
     }
 
     public Integer getOrderDetailId() {
@@ -73,11 +84,11 @@ public class Orderdetails implements Serializable {
         this.price = price;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
