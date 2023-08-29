@@ -16,6 +16,6 @@ public class cart {
 
     private int productId;
     private String name;
-    private BigDecimal       price;
+    private BigDecimal price;
     private int count;
 }

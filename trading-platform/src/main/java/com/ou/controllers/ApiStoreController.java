@@ -8,9 +8,6 @@ import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.service.storeService;
 import com.ou.service.userService;
-import java.security.Principal;
-import java.util.List;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,8 +50,7 @@ public class ApiStoreController {
     }
 
     @PostMapping("/store/")
-    public ResponseEntity<?> creareStore(@RequestBody
-            @Valid Store s) {
+    public ResponseEntity<?> creareStore(@RequestBody @Valid Store s) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {

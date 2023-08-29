@@ -96,7 +96,7 @@ public class ApiProductController {
     @PostMapping("/pay/")
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin
-    public void add(@RequestBody Map<String, cart> carts, String payname) {
+    public void add(@RequestBody Map<String, cart> carts,@RequestBody String payname) {
         this.receiptService.addReceipt(carts, payname);
     }
 

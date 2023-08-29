@@ -13,6 +13,7 @@ import com.ou.service.storeService;
 import com.ou.service.userService;
 import com.ou.validator.WebAppValidator;
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -89,6 +90,19 @@ public class ApiUserController {
         userService.updateRoleUser(userService.getUserById(id));
     }
 
+    @GetMapping("/requestment/")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<?> requestment() {
+        List<Users> user = this.userService.getUserActive();
+        if (user != null) {
+            return new ResponseEntity<>(user,HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("List User Is Null",HttpStatus.UNAUTHORIZED);
+
+        }
+    }
+
     @PostMapping("/login/")
     @CrossOrigin
     public ResponseEntity<?> login(@RequestBody logindto logindto) throws Exception {
@@ -115,7 +129,6 @@ public class ApiUserController {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
     }
 
     @GetMapping(path = "/current-user/", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -125,19 +138,14 @@ public class ApiUserController {
         return new ResponseEntity<>(u, HttpStatus.OK);
     }
 
-//    @InitBinder
-//    public void initBinder(WebDataBinder binder) {
-//        binder.setValidator(PassValidator);
-//    }
-
     @PostMapping(path = "/register/",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @CrossOrigin
-    public ResponseEntity<?> register(@Valid @RequestParam Map<String, String> params,@RequestPart MultipartFile file) throws Exception {
-            return new ResponseEntity<>(this.userService.addUsers(params, file), HttpStatus.CREATED);
-      
+    public ResponseEntity<?> register(@Valid @RequestParam Map<String, String> params, @RequestPart MultipartFile file) throws Exception {
+        return new ResponseEntity<>(this.userService.addUsers(params, file), HttpStatus.CREATED);
+
     }
 
 }
