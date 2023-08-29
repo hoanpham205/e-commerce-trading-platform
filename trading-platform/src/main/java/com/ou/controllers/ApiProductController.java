@@ -64,15 +64,17 @@ public class ApiProductController {
 
     @Autowired
     private ReceiptService receiptService;
-
+    
+    // xoá prodcut dc chọn
     @DeleteMapping("/product/{id}/")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "id") int id) {
         this.ProductService.deleteProduct(id);
     }
 
+    
     @GetMapping("/cart/{productId}/")
-    public ResponseEntity<Integer> cart(@PathVariable(value = "productId") Integer productId, HttpSession session) {
+    public ResponseEntity<?> cart(@PathVariable(value = "productId") Integer productId, HttpSession session) {
         Map<Integer, cart> cart = (Map<Integer, cart>) session.getAttribute("cart");
         if (cart == null) {
             cart = new HashMap<>();
@@ -90,14 +92,14 @@ public class ApiProductController {
             cart.put(productId, c);
         }
         session.setAttribute("cart", cart);
-        return new ResponseEntity<>(Ultill.countCart(cart), HttpStatus.OK);
+        return new ResponseEntity<>(cart, HttpStatus.OK);
     }
-
+    //thanh toán
     @PostMapping("/pay/")
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin
-    public void add(@RequestBody Map<String, cart> carts,@RequestBody String payname) {
-        this.receiptService.addReceipt(carts, payname);
+    public void add(@RequestBody Map<String, cart> carts) {
+        this.receiptService.addReceipt(carts);
     }
 
     @DeleteMapping("/cart/delete/{id}/")
@@ -110,21 +112,24 @@ public class ApiProductController {
         return new ResponseEntity<>(Ultill.countCart(cart), HttpStatus.OK);
 
     }
-
+    
+    //lấy tất cả prodcut của thg đăng nhập
     @GetMapping("/products/")
     @CrossOrigin
-    public ResponseEntity<List<Products>> getProduct(@RequestParam Map<String, String> params, HttpSession session, Store s) {
+    public ResponseEntity<List<Products>> getProduct(@RequestParam Map<String, String> params) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users userCuren = userSer.getUsers(userDetails.getUsername());
-            return new ResponseEntity<>(this.ProductService.getProduct(null, params), HttpStatus.OK);
+            Store store=this.storeService.getStoreByUserID(userCuren);
+            return new ResponseEntity<>(this.ProductService.getProduct(store, params), HttpStatus.OK);
         }
         return null;
 
     }
 
+    //thêm prodcut vào store
     @PostMapping("/product/")
     @CrossOrigin
     public ResponseEntity<?> addProduct(@RequestParam Map<String, String> params, @RequestPart MultipartFile file) {
@@ -141,6 +146,7 @@ public class ApiProductController {
 
     }
 
+    //cập nhật product
     @PutMapping("/product/{id}/")
     public ResponseEntity<?> productDetails(@RequestBody
             @Valid Products p, @PathVariable(value = "id") int id

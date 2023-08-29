@@ -97,4 +97,12 @@ public class CommentReponImpl implements CommentRepon {
         return query.getResultList();
     }
 
+    @Override
+    public Comments getAllByProductId(Products p) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        Query query = session.createQuery("SELECT c FROM Comments c WHERE c.commentsCommentId = :productId");
+        query.setParameter("productId", p);
+        return (Comments) query.getSingleResult();
+    }
+
 }

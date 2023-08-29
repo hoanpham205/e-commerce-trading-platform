@@ -35,7 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Orders.findAll", query = "SELECT o FROM Orders o"),
     @NamedQuery(name = "Orders.findByOrderId", query = "SELECT o FROM Orders o WHERE o.orderId = :orderId"),
-    @NamedQuery(name = "Orders.findByPaymentMethod", query = "SELECT o FROM Orders o WHERE o.paymentMethod = :paymentMethod"),
     @NamedQuery(name = "Orders.findByOrderDate", query = "SELECT o FROM Orders o WHERE o.orderDate = :orderDate")})
 public class Orders implements Serializable {
 
@@ -45,9 +44,7 @@ public class Orders implements Serializable {
     @Basic(optional = false)
     @Column(name = "order_id")
     private Integer orderId;
-    @Size(max = 255)
-    @Column(name = "payment_method")
-    private String paymentMethod;
+
     @Column(name = "order_date")
     @Temporal(TemporalType.DATE)
     private Date orderDate;
@@ -78,13 +75,7 @@ public class Orders implements Serializable {
         this.orderId = orderId;
     }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
 
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
 
     public Date getOrderDate() {
         return orderDate;

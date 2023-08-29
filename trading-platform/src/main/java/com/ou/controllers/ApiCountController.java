@@ -39,7 +39,7 @@ public class ApiCountController {
 
     @Autowired
     private ProductService ProductService;
-
+    //lấy số lượng cần phân trang
     @GetMapping("/count/")
     public ResponseEntity<Double> count() {
         int countSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));

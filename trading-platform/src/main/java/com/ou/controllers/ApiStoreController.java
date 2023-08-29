@@ -35,7 +35,8 @@ public class ApiStoreController {
 
     @Autowired
     private userService userService;
-
+    
+    //lấy store của curren user
     @GetMapping("/store/")
     public ResponseEntity<?> getStore() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -48,7 +49,8 @@ public class ApiStoreController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-
+    
+    //tạo thêm store
     @PostMapping("/store/")
     public ResponseEntity<?> creareStore(@RequestBody @Valid Store s) {
 

@@ -29,16 +29,19 @@ public class ApiCateControllers {
     @Autowired
     private CategoriService CategoriService;
 
+    //lấy all cate
     @GetMapping("/categories/")
     public ResponseEntity<List<Categories>> getCate() {
         return new ResponseEntity<>(this.CategoriService.getCates(), HttpStatus.OK);
     }
 
+    //lấy cate bawfnd id
     @GetMapping("/categories/{id}")
     public ResponseEntity<Categories> getCate(@PathVariable(value = "id") int id) {
         return new ResponseEntity<>(this.CategoriService.getCateById(id), HttpStatus.OK);
     }
 
+    //
     @PostMapping("/categories/{id}/")
     public ResponseEntity<?> addCate(@RequestBody @Valid Categories cate,@PathVariable(value = "id") int id) {
         

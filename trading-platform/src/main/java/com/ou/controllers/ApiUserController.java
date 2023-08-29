@@ -70,6 +70,7 @@ public class ApiUserController {
     @Autowired
     private WebAppValidator PassValidator;
 
+    //xoá cái thg user dc chọn
     @DeleteMapping("/user/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "id") int id) {
@@ -81,7 +82,8 @@ public class ApiUserController {
 
         }
     }
-
+    
+    //chấp nhận thg đó làm saller
     @PostMapping("/requestment/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void requestment(@PathVariable(value = "id") int id) {
@@ -89,7 +91,7 @@ public class ApiUserController {
 
         userService.updateRoleUser(userService.getUserById(id));
     }
-
+    // ds các yêu cầu làm saller
     @GetMapping("/requestment/")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<?> requestment() {
@@ -103,6 +105,7 @@ public class ApiUserController {
         }
     }
 
+    //đăng nhập
     @PostMapping("/login/")
     @CrossOrigin
     public ResponseEntity<?> login(@RequestBody logindto logindto) throws Exception {
@@ -124,20 +127,21 @@ public class ApiUserController {
         }
 
     }
-
+    //chứng thực
     private void authenticate(String username, String password) throws Exception {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
     }
-
+    
+    //lấy curren user
     @GetMapping(path = "/current-user/", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin
     public ResponseEntity<Users> details(Principal user) {
         Users u = this.userService.getUsers(user.getName());
         return new ResponseEntity<>(u, HttpStatus.OK);
     }
-
+    //đăng kí
     @PostMapping(path = "/register/",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}

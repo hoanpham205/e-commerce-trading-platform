@@ -90,4 +90,9 @@ public class CommentServiceImpl implements CommentService {
         return this.getAllByCommentId(c);
     }
 
+    @Override
+    public Comments getAllByProductId(Products p) {
+        return this.CommentRepon.getAllByProductId(p);
+    }
+
 }
