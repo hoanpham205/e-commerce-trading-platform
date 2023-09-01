@@ -29,12 +29,10 @@ public class storeServiceImpl implements storeService {
     @Autowired
     private userService userService;
 
-    @Autowired
-    private HttpSession session;
 
     @Override
-    public Store addStore(Store store,Users userId) {
-    
+    public Store addStore(Store store, Users userId) {
+
         userId.setActive(Boolean.TRUE);
         userService.addUser(userId);
         store.setUserId(userId);
@@ -62,12 +60,16 @@ public class storeServiceImpl implements storeService {
         try {
 
             store.setActive(Boolean.TRUE);
-          
-            return   storeRepon.updateStore(store);
+
+            return storeRepon.updateStore(store);
         } catch (Exception e) {
         }
 
         return false;
     }
 
+    @Override
+    public List<Object[]> statsAdmin(Map<String, String> params,Store s) {
+        return storeRepon.statsAdmin(params,s);
+    }
 }

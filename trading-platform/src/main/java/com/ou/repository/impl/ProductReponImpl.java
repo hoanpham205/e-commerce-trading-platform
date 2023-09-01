@@ -4,6 +4,8 @@
  */
 package com.ou.repository.impl;
 
+import com.ou.dto.ProductDto;
+import com.ou.pojo.Categories;
 import com.ou.pojo.Orderdetails;
 import com.ou.pojo.Orders;
 import com.ou.pojo.Products;
@@ -22,7 +24,13 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -200,62 +208,59 @@ public class ProductReponImpl implements ProductRepon {
         return posts;
     }
 
+    //THỐNG KÊ
     @Override
-    public List<Object[]> quarterStats(int quarter, int year) {
+    public List<Object[]> statsEmp(Map<String, String> params) {
         Session s = this.sessionFactory.getObject().getCurrentSession();
         CriteriaBuilder builder = s.getCriteriaBuilder();
         CriteriaQuery<Object[]> cr = builder.createQuery(Object[].class);
 
         Root rP = cr.from(Products.class);
         Root rOd = cr.from(Orderdetails.class);
+        Root rOr = cr.from(Orders.class);
 
-        cr.where(builder.equal(rOd.get("productId"), rP.get("productsProductId")),
-                builder.equal(builder.function("YEAR", Integer.class, rOd.get("paymentDate")), year));
+        String quarter = params.get("quarter");
+        String year = params.get("year");
+        String month = params.get("month");
 
-        cr.multiselect(rP.get("productId"), rP.get("productName"), builder.count(rOd.get("productId")));
-        cr.groupBy(rP.get("productId"));
+        if (params != null && year != null) {
+            List<Predicate> predicates = new ArrayList<>();
 
-        Query query = s.createQuery(cr);
-        return query.getResultList();
+//            cr.where(builder.equal(rOd.get("productsProductId"), rP.get("productId")),
+//                    builder.equal(rOd.get("ordersOrderId"), rOr.get("orderId")));
+            predicates.add(builder.equal(rOd.get("productsProductId"), rP.get("productId")));
+            predicates.add(builder.equal(rOd.get("ordersOrderId"), rOr.get("orderId")));
+
+            predicates.add(builder.equal(builder.function("year", Integer.class, rOr.get("orderDate")),
+                    Integer.parseInt(year)));
+
+            if (quarter != null && !quarter.isEmpty()) {
+                predicates.add(builder.equal(builder.function("quarter", Integer.class, rOr.get("orderDate")),
+                        Integer.parseInt(quarter)));
+            }
+
+            if (month != null && !month.isEmpty()) {
+                predicates.add(builder.equal(builder.function("month", Integer.class, rOr.get("orderDate")),
+                        Integer.parseInt(month)));
+            }
+            String cateId = params.get("cateId");
+            if (cateId != null && !cateId.isEmpty()) {
+                Root rCate = cr.from(Categories.class);
+                predicates.add(builder.equal(rP.get("categoriesCategoryId"), rCate.get("categoryId")));
+                predicates.add(builder.equal(rP.get("categoriesCategoryId"), Integer.parseInt(cateId)));
+                System.out.println(cateId);
+            }
+            cr.where(predicates.toArray(Predicate[]::new));
+
+            cr.multiselect(rP.get("productId"),
+                    rP.get("productName"),
+                    rOd.get("total"));
+
+            Query query = s.createQuery(cr);
+            return query.getResultList();
+        }
+        return null;
     }
 
-    @Override
-    public List<Object[]> monthStats(int m, int y) {
-        Session session = this.sessionFactory.getObject().getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Object[]> cr = builder.createQuery(Object[].class);
-
-        Root rP = cr.from(Products.class);
-        Root rOd = cr.from(Orderdetails.class);
-
-        cr.where(builder.equal(rP.get("productsProductId"), rOd.get("productId")),
-                builder.equal(builder.function("MONTH", Integer.class, rOd.get("paymentDate")), m),
-                builder.equal(builder.function("YEAR", Integer.class, rOd.get("paymentDate")), y));
-
-        cr.multiselect(rP.get("productId"), rP.get("productName"), builder.count(rOd.get("productId")));
-        cr.groupBy(rP.get("productId"));
-
-        Query query = session.createQuery(cr);
-        return query.getResultList();
-    }
-
-    @Override
-    public List<Object[]> yearStats(int y) {
-        Session session = this.sessionFactory.getObject().getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Object[]> cr = builder.createQuery(Object[].class);
-
-        Root rP = cr.from(Products.class);
-        Root rOd = cr.from(Orderdetails.class);
-
-        cr.where(builder.equal(rP.get("productsProductId"), rOd.get("productId")),
-                builder.equal(builder.function("YEAR", Integer.class, rOd.get("paymentDate")), y),
-                builder.equal(builder.function("YEAR", Integer.class, rOd.get("paymentDate")), y));
-        
-        cr.multiselect(rP.get("productId"), rP.get("productName"), builder.count(rOd.get("productId")));
-        cr.groupBy(rP.get("productId"));
-        Query query = session.createQuery(cr);
-        return query.getResultList();
-    }
-
+    
 }

@@ -64,7 +64,7 @@ public class ApiProductController {
 
     @Autowired
     private ReceiptService receiptService;
-    
+
     // xoá prodcut dc chọn
     @DeleteMapping("/product/{id}/")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -72,7 +72,6 @@ public class ApiProductController {
         this.ProductService.deleteProduct(id);
     }
 
-    
     @GetMapping("/cart/{productId}/")
     public ResponseEntity<?> cart(@PathVariable(value = "productId") Integer productId, HttpSession session) {
         Map<Integer, cart> cart = (Map<Integer, cart>) session.getAttribute("cart");
@@ -94,6 +93,7 @@ public class ApiProductController {
         session.setAttribute("cart", cart);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
+
     //thanh toán
     @PostMapping("/pay/")
     @ResponseStatus(HttpStatus.OK)
@@ -112,7 +112,7 @@ public class ApiProductController {
         return new ResponseEntity<>(Ultill.countCart(cart), HttpStatus.OK);
 
     }
-    
+
     //lấy tất cả prodcut của thg đăng nhập
     @GetMapping("/products/")
     @CrossOrigin
@@ -122,7 +122,7 @@ public class ApiProductController {
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users userCuren = userSer.getUsers(userDetails.getUsername());
-            Store store=this.storeService.getStoreByUserID(userCuren);
+            Store store = this.storeService.getStoreByUserID(userCuren);
             return new ResponseEntity<>(this.ProductService.getProduct(store, params), HttpStatus.OK);
         }
         return null;
@@ -168,5 +168,10 @@ public class ApiProductController {
     @GetMapping("/products/sort-price/")
     public ResponseEntity<List<Products>> sortPrice(@RequestParam(value = "order", defaultValue = "desc") String Dir) {
         return ResponseEntity.ok(ProductService.sortProductPrice(Dir));
+    }
+
+    @GetMapping("/stats/")
+    public ResponseEntity<?> stats(@RequestParam Map<String, String> params) {
+        return ResponseEntity.ok(ProductService.stats(params));
     }
 }

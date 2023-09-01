@@ -24,5 +24,6 @@ public interface storeRepon {
     boolean deleteStoreByUserId(Users id);
 
     boolean updateStore(Store store);
+    List<Object[]> statsAdmin(Map<String, String> params,Store s);
 
 }

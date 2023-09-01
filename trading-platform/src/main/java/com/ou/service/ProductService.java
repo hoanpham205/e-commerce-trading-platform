@@ -39,5 +39,7 @@ public interface ProductService {
 
     List<Products> sortProductPrice(String Dir);
 
+    List<Object[]> stats(Map<String, String> params);
 
-}
+
+    }

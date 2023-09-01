@@ -4,6 +4,7 @@
  */
 package com.ou.repository;
 
+import com.ou.pojo.Categories;
 import com.ou.pojo.Products;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
@@ -33,9 +34,8 @@ public interface ProductRepon {
     List<Products> sortProductPrice(String Dir);
 
 
-    List<Object[]> monthStats(int month, int year);
+    List<Object[]> statsEmp(Map<String, String> params );
+    
 
-    List<Object[]> quarterStats(int quarter, int year);
-
-    List<Object[]> yearStats(int year);
+  
 }
