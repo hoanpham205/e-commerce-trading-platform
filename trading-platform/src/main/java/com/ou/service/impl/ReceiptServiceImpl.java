@@ -27,9 +27,9 @@ public class ReceiptServiceImpl implements ReceiptService{
     private paymentService paymentService;
 
     @Override
-    public boolean addReceipt(Map<String, cart> carts,String payName) {
-        Payment pay=paymentService.getPaymentsByName(payName);
-        return ReceiptRepository.addReceipt(carts,pay);
+    public boolean addReceipt(Map<String, cart> carts) {
+        
+        return ReceiptRepository.addReceipt(carts);
     }
     
 }

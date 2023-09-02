@@ -146,6 +146,12 @@ public class ProductServiceImpl implements ProductService {
         return prodcutList;
     }
 
-  
+    @Override
+    public List<Object[]> stats(Map<String, String> params) {
+        
+        return this.ProductRepon.statsEmp(params);
+    }
+
+   
 
 }

@@ -7,6 +7,7 @@ package com.ou.pojo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,11 +20,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
+@Data
 @Entity
 @Table(name = "orderdetails")
 @XmlRootElement
@@ -46,13 +49,17 @@ public class Orderdetails implements Serializable {
     private BigDecimal price;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "total")
+    private BigDecimal total;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "quantity")
     private int quantity;
     @JoinColumn(name = "orders_order_id", referencedColumnName = "order_id")
     @ManyToOne
     private Orders ordersOrderId;
     @JoinColumn(name = "products_product_id", referencedColumnName = "product_id")
-    @ManyToOne
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     private Products productsProductId;
 
     public Orderdetails() {
@@ -132,5 +139,5 @@ public class Orderdetails implements Serializable {
     public String toString() {
         return "com.ou.pojo.Orderdetails[ orderDetailId=" + orderDetailId + " ]";
     }
-    
+
 }

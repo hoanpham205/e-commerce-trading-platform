@@ -29,4 +29,5 @@ public interface CommentService {
 
     List<Comments> getAllByCommentId(Comments c);
 
-}
+    public Comments getAllByProductId(Products p);
+    }

@@ -49,11 +49,13 @@ public class ApiConmentControllers {
     @Autowired
     private HttpSession session;
 
+    //lấy các comment prodcut
     @GetMapping("/product/{id}/comment")
     public ResponseEntity<List<Comments>> getAllCommentsByPost(@PathVariable("id") int id) {
         return new ResponseEntity<>(CommentService.findAllCommentsByProductId(ProductService.getProductById(id)), HttpStatus.OK);
     }
 
+    //comment product
     @PostMapping("/product/{id}/comment")
     public ResponseEntity<?> createCommentToProduct(@RequestBody @Valid Comments c, @PathVariable("id") int id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -68,6 +70,7 @@ public class ApiConmentControllers {
         }
     }
 
+    //reply comment
     @PostMapping("/product/{Proid}/comment/{id}/comments")
     public ResponseEntity<?> replyToComent(@RequestBody @Valid Comments c, @PathVariable("Proid") int proId, @PathVariable("id") int id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -80,11 +83,18 @@ public class ApiConmentControllers {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-
-    @DeleteMapping("/comment/{id}/")
-    public ResponseEntity<?> replyToComent(@PathVariable("Proid") int proId,@RequestBody int userId) {
-        
-        return new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.OK);
-
+    //lấy tất cả các reply của comment
+    @GetMapping("/comment/{id}")
+    public ResponseEntity<?> replyToComentAll( @PathVariable("id") int id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUsers(userDetails.getUsername());
+            Comments com=this.CommentService.findCommentById(id);
+            List<Comments> comment = CommentService.getAllByCommentId(com);
+            return new ResponseEntity<>(comment == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED) : comment, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 }

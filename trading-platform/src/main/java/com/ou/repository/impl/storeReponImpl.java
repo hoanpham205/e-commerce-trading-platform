@@ -4,9 +4,13 @@
  */
 package com.ou.repository.impl;
 
+import com.ou.dto.ProductDto;
+import com.ou.pojo.Orderdetails;
+import com.ou.pojo.Orders;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.repository.storeRepon;
+import com.ou.service.userService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +22,13 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,16 +42,15 @@ public class storeReponImpl implements storeRepon {
 
     @Autowired
     private LocalSessionFactoryBean sessionFactory;
+    
 
     @Override
     public Store addStore(Store store) {
         Session s = this.sessionFactory.getObject().getCurrentSession();
 
         try {
-          
-                s.save(store);
 
-            
+            s.save(store);
 
             return store;
         } catch (HibernateException ex) {
@@ -117,14 +126,60 @@ public class storeReponImpl implements storeRepon {
         Session s = this.sessionFactory.getObject().getCurrentSession();
 
         try {
-                s.update(store);
-
+            s.update(store);
 
             return true;
         } catch (HibernateException ex) {
             ex.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public List<Object[]> statsAdmin(Map<String, String> params,Store s) {
+        
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> cr = builder.createQuery(Object[].class);
+       
+        Root rS = cr.from(Store.class);
+        Root rOd = cr.from(Orderdetails.class);
+        Root rOr = cr.from(Orders.class);
+
+        String quarter = params.get("quarter");
+        String year = params.get("year");
+        String month = params.get("month");
+
+        if (params != null && year != null) {
+            List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(builder.equal(rOr.get("storeStoreId"), rS.get("storeId")));
+            predicates.add(builder.equal(rOd.get("ordersOrderId"), rOr.get("orderId")));
+            predicates.add(builder.equal( rS.get("storeId"),s.getStoreId() ));
+
+            predicates.add(builder.equal(builder.function("year", Integer.class, rOr.get("orderDate")),
+                    Integer.parseInt(year)));
+
+            if (quarter != null && !quarter.isEmpty()) {
+                predicates.add(builder.equal(builder.function("quarter", Integer.class, rOr.get("orderDate")),
+                        Integer.parseInt(quarter)));
+            }
+
+            if (month != null && !month.isEmpty()) {
+                predicates.add(builder.equal(builder.function("month", Integer.class, rOr.get("orderDate")),
+                        Integer.parseInt(month)));
+            }
+
+            cr.where(predicates.toArray(Predicate[]::new));
+
+            cr.multiselect(rS.get("storeId"),
+                    rS.get("storeName"),
+                    builder.sum(rOd.get("total")));
+
+            Query query = session.createQuery(cr);
+            return query.getResultList();
+        }
+        return null;
     }
 
 }

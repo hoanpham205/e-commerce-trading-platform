@@ -27,7 +27,8 @@ public interface CommentRepon {
 
     Comments getComment(Users user);
 
-
     List<Comments> getAllByCommentId(Comments c);
+
+    Comments getAllByProductId(Products p);
 
 }

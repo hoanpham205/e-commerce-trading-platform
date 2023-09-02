@@ -14,6 +14,6 @@ import java.util.Map;
  */
 public interface ReceiptService {
 
-    boolean addReceipt(Map<String, cart> carts,String payName);
+    boolean addReceipt(Map<String, cart> carts );
 
 }
