@@ -4,6 +4,7 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -45,6 +46,7 @@ public class Categories implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "category_name")
     private String categoryName;
+    @JsonIgnore
     @OneToMany(mappedBy = "categoriesCategoryId")
     private Set<Products> productsSet;
 

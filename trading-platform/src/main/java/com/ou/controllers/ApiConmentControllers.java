@@ -4,6 +4,7 @@
  */
 package com.ou.controllers;
 
+import com.ou.dto.CommentDto;
 import com.ou.pojo.Comments;
 import com.ou.pojo.Products;
 import com.ou.pojo.Store;
@@ -21,6 +22,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class ApiConmentControllers {
 
     @Autowired
@@ -57,7 +60,7 @@ public class ApiConmentControllers {
 
     //comment product
     @PostMapping("/product/{id}/comment")
-    public ResponseEntity<?> createCommentToProduct(@RequestBody @Valid Comments c, @PathVariable("id") int id) {
+    public ResponseEntity<?> createCommentToProduct(@RequestBody Comments c, @PathVariable("id") int id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
@@ -72,7 +75,9 @@ public class ApiConmentControllers {
 
     //reply comment
     @PostMapping("/product/{Proid}/comment/{id}/comments")
-    public ResponseEntity<?> replyToComent(@RequestBody @Valid Comments c, @PathVariable("Proid") int proId, @PathVariable("id") int id) {
+    public ResponseEntity<?> replyToComent(@RequestBody Comments c, @PathVariable("Proid") int proId, @PathVariable("id") int id) {
+        System.out.println(proId);
+        System.out.println(id);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -83,16 +88,17 @@ public class ApiConmentControllers {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
+
     //lấy tất cả các reply của comment
     @GetMapping("/comment/{id}")
-    public ResponseEntity<?> replyToComentAll( @PathVariable("id") int id) {
+    public ResponseEntity<?> replyToComentAll(@PathVariable("id") int id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.getUsers(userDetails.getUsername());
-            Comments com=this.CommentService.findCommentById(id);
-            List<Comments> comment = CommentService.getAllByCommentId(com);
-            return new ResponseEntity<>(comment == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED) : comment, HttpStatus.OK);
+            CommentDto com = this.CommentService.findCommentById(id);
+//            List<Comments> comment = CommentService.getAllByCommentId(com);
+            return new ResponseEntity<>(com == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED) : com, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

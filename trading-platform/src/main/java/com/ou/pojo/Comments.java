@@ -4,6 +4,7 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -61,6 +62,7 @@ public class Comments implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "evaluate")
     private Double evaluate;
+    @JsonIgnore
     @OneToMany(mappedBy = "commentsCommentId")
     private Set<Comments> commentsSet;
     @JoinColumn(name = "comments_comment_id", referencedColumnName = "comment_id")

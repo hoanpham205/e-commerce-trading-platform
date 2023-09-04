@@ -8,6 +8,7 @@ import com.ou.pojo.Comments;
 import com.ou.pojo.Products;
 import com.ou.pojo.Users;
 import com.ou.repository.CommentRepon;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -33,7 +34,7 @@ public class CommentReponImpl implements CommentRepon {
 
         Session session = this.sessionFactory.getObject().getCurrentSession();
         try {
-
+            c.setCommentDate(new Date());
             session.save(c);
 
             return c;

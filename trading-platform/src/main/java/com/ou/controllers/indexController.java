@@ -34,7 +34,6 @@ public class indexController {
 
     @RequestMapping("/")
     public String index(Model model, @RequestParam Map<String, String> params, HttpSession session) {
-        System.out.println(CommentService.findCommentById(1));
 
         model.addAttribute("currentUser", session.getAttribute("currentUser"));
         model.addAttribute("products", ProductService.getProduct(null, null));

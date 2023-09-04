@@ -17,6 +17,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,31 +26,32 @@ import org.springframework.web.bind.annotation.RestController;
  * @author ADMIN
  */
 @RestController
+@CrossOrigin
 public class ApiCountController {
 
     @Autowired
     private Environment env;
 
-   
     @Autowired
     private storeService storeService;
-    
+
     @Autowired
     private userService userService;
 
     @Autowired
     private ProductService ProductService;
+
     //lấy số lượng cần phân trang
     @GetMapping("/count/")
     public ResponseEntity<Double> count() {
         int countSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Users currentUser = userService.getUsers(userDetails.getUsername());
-        Store store = storeService.getStoreByUserID(currentUser);
-        int count = this.ProductService.countProduct(store);
-        return new ResponseEntity<>(  Math.ceil(count * 1.0 / countSize), HttpStatus.OK);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUsers(userDetails.getUsername());
+            Store store = storeService.getStoreByUserID(currentUser);
+            int count = this.ProductService.countProduct(store);
+            return new ResponseEntity<>(Math.ceil(count * 1.0 / countSize), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

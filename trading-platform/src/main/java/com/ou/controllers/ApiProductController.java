@@ -66,6 +66,7 @@ public class ApiProductController {
     private ReceiptService receiptService;
 
     // xoá prodcut dc chọn
+    @CrossOrigin
     @DeleteMapping("/product/{id}/")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "id") int id) {
@@ -73,6 +74,7 @@ public class ApiProductController {
     }
 
     @GetMapping("/cart/{productId}/")
+    @CrossOrigin
     public ResponseEntity<?> cart(@PathVariable(value = "productId") Integer productId, HttpSession session) {
         Map<Integer, cart> cart = (Map<Integer, cart>) session.getAttribute("cart");
         if (cart == null) {

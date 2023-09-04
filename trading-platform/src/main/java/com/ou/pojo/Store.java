@@ -4,6 +4,7 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -60,11 +61,13 @@ public class Store implements Serializable {
     @NotNull
     @Column(name = "active")
     private boolean active;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeStoreId")
     private Set<Orders> ordersSet;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne
     private Users userId;
+    @JsonIgnore
     @OneToMany(mappedBy = "storeStoreId")
     private Set<Products> productsSet;
 

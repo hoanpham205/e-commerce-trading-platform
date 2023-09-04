@@ -16,6 +16,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,9 +36,10 @@ public class ApiStoreController {
 
     @Autowired
     private userService userService;
-    
+
     //lấy store của curren user
     @GetMapping("/store/")
+    @CrossOrigin
     public ResponseEntity<?> getStore() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
@@ -49,9 +51,10 @@ public class ApiStoreController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-    
+
     //tạo thêm store
     @PostMapping("/store/")
+    @CrossOrigin
     public ResponseEntity<?> creareStore(@RequestBody @Valid Store s) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
