@@ -4,6 +4,7 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -51,6 +52,7 @@ public class Payment implements Serializable {
     @NotNull
     @Column(name = "payment_method_id")
     private int paymentMethodId;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentsPaymentId")
     private Set<Orders> ordersSet;
 

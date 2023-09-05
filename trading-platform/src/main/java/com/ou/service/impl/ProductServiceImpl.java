@@ -51,7 +51,6 @@ public class ProductServiceImpl implements ProductService {
 
             products.setProductName(params.get("productName"));
             BigDecimal price = new BigDecimal(params.get("price"));
-            System.out.println(price);
             products.setPrice(price);
             Map res = this.Cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
             products.setImageUrl(res.get("secure_url").toString());

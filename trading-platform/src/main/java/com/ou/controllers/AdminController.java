@@ -23,15 +23,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
  * @author ADMINasd
  */
-@Controller
+@RestController
+@CrossOrigin
 @ControllerAdvice
 @RequestMapping("/admin")
 public class AdminController {
@@ -75,7 +78,7 @@ public class AdminController {
             Store store = this.storeService.getStoreByUserID(userCuren);
             return ResponseEntity.ok(storeService.statsAdmin(params,store));
         } else {
-            return new ResponseEntity<>("loi", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("NO STATS", HttpStatus.UNAUTHORIZED);
         }
     }
 

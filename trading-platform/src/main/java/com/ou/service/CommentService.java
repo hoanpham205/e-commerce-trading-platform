@@ -4,6 +4,7 @@
  */
 package com.ou.service;
 
+import com.ou.dto.CommentDto;
 import com.ou.pojo.Comments;
 import com.ou.pojo.Products;
 import com.ou.pojo.Users;
@@ -17,7 +18,7 @@ public interface CommentService {
 
     Comments addComment(Comments c, Users userId, int proId, int reply);
 
-    Comments findCommentById(int id);
+    CommentDto findCommentById(int id);
 
     List<Comments> findAllCommentsByProductId(Products id);
 

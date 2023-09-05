@@ -4,6 +4,7 @@
  */
 package com.ou.service.impl;
 
+import com.ou.dto.CommentDto;
 import com.ou.pojo.Comments;
 import com.ou.pojo.Products;
 import com.ou.pojo.Users;
@@ -11,6 +12,7 @@ import com.ou.repository.CommentRepon;
 import com.ou.service.CommentService;
 import com.ou.service.ProductService;
 import com.ou.service.userService;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.hibernate.Session;
@@ -48,14 +50,36 @@ public class CommentServiceImpl implements CommentService {
         }
         c.setUserId(userId);
         c.setProductId(p);
-        System.out.println(reply);
 
         return CommentRepon.addComment(c);
     }
 
     @Override
-    public Comments findCommentById(int id) {
-        return CommentRepon.findCommentById(id);
+    public CommentDto findCommentById(int id) {
+        Comments com = CommentRepon.findCommentById(id);
+        List<CommentDto> listDto = new ArrayList<>();
+        System.out.println(this.getAllByCommentId(com));
+        for (Comments c : this.getAllByCommentId(com)) {
+
+            CommentDto dto1 = CommentDto.builder()
+                    .id(c.getCommentId())
+                    .text(c.getCommentText())
+                    .user(c.getUserId())
+                    .product(c.getProductId())
+                    .date(c.getCommentDate())
+                    .evaluate(c.getEvaluate()).build();
+            listDto.add(dto1);
+        }
+
+        CommentDto dto = CommentDto.builder()
+                .id(com.getCommentId())
+                .text(com.getCommentText())
+                .user(com.getUserId())
+                .product(com.getProductId())
+                .date(com.getCommentDate())
+                .evaluate(com.getEvaluate())
+                .listReply(listDto).build();
+        return dto;
     }
 
     @Override
@@ -87,7 +111,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comments> getAllByCommentId(Comments c) {
-        return this.getAllByCommentId(c);
+        return CommentRepon.getAllByCommentId(c);
     }
 
     @Override
