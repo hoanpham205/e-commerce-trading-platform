@@ -39,8 +39,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 })
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
-
     @Autowired
     private userService userService;
 
@@ -50,8 +48,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    
-    
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -59,33 +55,25 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
- 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable();
 
         http.formLogin()
                 .usernameParameter("username")
                 .passwordParameter("password");
 
         http.formLogin().defaultSuccessUrl("/")
-                .failureUrl("/login/?error");
+                .failureUrl("/login?error");
 
-//        http.csrf().ignoringAntMatchers("/api/**");
-//        http.authorizeRequests().antMatchers("/api/login/").permitAll();
-//        http.authorizeRequests().antMatchers("/api/products/").permitAll();
-//        http.authorizeRequests().antMatchers("/api/categories/").permitAll();
-//        http.authorizeRequests().antMatchers("/api/users/").permitAll();
-//        http.antMatcher("/api/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-//                .antMatchers(HttpMethod.GET, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-//                .antMatchers(HttpMethod.POST, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-//                .antMatchers(HttpMethod.DELETE, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')").and()
-//                .addFilterBefore(jwtL(), UsernamePasswordAuthenticationFilter.class)
-//                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
+        http.logout().logoutSuccessUrl("/login");
+        http.exceptionHandling()
+                .accessDeniedPage("/login?accessDenied");
 
+        http.authorizeRequests().antMatchers("/")
+                .access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/stat/")
+                .access("hasAnyAuthority('EMPLOYEE')");
         http.csrf().disable();
     }
 

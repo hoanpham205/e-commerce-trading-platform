@@ -17,7 +17,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -41,9 +40,7 @@ public class Categories implements Serializable {
     @Basic(optional = false)
     @Column(name = "category_id")
     private Integer categoryId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "category_name")
     private String categoryName;
     @JsonIgnore
@@ -55,11 +52,6 @@ public class Categories implements Serializable {
 
     public Categories(Integer categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public Categories(Integer categoryId, String categoryName) {
-        this.categoryId = categoryId;
-        this.categoryName = categoryName;
     }
 
     public Integer getCategoryId() {

@@ -6,16 +6,13 @@ package com.ou.service;
 
 import com.ou.pojo.Payment;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author ADMIN
  */
+@Service
 public interface paymentService {
-
-    public List<Payment> getListPayment();
-
-    public Payment getPaymentsById(int id);
-    public Payment getPaymentsByName(String name);
 
 }

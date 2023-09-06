@@ -28,14 +28,7 @@
                         </li>
                     </div>
                 </sec:authorize>
-                <sec:authorize access="hasAnyAuthority('USER')">
-                    <div class="dropdown">                   
-                        <li class="nav-item">
-                            <a class="nav-link text-primary" href="<c:url value="/create_store" />">
-                                Tạo Cửa Hàng</a>
-                        </li>
-                    </div>
-                </sec:authorize>
+          
 
 
 
@@ -43,23 +36,24 @@
             <ul class="navbar-nav align-center">       
                 <c:choose>
                     <c:when test="${pageContext.request.userPrincipal.name == null}">
+
                         <li class="nav-item">
                             <a class="nav-link text-primary" href="<c:url value="/register/" />">
                                 <i class="fa-solid fa-user-plus" aria-hidden="true"></i> Đăng ký</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-success" href="<c:url value="/login/" />">
+                            <a class="nav-link text-success" href="<c:url value="/login" />">
                                 <i class="fa fa-user" aria-hidden="true"></i>  Đăng nhập</a>
                         </li>
                     </c:when>
 
                     <c:when test="${pageContext.request.userPrincipal.name != null}">
-                        <li class="nav-item" >
-                            <a href="<c:url value="/cart" />"> <h1 class="nav-link text-danger" id="cart">0</h1></a>
+                        <li class="nav-item">
+                            <p class="text-white p-2 m-0">Xin chào,<span class="text-danger"> ${pageContext.request.userPrincipal.name}</span>
+                            </p>
                         </li>
-                        <li class="nav-item" >
-                            <img src="${sessionScope.currentUser.avatar}" class="rounded-circle" alt="Cinque Terre" style="height:  35px">
-                        </li>
+
+
 
                         <li class="nav-item">
                             <a class="nav-link text-danger" href="<c:url value="/logout" />">

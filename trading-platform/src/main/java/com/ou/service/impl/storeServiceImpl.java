@@ -72,4 +72,9 @@ public class storeServiceImpl implements storeService {
     public List<Object[]> statsAdmin(Map<String, String> params,Store s) {
         return storeRepon.statsAdmin(params,s);
     }
+
+    @Override
+    public Store getStoreByID(int id) {
+        return storeRepon.getStoreByID(id);
+    }
 }

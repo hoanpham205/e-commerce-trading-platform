@@ -12,7 +12,6 @@ import com.ou.service.storeService;
 import com.ou.service.userService;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,21 +21,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
  * @author ADMINasd
  */
-@RestController
+@Controller
 @CrossOrigin
-@ControllerAdvice
-@RequestMapping("/admin")
+@RequestMapping("/")
 public class AdminController {
 
     @Autowired
@@ -47,39 +44,50 @@ public class AdminController {
 
     @Autowired
     private ProductService ProductService;
-    
-    
 
-    @GetMapping("/")
-    public ResponseEntity<?> getAllUSer(Model model, @RequestParam(required = false) Map<String, String> params, HttpSession session) {
+    @GetMapping
+    public String getAllUSer(Model model) {
 
-        String username = params.getOrDefault("username", null);
-
-        return new ResponseEntity<>(userService.getUsers(username), HttpStatus.OK);
+        model.addAttribute("user", this.userService.getAllUser());
+        return "admin";
     }
 
     @GetMapping("/store-manager")
-    public ResponseEntity<?> getAllStore(@RequestParam Map<String, String> params) {
-        return new ResponseEntity<>(storeService.getStore(params), HttpStatus.OK);
+    public String getAllStore(@RequestParam Map<String, String> params, Model model) {
+        model.addAttribute("store", storeService.getStore(params));
+        return "storeManager";
+    }
+
+    @GetMapping("/stat/")
+    public String stats(Model model, @RequestParam Map<String, String> params) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUsers(userDetails.getUsername());
+            model.addAttribute("chartData", ProductService.stats(params));
+            return "stat";
+        } else {
+            return "stat";
+        }
     }
 
     @GetMapping("/requestment")
-    public ResponseEntity<?> requestment(Model model) {
+    public String requestment(Model model) {
         model.addAttribute("request", userService.getUserActive());
-        return new ResponseEntity<>(userService.getUserActive(), HttpStatus.OK);
+        return "request";
     }
 
-    @GetMapping("/statsAmin/")
+    @GetMapping("statsAmin/")
     public ResponseEntity<?> stats(@RequestParam Map<String, String> params) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users userCuren = userService.getUsers(userDetails.getUsername());
             Store store = this.storeService.getStoreByUserID(userCuren);
-            return ResponseEntity.ok(storeService.statsAdmin(params,store));
+            System.out.println(params);
+            return ResponseEntity.ok(storeService.statsAdmin(params, store));
         } else {
             return new ResponseEntity<>("NO STATS", HttpStatus.UNAUTHORIZED);
         }
     }
-
 }

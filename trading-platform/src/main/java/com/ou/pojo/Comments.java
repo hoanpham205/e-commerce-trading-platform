@@ -23,7 +23,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -48,14 +47,10 @@ public class Comments implements Serializable {
     @Basic(optional = false)
     @Column(name = "comment_id")
     private Integer commentId;
-    @Basic(optional = false)
-    @NotNull
     @Lob
-    @Size(min = 1, max = 65535)
+    @Size(max = 65535)
     @Column(name = "comment_text")
     private String commentText;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "comment_date")
     @Temporal(TemporalType.DATE)
     private Date commentDate;
@@ -80,12 +75,6 @@ public class Comments implements Serializable {
 
     public Comments(Integer commentId) {
         this.commentId = commentId;
-    }
-
-    public Comments(Integer commentId, String commentText, Date commentDate) {
-        this.commentId = commentId;
-        this.commentText = commentText;
-        this.commentDate = commentDate;
     }
 
     public Integer getCommentId() {
