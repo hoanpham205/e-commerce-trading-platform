@@ -4,6 +4,7 @@
  */
 package com.ou.service;
 
+import com.ou.dto.UserDto;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,12 @@ public interface userService extends UserDetailsService {
 
     boolean updateRoleUser(Users u);
 
-    Users addUsers(Map<String, String> params,MultipartFile file);
+    Users addUsers(Map<String, String> params, MultipartFile file);
+
+    UserDto getUserByUsername(String username);
+
+    List<Users> getAllUser();
+
+    List<Users> findUser(Map<String, String> params);
 
 }

@@ -14,7 +14,6 @@
     <div class="main-title">
         <h2 class="text-uppercase text-center text-info">DANH SÁCH TÀI KHOẢN HỆ THỐNG</h2>
     </div>
-    <h1>${request}</h1>
     <div class="user-table">
         <table class="table">
             <thead class="table-primary">
@@ -45,7 +44,7 @@
                         <td>${u.fullname}</td>
                         <td>${u.phone}</td>
                          <td>
-                        <c:url value="/api/requestment/${u.userId}" var="api" />
+                        <c:url value="/requestment/${u.userId}" var="api" />
                         <button class="btn btn-danger" onclick="request('${api}')">Xác Nhận</button>
                     </td>
 

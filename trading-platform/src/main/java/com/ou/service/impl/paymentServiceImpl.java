@@ -7,8 +7,11 @@ package com.ou.service.impl;
 import com.ou.pojo.Payment;
 import com.ou.repository.PayMentRespon;
 import com.ou.service.paymentService;
+import com.paypal.base.rest.APIContext;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,22 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class paymentServiceImpl implements paymentService {
 
-    @Autowired
-    private PayMentRespon PayMentRespon;
 
-    @Override
-    public List<Payment> getListPayment() {
-        return PayMentRespon.getListPayment();
-    }
-
-    @Override
-    public Payment getPaymentsById(int id) {
-        return PayMentRespon.getPaymentsById(id);
-    }
-
-    @Override
-    public Payment getPaymentsByName(String name) {
-        return PayMentRespon.getPaymentsByName(name);
-    }
+   
 
 }

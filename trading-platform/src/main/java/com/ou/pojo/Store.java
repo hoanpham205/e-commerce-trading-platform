@@ -21,7 +21,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -46,21 +45,15 @@ public class Store implements Serializable {
     @Basic(optional = false)
     @Column(name = "store_id")
     private Integer storeId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "store_name")
     private String storeName;
-    @Basic(optional = false)
-    @NotNull
     @Lob
-    @Size(min = 1, max = 65535)
+    @Size(max = 65535)
     @Column(name = "description")
     private String description;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "active")
-    private boolean active;
+    private Boolean active;
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeStoreId")
     private Set<Orders> ordersSet;
@@ -76,13 +69,6 @@ public class Store implements Serializable {
 
     public Store(Integer storeId) {
         this.storeId = storeId;
-    }
-
-    public Store(Integer storeId, String storeName, String description, boolean active) {
-        this.storeId = storeId;
-        this.storeName = storeName;
-        this.description = description;
-        this.active = active;
     }
 
     public Integer getStoreId() {
@@ -109,11 +95,11 @@ public class Store implements Serializable {
         this.description = description;
     }
 
-    public boolean getActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 

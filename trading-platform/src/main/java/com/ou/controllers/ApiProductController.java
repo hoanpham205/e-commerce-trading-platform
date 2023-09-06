@@ -51,7 +51,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author ADMIN
  */
 @RestController
-@ControllerAdvice
+@RequestMapping("/api")
 public class ApiProductController {
 
     @Autowired
