@@ -34,42 +34,16 @@ const Header=()=> {
 
     useEffect(() => {
         // Gửi yêu cầu API để lấy dữ liệu người dùng
-        axios.get('http://localhost:8080/trading-platform/current-user/')
+        axios.get('http://localhost:8080/trading-platform/api/curren')
           .then(response => {
-            setCurrentUser(response.data);
+            setCurrentUser(response.data); 
             console.log(response.data)// Cập nhật state với dữ liệu người dùng
           })
           .catch(error => {
             console.error('Lỗi khi lấy dữ liệu người dùng:', error);
           });
       }, []);
-    
-
-    // const extractUserInfoFromToken = (token) => {
-    //     try {
-    //       const decodedToken = jwt.decode(token);
-    //       if (decodedToken) {
-    //         return decodedToken;
-    //       }
-    //     } catch (error) {
-    //       console.error('Lỗi khi giải mã token:', error);
-    //     }
-    //     return null;
-    //   };
       
-    //   // Trong useEffect của bạn:
-    //   useEffect(() => {
-    //     // Gửi yêu cầu API để lấy dữ liệu người dùng
-    //     axios.get('http://localhost:8080/trading-platform/api/current-user/')
-    //       .then(response => {
-    //         const userInfo = extractUserInfoFromToken(response.data);
-    //         setCurrentUser(userInfo);
-    //         console.log(userInfo); // Hiển thị thông tin người dùng đã trích xuất từ token
-    //       })
-    //       .catch(error => {
-    //         console.error('Lỗi khi lấy dữ liệu người dùng:', error);
-    //       });
-    //   }, []);
     
     const dispatch = useDispatch();
     const stickyHeaderFunc = () =>{
@@ -128,7 +102,7 @@ const Header=()=> {
 
                     <div className='profile'>
                         <motion.img whileTap={{scale:1.1}} 
-                        src={currentUser ? currentUser.avatar :   userIcon } alt='' onClick={toggleProfileAction} />
+                        src={isLoggedIn ? isLoggedIn.avatar :   userIcon } alt='' onClick={toggleProfileAction} />
                         
                         <div className="profile__actions" ref={profileActionRef} onClick={toggleProfileAction}>
                         {

@@ -13,7 +13,6 @@ import {
     loginStart,
     loginSuccess,
 } from "../redux/slices/authSlice";
-import { toast } from "react-toastify";
 
 const Login = () => {
   //const [email,setEmail] = useState('');
@@ -47,17 +46,10 @@ const Login = () => {
         newUser
       );
       
-    //     console.log(user);
-    //     setLoading(false);
-    //     toast.success("User signed in successfully");
       dispatch(loginSuccess(res.data));
       navigate("/home");
-      setLoading(false);
-      toast.success("User signed in successfully");
     } catch (e) {
       dispatch(loginFailed());
-      setLoading(false);
-      toast.error(e.message);
     }
   };
 

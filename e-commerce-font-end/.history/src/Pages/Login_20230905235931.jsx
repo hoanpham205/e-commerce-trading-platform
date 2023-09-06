@@ -53,7 +53,7 @@ const Login = () => {
       dispatch(loginSuccess(res.data));
       navigate("/home");
       setLoading(false);
-      toast.success("User signed in successfully");
+       toast.success("User signed in successfully");
     } catch (e) {
       dispatch(loginFailed());
       setLoading(false);

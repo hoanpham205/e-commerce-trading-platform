@@ -34,7 +34,7 @@ const Header=()=> {
 
     useEffect(() => {
         // Gửi yêu cầu API để lấy dữ liệu người dùng
-        axios.get('http://localhost:8080/trading-platform/current-user/')
+        axios.get('http://localhost:8080/trading-platform/api/current-user/')
           .then(response => {
             setCurrentUser(response.data);
             console.log(response.data)// Cập nhật state với dữ liệu người dùng

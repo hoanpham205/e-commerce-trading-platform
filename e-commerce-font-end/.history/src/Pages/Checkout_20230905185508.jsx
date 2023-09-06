@@ -1,4 +1,3 @@
-import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import React from 'react';
 import { Col, Container, Form, FormGroup, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';

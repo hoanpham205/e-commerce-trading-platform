@@ -46,18 +46,15 @@ const Login = () => {
         "http://localhost:8080/trading-platform/login/",
         newUser
       );
-      
-    //     console.log(user);
-    //     setLoading(false);
-    //     toast.success("User signed in successfully");
+      const userCredential = await signInWithEmailAndPassword(username, password)
+         const user = userCredential.user
+         console.log(user);
+         setLoading(false);
+         toast.success("User signed in successfully");
       dispatch(loginSuccess(res.data));
       navigate("/home");
-      setLoading(false);
-      toast.success("User signed in successfully");
     } catch (e) {
       dispatch(loginFailed());
-      setLoading(false);
-      toast.error(e.message);
     }
   };
 

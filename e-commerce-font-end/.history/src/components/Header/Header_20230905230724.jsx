@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { motion } from 'framer-motion'
 import React, { useEffect, useRef, useState } from 'react'
 import { Container, Row } from 'react-bootstrap'
@@ -8,6 +7,8 @@ import logo from '../../assets/img/github-logo.png'
 import userIcon from '../../assets/img/user-icon.png'
 import { logOut } from '../../redux/slices/authSlice'
 import './header.css'
+import axios from 'axios'
+import jwt from 'jsonwebtoken';
 
 const nav__links = [
     {
@@ -32,17 +33,17 @@ const Header=()=> {
     const navigate = useNavigate()
     const profileActionRef = useRef(null)
 
-    useEffect(() => {
-        // Gửi yêu cầu API để lấy dữ liệu người dùng
-        axios.get('http://localhost:8080/trading-platform/current-user/')
-          .then(response => {
-            setCurrentUser(response.data);
-            console.log(response.data)// Cập nhật state với dữ liệu người dùng
-          })
-          .catch(error => {
-            console.error('Lỗi khi lấy dữ liệu người dùng:', error);
-          });
-      }, []);
+    // useEffect(() => {
+    //     // Gửi yêu cầu API để lấy dữ liệu người dùng
+    //     axios.get('http://localhost:8080/trading-platform/api/current-user/')
+    //       .then(response => {
+    //         setCurrentUser(response.data); 
+    //         console.log(response.data)// Cập nhật state với dữ liệu người dùng
+    //       })
+    //       .catch(error => {
+    //         console.error('Lỗi khi lấy dữ liệu người dùng:', error);
+    //       });
+    //   }, []);
     
 
     // const extractUserInfoFromToken = (token) => {
