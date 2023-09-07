@@ -7,6 +7,7 @@ package com.ou.repository;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -29,5 +30,9 @@ public interface userRepon {
     boolean deleteAcount(int id);
 
     List<Users> getUserActive();
+
+    List<Users> getAllUser();
+
+    List<Users> findUser(Map<String, String> params);
 
 }

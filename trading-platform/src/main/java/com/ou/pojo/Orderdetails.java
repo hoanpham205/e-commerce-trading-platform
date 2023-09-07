@@ -7,7 +7,6 @@ package com.ou.pojo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,15 +17,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
-@Data
 @Entity
 @Table(name = "orderdetails")
 @XmlRootElement
@@ -34,7 +30,8 @@ import lombok.Data;
     @NamedQuery(name = "Orderdetails.findAll", query = "SELECT o FROM Orderdetails o"),
     @NamedQuery(name = "Orderdetails.findByOrderDetailId", query = "SELECT o FROM Orderdetails o WHERE o.orderDetailId = :orderDetailId"),
     @NamedQuery(name = "Orderdetails.findByPrice", query = "SELECT o FROM Orderdetails o WHERE o.price = :price"),
-    @NamedQuery(name = "Orderdetails.findByQuantity", query = "SELECT o FROM Orderdetails o WHERE o.quantity = :quantity")})
+    @NamedQuery(name = "Orderdetails.findByQuantity", query = "SELECT o FROM Orderdetails o WHERE o.quantity = :quantity"),
+    @NamedQuery(name = "Orderdetails.findByTotal", query = "SELECT o FROM Orderdetails o WHERE o.total = :total")})
 public class Orderdetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,23 +40,17 @@ public class Orderdetails implements Serializable {
     @Basic(optional = false)
     @Column(name = "order_detail_id")
     private Integer orderDetailId;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "price")
     private BigDecimal price;
-    @Basic(optional = false)
-    @NotNull
+    @Column(name = "quantity")
+    private Integer quantity;
     @Column(name = "total")
     private BigDecimal total;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "quantity")
-    private int quantity;
     @JoinColumn(name = "orders_order_id", referencedColumnName = "order_id")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Orders ordersOrderId;
     @JoinColumn(name = "products_product_id", referencedColumnName = "product_id")
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private Products productsProductId;
 
     public Orderdetails() {
@@ -67,12 +58,6 @@ public class Orderdetails implements Serializable {
 
     public Orderdetails(Integer orderDetailId) {
         this.orderDetailId = orderDetailId;
-    }
-
-    public Orderdetails(Integer orderDetailId, BigDecimal price, int quantity) {
-        this.orderDetailId = orderDetailId;
-        this.price = price;
-        this.quantity = quantity;
     }
 
     public Integer getOrderDetailId() {
@@ -91,12 +76,20 @@ public class Orderdetails implements Serializable {
         this.price = price;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
     public Orders getOrdersOrderId() {
@@ -139,5 +132,5 @@ public class Orderdetails implements Serializable {
     public String toString() {
         return "com.ou.pojo.Orderdetails[ orderDetailId=" + orderDetailId + " ]";
     }
-
+    
 }

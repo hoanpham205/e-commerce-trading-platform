@@ -6,6 +6,7 @@ package com.ou.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ou.dto.UserDto;
 import com.ou.pojo.Store;
 import com.ou.service.*;
 import com.ou.pojo.Users;
@@ -135,6 +136,28 @@ public class userServiceImpl implements userService {
             Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return userRepon.addUser(u);
+    }
+
+    @Override
+    public UserDto getUserByUsername(String username) {
+      Users user= userRepon.getUsers(username);
+      UserDto userdto=UserDto.builder()
+              .id(user.getUserId())
+              .userNaeme(user.getUsername())
+              .email(user.getEmail())
+              .avatar(user.getAvatar())
+              .role(user.getRole()).build();
+        return userdto;
+    }
+
+    @Override
+    public List<Users> getAllUser() {
+        return this.userRepon.getAllUser();
+    }
+
+    @Override
+    public List<Users> findUser(Map<String, String> params) {
+        return this.userRepon.findUser(params);
     }
 
 }

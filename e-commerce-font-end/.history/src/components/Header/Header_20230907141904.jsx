@@ -75,7 +75,7 @@ const Header = () => {
     cookie.remove("token");
     dispatch(logOut());
     setCurrentUser(null);
-    
+    dispatch(resetTotalQuantity());
     navigate("/home");
   };
   useEffect(() => {

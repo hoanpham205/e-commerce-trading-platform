@@ -17,8 +17,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -49,52 +47,40 @@ public class Users implements Serializable {
     @Basic(optional = false)
     @Column(name = "user_id")
     private Integer userId;
-    @Basic(optional = false)
-    @NotNull(message="{notNullMsg}")
-    @Size(min = 1, max = 50)
+    @Size(max = 255)
     @Column(name = "username")
     private String username;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @JsonIgnore
+    @Size(max = 255)
     @Column(name = "password")
     private String password;
-    @Basic(optional = false)
-    @Size(min = 1, max = 45)
+    @Size(max = 45)
     @Column(name = "fullname")
     private String fullname;
     // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
+    @Size(max = 45)
     @Column(name = "phone")
     private String phone;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Basic(optional = false)
-    @NotNull
-    @Email
-    @Size(min = 1, max = 45)
+    @Size(max = 45)
     @Column(name = "email")
     private String email;
-    @Basic(optional = false)
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "avatar")
     private String avatar;
-    @Basic(optional = false)
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "role")
     private String role;
-    @Basic(optional = false)
     @Column(name = "active")
-    private boolean active;
+    private Boolean active;
     @JsonIgnore
     @OneToMany(mappedBy = "userId")
     private Set<Comments> commentsSet;
     @JsonIgnore
+
     @OneToMany(mappedBy = "userId")
     private Set<Orders> ordersSet;
     @JsonIgnore
+
     @OneToMany(mappedBy = "userId")
     private Set<Store> storeSet;
 
@@ -103,18 +89,6 @@ public class Users implements Serializable {
 
     public Users(Integer userId) {
         this.userId = userId;
-    }
-
-    public Users(Integer userId, String username, String password, String fullname, String phone, String email, String avatar, String role, boolean active) {
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.fullname = fullname;
-        this.phone = phone;
-        this.email = email;
-        this.avatar = avatar;
-        this.role = role;
-        this.active = active;
     }
 
     public Integer getUserId() {
@@ -181,11 +155,11 @@ public class Users implements Serializable {
         this.role = role;
     }
 
-    public boolean getActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
@@ -240,5 +214,5 @@ public class Users implements Serializable {
     public String toString() {
         return "com.ou.pojo.Users[ userId=" + userId + " ]";
     }
-    
+
 }

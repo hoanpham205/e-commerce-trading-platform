@@ -4,6 +4,9 @@
  */
 package com.ou.repository.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.ou.dto.ProductDto;
 import com.ou.pojo.Categories;
 import com.ou.pojo.Orderdetails;
@@ -13,6 +16,7 @@ import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.repository.ProductRepon;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -251,16 +255,28 @@ public class ProductReponImpl implements ProductRepon {
                 System.out.println(cateId);
             }
             cr.where(predicates.toArray(Predicate[]::new));
-
-            cr.multiselect(rP.get("productId"),
-                    rP.get("productName"),
-                    rOd.get("total"));
-
+            cr.multiselect(rOd);
+//
+//            cr.multiselect(rP.get("productId"),
+//                    rP.get("productName"),
+//                    rOd.get("total"));
             Query query = s.createQuery(cr);
-            return query.getResultList();
+//            List<Object[]> list = query.getResultList();
+//            Gson gson = new Gson();
+//            List<Map<String, Object>> jsonResults = new ArrayList<>();
+//
+//            for (Object[] result : list) {
+//                Map<String, Object> jsonResult = new HashMap<>();
+//                jsonResult.put("productId", result[0]);
+//                jsonResult.put("productName", result[1]);
+//                jsonResult.put("total", result[2]);
+//                jsonResults.add(jsonResult);
+//            }
+
+            return  query.getResultList();
+
         }
         return null;
     }
 
-    
 }

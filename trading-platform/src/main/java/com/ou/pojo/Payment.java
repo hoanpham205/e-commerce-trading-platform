@@ -8,17 +8,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -33,8 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p"),
     @NamedQuery(name = "Payment.findByPaymentId", query = "SELECT p FROM Payment p WHERE p.paymentId = :paymentId"),
-    @NamedQuery(name = "Payment.findByPayment", query = "SELECT p FROM Payment p WHERE p.payment = :payment"),
-    @NamedQuery(name = "Payment.findByPaymentMethodId", query = "SELECT p FROM Payment p WHERE p.paymentMethodId = :paymentMethodId")})
+    @NamedQuery(name = "Payment.findByPayment", query = "SELECT p FROM Payment p WHERE p.payment = :payment")})
 public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,30 +42,21 @@ public class Payment implements Serializable {
     @Basic(optional = false)
     @Column(name = "payment_id")
     private Integer paymentId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "payment")
     private String payment;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "payment_method_id")
-    private int paymentMethodId;
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentsPaymentId")
+    @OneToMany(mappedBy = "paymentsPaymentId")
     private Set<Orders> ordersSet;
+    @JoinColumn(name = "payment_method_id", referencedColumnName = "id")
+    @ManyToOne
+    private PaymentMethod paymentMethodId;
 
     public Payment() {
     }
 
     public Payment(Integer paymentId) {
         this.paymentId = paymentId;
-    }
-
-    public Payment(Integer paymentId, String payment, int paymentMethodId) {
-        this.paymentId = paymentId;
-        this.payment = payment;
-        this.paymentMethodId = paymentMethodId;
     }
 
     public Integer getPaymentId() {
@@ -85,14 +75,6 @@ public class Payment implements Serializable {
         this.payment = payment;
     }
 
-    public int getPaymentMethodId() {
-        return paymentMethodId;
-    }
-
-    public void setPaymentMethodId(int paymentMethodId) {
-        this.paymentMethodId = paymentMethodId;
-    }
-
     @XmlTransient
     public Set<Orders> getOrdersSet() {
         return ordersSet;
@@ -100,6 +82,14 @@ public class Payment implements Serializable {
 
     public void setOrdersSet(Set<Orders> ordersSet) {
         this.ordersSet = ordersSet;
+    }
+
+    public PaymentMethod getPaymentMethodId() {
+        return paymentMethodId;
+    }
+
+    public void setPaymentMethodId(PaymentMethod paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
     }
 
     @Override

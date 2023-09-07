@@ -1,7 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="container mt-3">
-    <h1>${mes}</h1>
 
     <div class="search">
         <form action="<c:url value="/admin/store-manager"/>" class="form-search">
@@ -16,6 +15,7 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th></th>
+                <th></th>
 
 
             </tr>
@@ -25,12 +25,14 @@
                 <tr>
                     <td>${s.storeName}</td>
                     <td>${s.description}</td>
-
-
+                    <c:url value="/store/${s.storeId}" var="api" />
                     <td>
-                        <a href="#" class="btn btn-info">Update</a>
-                        <button class="btn btn-danger" >Delete</button>
+                        <a href="${api}" class="btn btn-info">stat</a>
                     </td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteProduct('${api}')">Delete</button>
+                    </td>
+
 
                 </tr>
             </c:forEach>

@@ -74,4 +74,9 @@ public class storeServiceImpl implements storeService {
     public Store addStoreRequest(Store store, Users userId) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    @Override
+    public Store getStoreByID(int id) {
+        return storeRepon.getStoreByID(id);
+    }
 }

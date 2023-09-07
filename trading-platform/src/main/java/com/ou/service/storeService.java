@@ -25,8 +25,10 @@ public interface storeService {
 
     boolean deleteProductByUserId(Users id);
 
-    List<Object[]> statsAdmin(Map<String, String> params,Store s);
+    List<Object[]> statsAdmin(Map<String, String> params, Store s);
 
     boolean updateStore(Store store);
+
+    public Store getStoreByID(int id);
 
 }

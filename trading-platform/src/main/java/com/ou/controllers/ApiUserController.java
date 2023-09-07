@@ -4,6 +4,7 @@
  */
 package com.ou.controllers;
 
+import com.ou.dto.UserDto;
 import com.ou.dto.logindto;
 import com.ou.pojo.Products;
 import com.ou.pojo.Users;
@@ -52,6 +53,8 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 
+@RequestMapping("/api")
+
 public class ApiUserController {
 
     @Autowired
@@ -76,13 +79,9 @@ public class ApiUserController {
     @DeleteMapping("/user/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "id") int id) {
-        if (storeService.getStoreByUserID(userService.getUserById(id)) != null) {
-            this.userService.deleteAcount(id);
-        } else {
-            storeService.deleteProductByUserId(userService.getUserById(id));
-            this.userService.deleteAcount(id);
 
-        }
+        this.userService.deleteAcount(id);
+
     }
 
     //chấp nhận thg đó làm saller

@@ -42,7 +42,6 @@ public class storeReponImpl implements storeRepon {
 
     @Autowired
     private LocalSessionFactoryBean sessionFactory;
-    
 
     @Override
     public Store addStore(Store store) {
@@ -62,21 +61,9 @@ public class storeReponImpl implements storeRepon {
     @Override
     public Store getStoreByUserID(Users id) {
         Session session = this.sessionFactory.getObject().getCurrentSession();
-        CriteriaBuilder b = session.getCriteriaBuilder();
-        CriteriaQuery<Store> query = b.createQuery(Store.class);
-        Root<Store> root = query.from(Store.class);
 
-        List<Predicate> predicates = new ArrayList<>();
-
-        Predicate p = b.equal(root.get("userId"), id);
-        predicates.add(p);
-
-        query.where(predicates.toArray(Predicate[]::new));
-
-//        query.orderBy(b.desc(root.get("productId")));
-        query.select(root);
-
-        Query q = session.createQuery(query);
+        Query q = session.createQuery("SELECT s FROM Store s WHERE s.userId = :un");
+        q.setParameter("un", id);
 
         return (Store) q.getSingleResult();
 
@@ -136,12 +123,12 @@ public class storeReponImpl implements storeRepon {
     }
 
     @Override
-    public List<Object[]> statsAdmin(Map<String, String> params,Store s) {
-        
+    public List<Object[]> statsAdmin(Map<String, String> params, Store s) {
+
         Session session = this.sessionFactory.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Object[]> cr = builder.createQuery(Object[].class);
-       
+
         Root rS = cr.from(Store.class);
         Root rOd = cr.from(Orderdetails.class);
         Root rOr = cr.from(Orders.class);
@@ -155,7 +142,7 @@ public class storeReponImpl implements storeRepon {
 
             predicates.add(builder.equal(rOr.get("storeStoreId"), rS.get("storeId")));
             predicates.add(builder.equal(rOd.get("ordersOrderId"), rOr.get("orderId")));
-            predicates.add(builder.equal( rS.get("storeId"),s.getStoreId() ));
+            predicates.add(builder.equal(rS.get("storeId"), s.getStoreId()));
 
             predicates.add(builder.equal(builder.function("year", Integer.class, rOr.get("orderDate")),
                     Integer.parseInt(year)));
@@ -171,15 +158,21 @@ public class storeReponImpl implements storeRepon {
             }
 
             cr.where(predicates.toArray(Predicate[]::new));
+            cr.multiselect(rOd);
 
-            cr.multiselect(rS.get("storeId"),
-                    rS.get("storeName"),
-                    builder.sum(rOd.get("total")));
-
+//            cr.multiselect(rS.get("storeId"),
+//                    rS.get("storeName"),
+//                    builder.sum(rOd.get("total")));
             Query query = session.createQuery(cr);
             return query.getResultList();
         }
         return null;
+    }
+
+    @Override
+    public Store getStoreByID(int id) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        return session.get(Store.class, id);
     }
 
 }
