@@ -20,15 +20,31 @@
                     <a class="nav-link" href="<c:url value="/" />">
                         <i class="fa-solid fa-house" aria-hidden="true"></i> Trang chủ</a>
                 </li>
-                <sec:authorize access="hasAnyAuthority('EMPLOYEE')">
+                <sec:authorize access="hasAnyAuthority('ADMIN')">
                     <div class="dropdown">                   
                         <li class="nav-item">
-                            <a class="nav-link text-primary" href="<c:url value="/store/" />">
+                            <a class="nav-link text-primary" href="<c:url value="/store-manager/" />">
                                 <i class="fa-solid fa-shop" aria-hidden="true"></i> Cửa Hàng</a>
                         </li>
                     </div>
                 </sec:authorize>
-          
+                <sec:authorize access="hasAnyAuthority('ADMIN')">
+                    <div class="dropdown">                   
+                        <li class="nav-item">
+                            <a class="nav-link text-primary" href="<c:url value="/requestment" />">
+                                <i class="fa-regular fa-user"></i> Yêu Cầu</a>
+                        </li>
+                    </div>
+                </sec:authorize>
+                <sec:authorize access="hasAnyAuthority('EMPLOYE')">
+                    <div class="dropdown">                   
+                        <li class="nav-item">
+                            <a class="nav-link text-primary" href="<c:url value="/stat/" />">
+                                <i class="fa-solid fa-shop" aria-hidden="true"></i> Stats</a>
+                        </li>
+                    </div>
+                </sec:authorize>
+
 
 
 

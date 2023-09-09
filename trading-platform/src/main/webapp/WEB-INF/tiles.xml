@@ -49,5 +49,12 @@
 
     </definition>
   
+    <definition name="statAdmin" extends="baseLayout">
+        <put-attribute name="titleAdmin" value="statAdmin" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/statAdmin.jsp" />
+        <put-attribute name="footer" value="" />
+
+    </definition>
 
 </tiles-definitions>

@@ -10,6 +10,7 @@ import com.ou.service.ProductService;
 import com.ou.service.storeService;
 import com.ou.service.userService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @RequestMapping("/api")
+@PropertySource("classpath:configs.properties")
 public class ApiCountController {
 
     @Autowired
@@ -53,6 +55,22 @@ public class ApiCountController {
             Users currentUser = userService.getUsers(userDetails.getUsername());
             Store store = storeService.getStoreByUserID(currentUser);
             int count = this.ProductService.countProduct(store);
+            return new ResponseEntity<>(Math.ceil(count * 1.0 / countSize), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+    }
+
+    @GetMapping("/counts/")
+    public ResponseEntity<Double> countAll() {
+        int countSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUsers(userDetails.getUsername());
+            Store store = storeService.getStoreByUserID(currentUser);
+            int count = this.ProductService.countAllProduct();
             return new ResponseEntity<>(Math.ceil(count * 1.0 / countSize), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

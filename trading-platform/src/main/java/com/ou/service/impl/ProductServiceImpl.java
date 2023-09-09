@@ -76,13 +76,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Products> getProduct(Store s, Map<String, String> params) {
-        return ProductRepon.getProduct(s, params);
+    public List<Products> getProduct(Store s) {
+        return ProductRepon.getProduct(s);
     }
 
     @Override
     public int countProduct(Store s) {
         return ProductRepon.countProduct(s);
+    }
+
+    @Override
+    public int countAllProduct() {
+        return ProductRepon.countAllProduct();
     }
 
     @Override
@@ -147,10 +152,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Object[]> stats(Map<String, String> params) {
-        
+
         return this.ProductRepon.statsEmp(params);
     }
 
-   
+    @Override
+    public List<Products> getAllProduct() {
+        return this.ProductRepon.getAllProduct();
+    }
 
 }

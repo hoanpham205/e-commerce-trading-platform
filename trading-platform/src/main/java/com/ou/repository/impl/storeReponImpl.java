@@ -11,13 +11,16 @@ import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.repository.storeRepon;
 import com.ou.service.userService;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -42,6 +45,9 @@ public class storeReponImpl implements storeRepon {
 
     @Autowired
     private LocalSessionFactoryBean sessionFactory;
+
+    @Autowired
+    private SimpleDateFormat f;
 
     @Override
     public Store addStore(Store store) {
@@ -133,11 +139,10 @@ public class storeReponImpl implements storeRepon {
         Root rOd = cr.from(Orderdetails.class);
         Root rOr = cr.from(Orders.class);
 
-        String quarter = params.get("quarter");
         String year = params.get("year");
         String month = params.get("month");
 
-        if (params != null && year != null) {
+        if (year != null) {
             List<Predicate> predicates = new ArrayList<>();
 
             predicates.add(builder.equal(rOr.get("storeStoreId"), rS.get("storeId")));
@@ -147,22 +152,17 @@ public class storeReponImpl implements storeRepon {
             predicates.add(builder.equal(builder.function("year", Integer.class, rOr.get("orderDate")),
                     Integer.parseInt(year)));
 
-            if (quarter != null && !quarter.isEmpty()) {
-                predicates.add(builder.equal(builder.function("quarter", Integer.class, rOr.get("orderDate")),
-                        Integer.parseInt(quarter)));
-            }
-
             if (month != null && !month.isEmpty()) {
                 predicates.add(builder.equal(builder.function("month", Integer.class, rOr.get("orderDate")),
                         Integer.parseInt(month)));
             }
-
+            
+            cr.orderBy(builder.asc(rOr.get("orderDate")));
+            
             cr.where(predicates.toArray(Predicate[]::new));
-            cr.multiselect(rOd);
 
-//            cr.multiselect(rS.get("storeId"),
-//                    rS.get("storeName"),
-//                    builder.sum(rOd.get("total")));
+            cr.multiselect(rOr.get("orderDate"),
+                    rOd.get("total"));
             Query query = session.createQuery(cr);
             return query.getResultList();
         }
