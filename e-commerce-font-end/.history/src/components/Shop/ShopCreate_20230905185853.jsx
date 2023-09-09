@@ -1,0 +1,2 @@
+storeName: shopname,
+          description: address,

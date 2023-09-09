@@ -16,6 +16,8 @@ import java.util.Map;
 public interface storeService {
 
     Store addStore(Store store, Users userId);
+    Store addStoreRequest(Store store, Users userId);
+
 
     List<Store> getStore(Map<String, String> params);
 

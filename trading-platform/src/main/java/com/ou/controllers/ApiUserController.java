@@ -42,7 +42,9 @@ import org.springframework.web.multipart.MultipartFile;
  * @author ADMIN
  */
 @RestController
+
 @RequestMapping("/api")
+
 public class ApiUserController {
 
     @Autowired
