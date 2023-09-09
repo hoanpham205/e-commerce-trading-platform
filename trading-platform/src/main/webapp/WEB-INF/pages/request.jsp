@@ -44,7 +44,7 @@
                         <td>${u.fullname}</td>
                         <td>${u.phone}</td>
                          <td>
-                        <c:url value="/requestment/${u.userId}" var="api" />
+                        <c:url value="/api/requestment/${u.userId}" var="api" />
                         <button class="btn btn-danger" onclick="request('${api}')">Xác Nhận</button>
                     </td>
 

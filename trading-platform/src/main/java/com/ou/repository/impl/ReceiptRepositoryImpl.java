@@ -13,6 +13,7 @@ import com.ou.repository.ReceiptRepository;
 import com.ou.repository.storeRepon;
 import com.ou.repository.userRepon;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import org.hibernate.HibernateException;
@@ -46,6 +47,9 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
 
     @Autowired
     private storeRepon storeRepon;
+    
+    @Autowired
+    private SimpleDateFormat f;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)

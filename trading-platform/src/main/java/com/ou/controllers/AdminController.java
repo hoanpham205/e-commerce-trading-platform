@@ -7,6 +7,7 @@ package com.ou.controllers;
 import com.ou.dto.ProductDto;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
+import com.ou.service.CategoriService;
 import com.ou.service.ProductService;
 import com.ou.service.storeService;
 import com.ou.service.userService;
@@ -21,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,8 +34,9 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author ADMINasd
  */
 @Controller
-@CrossOrigin
+@ControllerAdvice
 @RequestMapping("/")
+
 public class AdminController {
 
     @Autowired
@@ -45,11 +48,19 @@ public class AdminController {
     @Autowired
     private ProductService ProductService;
 
+    @Autowired
+    private CategoriService CategoriService;
+
     @GetMapping
     public String getAllUSer(Model model) {
 
         model.addAttribute("user", this.userService.getAllUser());
         return "admin";
+    }
+
+    @RequestMapping
+    public void actice(Model model) {
+        model.addAttribute("cate", this.CategoriService.getCates());
     }
 
     @GetMapping("/store-manager")
@@ -77,17 +88,12 @@ public class AdminController {
         return "request";
     }
 
-    @GetMapping("statsAmin/")
-    public ResponseEntity<?> stats(@RequestParam Map<String, String> params) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            Users userCuren = userService.getUsers(userDetails.getUsername());
-            Store store = this.storeService.getStoreByUserID(userCuren);
-            System.out.println(params);
-            return ResponseEntity.ok(storeService.statsAdmin(params, store));
-        } else {
-            return new ResponseEntity<>("NO STATS", HttpStatus.UNAUTHORIZED);
-        }
+    @GetMapping("store/{id}")
+    public String stats(Model model, @RequestParam Map<String, String> params, @PathVariable int id) {
+        
+        model.addAttribute("store", this.storeService.getStoreByID(id));
+        model.addAttribute("stat", storeService.statsAdmin(params, this.storeService.getStoreByID(id)));
+        return "statAdmin";
+
     }
 }

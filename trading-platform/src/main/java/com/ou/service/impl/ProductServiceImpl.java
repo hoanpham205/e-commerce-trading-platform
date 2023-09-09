@@ -86,6 +86,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public int countAllProduct() {
+        return ProductRepon.countAllProduct();
+    }
+
+    @Override
     public boolean deleteProduct(int id) {
         return this.ProductRepon.deleteProduct(id);
 
@@ -147,10 +152,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Object[]> stats(Map<String, String> params) {
-        
+
         return this.ProductRepon.statsEmp(params);
     }
 
-   
+    @Override
+    public List<Products> getAllProduct() {
+        return this.ProductRepon.getAllProduct();
+    }
 
 }

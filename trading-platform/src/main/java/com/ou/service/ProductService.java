@@ -29,6 +29,8 @@ public interface ProductService {
 
     int countProduct(Store s);
 
+    int countAllProduct();
+
     boolean deleteProduct(int id);
 
     Products getProductById(int id);
@@ -41,5 +43,6 @@ public interface ProductService {
 
     List<Object[]> stats(Map<String, String> params);
 
+    List<Products> getAllProduct();
 
-    }
+}

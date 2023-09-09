@@ -19,9 +19,11 @@ public interface ProductRepon {
 
     Products addProduct(Products p);
 
-    List<Products> getProduct(Store s);
+    List<Products> getProduct(Store s, Map<String, String> params);
 
     int countProduct(Store s);
+
+    int countAllProduct();
 
     boolean deleteProduct(int id);
 
@@ -33,9 +35,6 @@ public interface ProductRepon {
 
     List<Products> sortProductPrice(String Dir);
 
+    List<Object[]> statsEmp(Map<String, String> params);
 
-    List<Object[]> statsEmp(Map<String, String> params );
-    
-
-  
 }

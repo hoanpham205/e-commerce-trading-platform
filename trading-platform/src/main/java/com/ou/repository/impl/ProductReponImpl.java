@@ -86,6 +86,13 @@ public class ProductReponImpl implements ProductRepon {
     }
 
     @Override
+    public int countAllProduct() {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        Query q = session.createQuery("SELECT COUNT(*) From Products ");
+        return Integer.parseInt(q.getSingleResult().toString());
+    }
+
+    @Override
     public Products getProductById(int id) {
         Session session = this.sessionFactory.getObject().getCurrentSession();
         return session.get(Products.class, id);
@@ -222,6 +229,13 @@ public class ProductReponImpl implements ProductRepon {
 
         }
         return null;
+    }
+
+    @Override
+    public List<Products> getAllProduct() {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        Query q = session.createQuery(" From Products  ");
+        return q.getResultList();
     }
 
 }
