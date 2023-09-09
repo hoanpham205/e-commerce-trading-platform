@@ -128,22 +128,8 @@ public class ApiProductController {
         return null;
 
     }
-
-    //lấy tất cả prodcut của thg đăng nhập
-    @GetMapping("/products/")
-    @CrossOrigin
-    public ResponseEntity<List<Products>> getProduct() {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            Users userCuren = userSer.getUsers(userDetails.getUsername());
-            Store store = this.storeService.getStoreByUserID(userCuren);
-            return new ResponseEntity<>(this.ProductService.getProduct(store), HttpStatus.OK);
-        }
-        return null;
-
-    }
+    
+    
 
     //lấy tất cả prodcut
     @GetMapping("/allProducts/")
