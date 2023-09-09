@@ -35,13 +35,37 @@ public class CategoriReponImpl implements CategoriRepon {
 
     @Override
     public Categories getCateById(int id) {
-        Session session=this.factory.getObject().getCurrentSession();
+        Session session = this.factory.getObject().getCurrentSession();
         return session.get(Categories.class, id);
     }
 
     @Override
-    public boolean addOrUpdate() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean addOrUpdate(Categories cate) {
+        Session session = this.factory.getObject().getCurrentSession();
+
+        try {
+            if (cate == null) {
+                session.save(cate);
+
+            }
+            else{
+                session.update(cate);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
+    @Override
+    public Categories getCateByName(String name) {
+        Session session = this.factory.getObject().getCurrentSession();
+
+        Query q = session.createQuery("SELECT c FROM Categories c WHERE c.categoryName = :categoryName");
+        q.setParameter("categoryName", name);
+        return (Categories) q.getSingleResult();
+
     }
 
 }

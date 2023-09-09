@@ -25,4 +25,8 @@ public interface storeRepon {
 
     boolean updateStore(Store store);
 
+    Store getStoreByID(int id);
+
+    List<Object[]> statsAdmin(Map<String, String> params, Store s);
+
 }

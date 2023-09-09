@@ -55,7 +55,6 @@ public class Store implements Serializable {
     @Column(name = "active")
     private Boolean active;
     @JsonIgnore
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeStoreId")
     private Set<Orders> ordersSet;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
@@ -154,5 +153,5 @@ public class Store implements Serializable {
     public String toString() {
         return "com.ou.pojo.Store[ storeId=" + storeId + " ]";
     }
-
+    
 }

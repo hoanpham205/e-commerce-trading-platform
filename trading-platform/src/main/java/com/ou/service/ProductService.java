@@ -4,11 +4,16 @@
  */
 package com.ou.service;
 
+import com.ou.dto.ProductDto;
+import com.ou.dto.Stats;
+import com.ou.pojo.Categories;
 import com.ou.pojo.Products;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import java.util.List;
 import java.util.Map;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -16,13 +21,15 @@ import java.util.Map;
  */
 public interface ProductService {
 
-    Products addProduct(Products p, Store s);
+    ProductDto addProduct(@RequestParam Map<String, String> params, Store s, MultipartFile file);
 
     boolean updateProduct(Products p, int id);
 
-    public List<Products> getProduct(Store s, Map<String, String> params);
+    public List<Products> getProduct(Store s);
 
     int countProduct(Store s);
+
+    int countAllProduct();
 
     boolean deleteProduct(int id);
 
@@ -33,5 +40,9 @@ public interface ProductService {
     List<Products> sortProductname(String Dir);
 
     List<Products> sortProductPrice(String Dir);
+
+    List<Object[]> stats(Map<String, String> params);
+
+    List<Products> getAllProduct();
 
 }

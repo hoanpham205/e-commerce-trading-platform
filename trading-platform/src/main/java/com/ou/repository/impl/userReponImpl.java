@@ -8,6 +8,7 @@ import com.ou.pojo.Products;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.repository.userRepon;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,11 +59,11 @@ public class userReponImpl implements userRepon {
 
     @Override
     public Users getUsers(String username) {
-          Session s = this.sessionFactory.getObject().getCurrentSession();
+        Session s = this.sessionFactory.getObject().getCurrentSession();
         Query q = s.createQuery("From Users Where username=:un");
         q.setParameter("un", username);
 
-        return  (Users) q.getSingleResult();
+        return (Users) q.getSingleResult();
     }
 
     @Override
@@ -109,11 +110,45 @@ public class userReponImpl implements userRepon {
 
     @Override
     public List<Users> getUserActive() {
-     Session s = this.sessionFactory.getObject().getCurrentSession();
+        Session s = this.sessionFactory.getObject().getCurrentSession();
         Query q = s.createQuery("From Users Where active=:un");
         q.setParameter("un", true);
 
-        return  q.getResultList();
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Users> getAllUser() {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+        Query q = s.createQuery("SELECT u FROM Users u WHERE u.role !=:un");
+        q.setParameter("un", "ADMIN");
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Users> findUser(Map<String, String> params) {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+        Query q = s.createQuery("FROM Users");
+
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Users> query = b.createQuery(Users.class);
+
+        Root<Users> root = query.from(Users.class);
+
+        if (params != null) {
+            List<Predicate> predicates = new ArrayList<>();
+
+            String username = params.get("username");
+            if (username != null && !username.isEmpty()) {
+                predicates.add(b.like(root.get("username"), String.format("%%%s%%", username)));
+            }
+            query.where(predicates.toArray(Predicate[]::new));
+            query.multiselect(root);
+            q = s.createQuery(query);
+
+        }
+        return q.getResultList();
     }
 
 }

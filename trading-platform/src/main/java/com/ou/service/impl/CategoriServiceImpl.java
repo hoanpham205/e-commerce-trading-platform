@@ -21,19 +21,29 @@ public class CategoriServiceImpl implements CategoriService {
     @Autowired
     private CategoriRepon CategoriRepon;
 
+    
+    // lấy all cate
     @Override
     public List<Categories> getCates() {
         return CategoriRepon.getcate();
     }
-
+    
+    //lấy cate bằng id
     @Override
     public Categories getCateById(int id) {
        return  CategoriRepon.getCateById(id);
     }
-
+    
+    //thêm cate
     @Override
     public boolean addCate(Categories cate) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    //lấy
+    @Override
+    public Categories getCateByName(String name) {
+        return this.CategoriRepon.getCateByName(name);
     }
 
 }

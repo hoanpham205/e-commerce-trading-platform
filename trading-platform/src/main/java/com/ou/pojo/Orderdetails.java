@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Orderdetails.findAll", query = "SELECT o FROM Orderdetails o"),
     @NamedQuery(name = "Orderdetails.findByOrderDetailId", query = "SELECT o FROM Orderdetails o WHERE o.orderDetailId = :orderDetailId"),
     @NamedQuery(name = "Orderdetails.findByPrice", query = "SELECT o FROM Orderdetails o WHERE o.price = :price"),
-    @NamedQuery(name = "Orderdetails.findByQuantity", query = "SELECT o FROM Orderdetails o WHERE o.quantity = :quantity")})
+    @NamedQuery(name = "Orderdetails.findByQuantity", query = "SELECT o FROM Orderdetails o WHERE o.quantity = :quantity"),
+    @NamedQuery(name = "Orderdetails.findByTotal", query = "SELECT o FROM Orderdetails o WHERE o.total = :total")})
 public class Orderdetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,6 +44,8 @@ public class Orderdetails implements Serializable {
     private BigDecimal price;
     @Column(name = "quantity")
     private Integer quantity;
+    @Column(name = "total")
+    private BigDecimal total;
     @JoinColumn(name = "orders_order_id", referencedColumnName = "order_id")
     @ManyToOne(optional = false)
     private Orders ordersOrderId;
@@ -79,6 +82,14 @@ public class Orderdetails implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
     public Orders getOrdersOrderId() {

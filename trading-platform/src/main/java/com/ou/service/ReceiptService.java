@@ -4,6 +4,7 @@
  */
 package com.ou.service;
 
+import com.ou.pojo.Payment;
 import com.ou.pojo.cart;
 import java.util.Map;
 
@@ -13,6 +14,6 @@ import java.util.Map;
  */
 public interface ReceiptService {
 
-    boolean addReceipt(Map<String, cart> carts);
+    boolean addReceipt(Map<String, cart> carts );
 
 }

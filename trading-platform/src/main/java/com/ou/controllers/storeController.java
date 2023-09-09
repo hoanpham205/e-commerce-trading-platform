@@ -72,7 +72,7 @@ public class storeController {
         //ok
         model.addAttribute("store", this.storeService.getStoreByUserID((Users) s.getAttribute("currentUser")));
         //ok
-        model.addAttribute("product", this.ProductService.getProduct(this.storeService.getStoreByUserID((Users) s.getAttribute("currentUser")), params));
+        model.addAttribute("product", this.ProductService.getProduct(this.storeService.getStoreByUserID((Users) s.getAttribute("currentUser"))));
 
         int countSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
         int count = this.ProductService.countProduct(this.storeService.getStoreByUserID((Users) s.getAttribute("currentUser")));

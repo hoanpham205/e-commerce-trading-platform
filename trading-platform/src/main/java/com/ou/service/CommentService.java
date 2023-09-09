@@ -4,6 +4,7 @@
  */
 package com.ou.service;
 
+import com.ou.dto.CommentDto;
 import com.ou.pojo.Comments;
 import com.ou.pojo.Products;
 import com.ou.pojo.Users;
@@ -15,9 +16,19 @@ import java.util.List;
  */
 public interface CommentService {
 
-    Comments addComment(Comments c, Users userId, int proId,int reply);
+    Comments addComment(Comments c, Users userId, int proId, int reply);
 
-    Comments findCommentById(int id);
+    CommentDto findCommentById(int id);
 
     List<Comments> findAllCommentsByProductId(Products id);
-}
+
+    boolean deleteComment(Comments id);
+
+    Comments getComment(Users user);
+
+    boolean deleteComment(int id, int userId);
+
+    List<Comments> getAllByCommentId(Comments c);
+
+    public Comments getAllByProductId(Products p);
+    }

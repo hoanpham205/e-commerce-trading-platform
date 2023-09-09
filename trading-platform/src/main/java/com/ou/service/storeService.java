@@ -15,7 +15,9 @@ import java.util.Map;
  */
 public interface storeService {
 
-    Store addStore(Store store,Users userId);
+    Store addStore(Store store, Users userId);
+    Store addStoreRequest(Store store, Users userId);
+
 
     List<Store> getStore(Map<String, String> params);
 
@@ -23,7 +25,10 @@ public interface storeService {
 
     boolean deleteProductByUserId(Users id);
 
+    List<Object[]> statsAdmin(Map<String, String> params, Store s);
 
     boolean updateStore(Store store);
+
+    Store getStoreByID(int id);
 
 }

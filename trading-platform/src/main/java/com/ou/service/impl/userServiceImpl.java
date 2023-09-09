@@ -6,6 +6,7 @@ package com.ou.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ou.dto.UserDto;
 import com.ou.pojo.Store;
 import com.ou.service.*;
 import com.ou.pojo.Users;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -49,17 +51,12 @@ public class userServiceImpl implements userService {
     @Override
     public Users addUser(Users user) {
 
-//            try {
-        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        user.setRole("USER");
-        user.setActive(Boolean.FALSE);
-//                Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-//                user.setAvatar(res.get("secure_url").toString());
+        if (user == null) {
+            user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+            user.setRole("USER");
+            user.setActive(Boolean.FALSE);
+        }
 
-//            } 
-//            catch (IOException ex) {
-//                Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-//            }
         return userRepon.addUser(user);
     }
 
@@ -124,11 +121,11 @@ public class userServiceImpl implements userService {
         Users u = new Users();
         u.setUsername(params.get("username"));
         u.setPassword(this.passwordEncoder.encode(params.get("password")));
+        u.setFullname(params.get("fullname"));
 
-        u.setPhone(params.get("fullname"));
+        u.setPhone(params.get("phone"));
         u.setEmail(params.get("phone"));
         u.setEmail(params.get("email"));
-        u.setSex(params.get("sex"));
         u.setActive(Boolean.FALSE);
         u.setRole("USER");
         try {
@@ -139,6 +136,28 @@ public class userServiceImpl implements userService {
             Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return userRepon.addUser(u);
+    }
+
+    @Override
+    public UserDto getUserByUsername(String username) {
+      Users user= userRepon.getUsers(username);
+      UserDto userdto=UserDto.builder()
+              .id(user.getUserId())
+              .userNaeme(user.getUsername())
+              .email(user.getEmail())
+              .avatar(user.getAvatar())
+              .role(user.getRole()).build();
+        return userdto;
+    }
+
+    @Override
+    public List<Users> getAllUser() {
+        return this.userRepon.getAllUser();
+    }
+
+    @Override
+    public List<Users> findUser(Map<String, String> params) {
+        return this.userRepon.findUser(params);
     }
 
 }

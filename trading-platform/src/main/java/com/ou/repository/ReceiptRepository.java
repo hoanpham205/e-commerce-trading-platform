@@ -4,6 +4,7 @@
  */
 package com.ou.repository;
 
+import com.ou.pojo.Payment;
 import com.ou.pojo.cart;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import java.util.Map;
  * @author ADMIN
  */
 public interface ReceiptRepository {
-        boolean addReceipt(Map<String, cart> carts);
+
+    boolean addReceipt(Map<String, cart> carts );
 
 }

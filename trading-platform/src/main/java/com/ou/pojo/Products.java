@@ -56,18 +56,15 @@ public class Products implements Serializable {
     @Column(name = "image_url")
     private String imageUrl;
     @JsonIgnore
-
     @OneToMany(mappedBy = "productId")
     private Set<Comments> commentsSet;
     @JsonIgnore
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productsProductId")
     private Set<Orderdetails> orderdetailsSet;
     @JoinColumn(name = "categories_category_id", referencedColumnName = "category_id")
     @ManyToOne
     private Categories categoriesCategoryId;
     @JoinColumn(name = "store_store_id", referencedColumnName = "store_id")
-    @JsonIgnore
     @ManyToOne
     private Store storeStoreId;
 
@@ -168,5 +165,5 @@ public class Products implements Serializable {
     public String toString() {
         return "com.ou.pojo.Products[ productId=" + productId + " ]";
     }
-
+    
 }

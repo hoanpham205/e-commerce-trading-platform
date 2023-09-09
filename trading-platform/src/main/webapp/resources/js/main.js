@@ -12,7 +12,7 @@ function deleteProduct(path) {
 
 
 function addCart(productId) {
-    fetch("/trading-platform/api/cart/" + productId).then(res => res.json()).then(data => {
+    fetch("/trading-platform/cart/" + productId).then(res => res.json()).then(data => {
         var d = document.getElementById("cart")
         if (d != null)
             d.innerText = data;

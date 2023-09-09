@@ -1,25 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ou.service.impl;
+
 
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.repository.storeRepon;
-import com.ou.repository.userRepon;
 import com.ou.service.storeService;
 import com.ou.service.userService;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-/**
- *
- * @author ADMIN
- */
 @Service
 public class storeServiceImpl implements storeService {
 
@@ -29,17 +21,20 @@ public class storeServiceImpl implements storeService {
     @Autowired
     private userService userService;
 
-    @Autowired
-    private HttpSession session;
-
     @Override
-    public Store addStore(Store store,Users userId) {
-    
-        userId.setActive(Boolean.TRUE);
-        userService.addUser(userId);
-        store.setUserId(userId);
-        store.setActive(Boolean.FALSE);
-        return storeRepon.addStore(store);
+    @Transactional
+    public Store addStore(Store store, Users userId) {
+        // Đảm bảo userId không null và trạng thái của nó chưa được thay đổi
+        if (userId != null && !userId.getActive()) {
+            userId.setActive(true);
+            userService.addUser(userId);
+            store.setUserId(userId);
+            store.setActive(false);
+            return storeRepon.addStore(store);
+        } else {
+            // Xử lý khi userId không hợp lệ
+            return null;
+        }
     }
 
     @Override
@@ -53,21 +48,35 @@ public class storeServiceImpl implements storeService {
     }
 
     @Override
+    @Transactional
     public boolean deleteProductByUserId(Users id) {
         return storeRepon.deleteStoreByUserId(id);
     }
 
     @Override
+    @Transactional
     public boolean updateStore(Store store) {
         try {
-
-            store.setActive(Boolean.TRUE);
-          
-            return   storeRepon.updateStore(store);
+            store.setActive(true);
+            return storeRepon.updateStore(store);
         } catch (Exception e) {
+            // Xử lý khi có lỗi xảy ra
+            return false;
         }
-
-        return false;
     }
 
+    @Override
+    public List<Object[]> statsAdmin(Map<String, String> params, Store s) {
+        return storeRepon.statsAdmin(params, s);
+    }
+
+    @Override
+    public Store addStoreRequest(Store store, Users userId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Store getStoreByID(int id) {
+        return storeRepon.getStoreByID(id);
+    }
 }

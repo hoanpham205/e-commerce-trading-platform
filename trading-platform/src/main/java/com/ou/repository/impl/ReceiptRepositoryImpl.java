@@ -6,10 +6,14 @@ package com.ou.repository.impl;
 
 import com.ou.pojo.Orderdetails;
 import com.ou.pojo.Orders;
+import com.ou.pojo.Payment;
 import com.ou.pojo.cart;
 import com.ou.repository.ProductRepon;
 import com.ou.repository.ReceiptRepository;
+import com.ou.repository.storeRepon;
 import com.ou.repository.userRepon;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import org.hibernate.HibernateException;
@@ -40,9 +44,12 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
 
     @Autowired
     private ProductRepon productRepo;
+
+    @Autowired
+    private storeRepon storeRepon;
     
-    
-    
+    @Autowired
+    private SimpleDateFormat f;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -52,7 +59,10 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
         try {
             Orders order = new Orders();
             order.setUserId(this.userRepo.getUserByUsername(authentication.getName()));
+            order.setStoreStoreId(storeRepon.getStoreByUserID(this.userRepo.getUserByUsername(authentication.getName())));
+            order.setOrderDate(new Date());
             s.save(order);
+            s.flush();
 
             for (cart c : carts.values()) {
                 Orderdetails d = new Orderdetails();
@@ -60,6 +70,8 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
                 d.setPrice(c.getPrice());
                 d.setOrdersOrderId(order);
                 d.setProductsProductId(this.productRepo.getProductById(c.getProductId()));
+                d.setTotal(c.getPrice().multiply(new BigDecimal(c.getCount())));
+                d.setOrdersOrderId(order);
                 s.save(d);
             }
 
@@ -69,7 +81,5 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
             return false;
         }
     }
-
-   
 
 }

@@ -36,7 +36,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByFullname", query = "SELECT u FROM Users u WHERE u.fullname = :fullname"),
     @NamedQuery(name = "Users.findByPhone", query = "SELECT u FROM Users u WHERE u.phone = :phone"),
     @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
-    @NamedQuery(name = "Users.findBySex", query = "SELECT u FROM Users u WHERE u.sex = :sex"),
     @NamedQuery(name = "Users.findByAvatar", query = "SELECT u FROM Users u WHERE u.avatar = :avatar"),
     @NamedQuery(name = "Users.findByRole", query = "SELECT u FROM Users u WHERE u.role = :role"),
     @NamedQuery(name = "Users.findByActive", query = "SELECT u FROM Users u WHERE u.active = :active")})
@@ -65,9 +64,6 @@ public class Users implements Serializable {
     @Size(max = 45)
     @Column(name = "email")
     private String email;
-    @Size(max = 45)
-    @Column(name = "sex")
-    private String sex;
     @Size(max = 255)
     @Column(name = "avatar")
     private String avatar;
@@ -77,7 +73,6 @@ public class Users implements Serializable {
     @Column(name = "active")
     private Boolean active;
     @JsonIgnore
-
     @OneToMany(mappedBy = "userId")
     private Set<Comments> commentsSet;
     @JsonIgnore
@@ -142,14 +137,6 @@ public class Users implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
     }
 
     public String getAvatar() {

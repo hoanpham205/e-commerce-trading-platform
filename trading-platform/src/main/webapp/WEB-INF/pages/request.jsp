@@ -14,7 +14,6 @@
     <div class="main-title">
         <h2 class="text-uppercase text-center text-info">DANH SÁCH TÀI KHOẢN HỆ THỐNG</h2>
     </div>
-    <h1>${request}</h1>
     <div class="user-table">
         <table class="table">
             <thead class="table-primary">

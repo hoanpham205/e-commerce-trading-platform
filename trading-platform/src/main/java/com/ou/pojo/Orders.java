@@ -23,7 +23,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -37,7 +36,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Orders.findAll", query = "SELECT o FROM Orders o"),
     @NamedQuery(name = "Orders.findByOrderId", query = "SELECT o FROM Orders o WHERE o.orderId = :orderId"),
-    @NamedQuery(name = "Orders.findByPaymentMethod", query = "SELECT o FROM Orders o WHERE o.paymentMethod = :paymentMethod"),
     @NamedQuery(name = "Orders.findByOrderDate", query = "SELECT o FROM Orders o WHERE o.orderDate = :orderDate")})
 public class Orders implements Serializable {
 
@@ -47,19 +45,15 @@ public class Orders implements Serializable {
     @Basic(optional = false)
     @Column(name = "order_id")
     private Integer orderId;
-    @Size(max = 255)
-    @Column(name = "payment_method")
-    private String paymentMethod;
     @Column(name = "order_date")
     @Temporal(TemporalType.DATE)
     private Date orderDate;
     @JsonIgnore
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordersOrderId")
     private Set<Orderdetails> orderdetailsSet;
     @JoinColumn(name = "payments_payment_id", referencedColumnName = "payment_id")
-    @ManyToOne(optional = false)
-    private Payments paymentsPaymentId;
+    @ManyToOne
+    private Payment paymentsPaymentId;
     @JoinColumn(name = "store_store_id", referencedColumnName = "store_id")
     @ManyToOne(optional = false)
     private Store storeStoreId;
@@ -82,14 +76,6 @@ public class Orders implements Serializable {
         this.orderId = orderId;
     }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
     public Date getOrderDate() {
         return orderDate;
     }
@@ -107,11 +93,11 @@ public class Orders implements Serializable {
         this.orderdetailsSet = orderdetailsSet;
     }
 
-    public Payments getPaymentsPaymentId() {
+    public Payment getPaymentsPaymentId() {
         return paymentsPaymentId;
     }
 
-    public void setPaymentsPaymentId(Payments paymentsPaymentId) {
+    public void setPaymentsPaymentId(Payment paymentsPaymentId) {
         this.paymentsPaymentId = paymentsPaymentId;
     }
 
@@ -155,5 +141,5 @@ public class Orders implements Serializable {
     public String toString() {
         return "com.ou.pojo.Orders[ orderId=" + orderId + " ]";
     }
-
+    
 }

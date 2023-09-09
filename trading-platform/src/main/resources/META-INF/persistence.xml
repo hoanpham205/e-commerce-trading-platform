@@ -25,6 +25,8 @@
     <class>com.ou.pojo.NewEntity</class>
     <class>com.ou.pojo.Orderdetails</class>
     <class>com.ou.configs.SecurityWebAppInitializer</class>
+    <class>com.ou.pojo.Payment</class>
+    <class>com.ou.pojo.PaymentMethod</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/tradedb?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

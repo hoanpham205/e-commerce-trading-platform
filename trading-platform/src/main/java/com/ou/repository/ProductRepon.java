@@ -4,6 +4,7 @@
  */
 package com.ou.repository;
 
+import com.ou.pojo.Categories;
 import com.ou.pojo.Products;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
@@ -22,6 +23,8 @@ public interface ProductRepon {
 
     int countProduct(Store s);
 
+    int countAllProduct();
+
     boolean deleteProduct(int id);
 
     Products getProductById(int id);
@@ -31,8 +34,7 @@ public interface ProductRepon {
     List<Products> sortProductname(String Dir);
 
     List<Products> sortProductPrice(String Dir);
-    
 
-    public List<Object[]> densityStats(Map<String, String> params);
+    List<Object[]> statsEmp(Map<String, String> params);
 
 }

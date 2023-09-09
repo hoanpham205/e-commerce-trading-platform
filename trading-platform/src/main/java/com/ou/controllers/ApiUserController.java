@@ -4,23 +4,21 @@
  */
 package com.ou.controllers;
 
-import com.ou.dto.JwtResponse;
 import com.ou.dto.logindto;
-import com.ou.pojo.Products;
 import com.ou.pojo.Users;
-import com.ou.security.JwtTokenProvider;
-import com.ou.service.impl.userServiceImpl;
+import com.ou.security.JwtService;
 import com.ou.service.storeService;
 import com.ou.service.userService;
+import com.ou.validator.WebAppValidator;
+import java.util.List;
 import java.util.Map;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.velocity.tools.config.ValidScope;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,90 +42,112 @@ import org.springframework.web.multipart.MultipartFile;
  * @author ADMIN
  */
 @RestController
+
+@RequestMapping("/api")
+
 public class ApiUserController {
 
     @Autowired
     private userService userService;
 
     @Autowired
-    private JwtTokenProvider tokenProvider;
+    private JwtService JwtService;
 
     @Autowired
     private storeService storeService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
-    
+
     @Autowired
     private HttpServletResponse response;
 
+    @Autowired
+    private WebAppValidator PassValidator;
+
+    //xoá cái thg user dc chọn
     @DeleteMapping("/user/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "id") int id) {
-        if (storeService.getStoreByUserID(userService.getUserById(id)) != null) {
-            this.userService.deleteAcount(id);
-        } else {
-            storeService.deleteProductByUserId(userService.getUserById(id));
-            this.userService.deleteAcount(id);
 
-        }
+        this.userService.deleteAcount(id);
+
     }
 
+    //chấp nhận thg đó làm saller
     @PostMapping("/requestment/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void requestment(@PathVariable(value = "id") int id) {
         storeService.updateStore(storeService.getStoreByUserID(userService.getUserById(id)));
+
         userService.updateRoleUser(userService.getUserById(id));
     }
 
-    @PostMapping(path ="/register/",
-            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE}
-    )
-    @CrossOrigin
-    public ResponseEntity<Users> register(@RequestParam Map<String, String> params ,@RequestPart MultipartFile file) throws Exception {
-        return new ResponseEntity<>(this.userService.addUsers(params,file), HttpStatus.CREATED);
+    // ds các yêu cầu làm saller
+    @GetMapping("/requestment/")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<?> requestment() {
+        List<Users> user = this.userService.getUserActive();
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("List User Is Null", HttpStatus.UNAUTHORIZED);
+
+        }
     }
 
+    //đăng nhập
     @PostMapping("/login/")
     @CrossOrigin
-    public ResponseEntity<?> login(@RequestBody  logindto logindto ) throws Exception {
+    public ResponseEntity<?> login(@RequestBody logindto logindto) throws Exception {
         authenticate(logindto.getUsername(), logindto.getPassword());
         final UserDetails userDetails = userService.loadUserByUsername(logindto.getUsername());
         Users user = userService.getUsers(userDetails.getUsername());
-        System.out.println(userDetails);
-        JwtResponse jwtResponse = tokenProvider.generateToken(userDetails);
-        if (jwtResponse != null) {
-            Cookie cookie = new Cookie("JWT_TOKEN", jwtResponse.getAccessToken());
-            cookie.setPath("/");
-            cookie.setMaxAge(3600);
 
-            response.addCookie(cookie);
+        String jwtResponse = JwtService.generateTokenLogin(userDetails.getUsername());
+        if (jwtResponse != null) {
+
             return ResponseEntity.ok().body(jwtResponse);
         } else {
             return ResponseEntity.badRequest().body("Username or password is invalid!");
 
         }
-//        else {
-//            JwtResponse jwtResponse1 = tokenProvider.generateToken(userDetails);
-//            if (jwtResponse != null) {
-//                Cookie cookie = new Cookie("JWT_TOKEN", jwtResponse.getAccessToken());
-//                cookie.setPath("/");
-//                cookie.setMaxAge(3600);
-//
-//                response.addCookie(cookie);
-//                return ResponseEntity.ok().body(jwtResponse);
-//            } else {
-//                return ResponseEntity.badRequest().body("Username or password is invalid!");
-//            }
-//        }
+
     }
 
+    //chứng thực
     private void authenticate(String username, String password) throws Exception {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
     }
 
-    
-    
+    //lấy curren user
+    @GetMapping(path = "/current-user/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    public ResponseEntity<?> details() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUsers(userDetails.getUsername());
+            if (currentUser != null) {
+                return new ResponseEntity<>(currentUser, HttpStatus.OK);
+            }
+            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    //đăng kí
+    @PostMapping(path = "/register/",
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    @CrossOrigin
+    public ResponseEntity<?> register(@Valid @RequestParam Map<String, String> params, @RequestPart MultipartFile file) throws Exception {
+        return new ResponseEntity<>(this.userService.addUsers(params, file), HttpStatus.CREATED);
+
+    }
+
 }

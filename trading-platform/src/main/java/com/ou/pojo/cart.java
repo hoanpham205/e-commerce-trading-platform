@@ -5,74 +5,23 @@
 package com.ou.pojo;
 
 import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author ADMIN
  */
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class cart {
 
-    /**
-     * @return the count
-     */
-    public int getCount() {
-        return count;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return the price
-     */
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    /**
-     * @return the productId
-     */
-    public int getProductId() {
-        return productId;
-    }
-
-    /**
-     * @param count the count to set
-     */
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @param price the price to set
-     */
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    /**
-     * @param productId the productId to set
-     */
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-    
-    
     private int productId;
     private String name;
     private BigDecimal price;
-    private int  count;
-    
+    private int count;
 }
