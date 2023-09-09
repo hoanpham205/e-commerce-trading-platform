@@ -4,23 +4,16 @@
  */
 package com.ou.controllers;
 
-import com.ou.dto.UserDto;
 import com.ou.dto.logindto;
-import com.ou.pojo.Products;
 import com.ou.pojo.Users;
 import com.ou.security.JwtService;
-import com.ou.service.impl.userServiceImpl;
 import com.ou.service.storeService;
 import com.ou.service.userService;
 import com.ou.validator.WebAppValidator;
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import org.apache.velocity.tools.config.ValidScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,12 +24,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

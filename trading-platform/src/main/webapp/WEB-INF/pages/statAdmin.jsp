@@ -5,7 +5,7 @@
 
 <div class="main-table  container">
     <div class="search">
-        <form action="<c:url value="/stat/"/>" class="form-search">
+        <form action="<c:url value="/store/${store.storeId}"/>" class="form-search">
             <input name="month" type="month"  />
             <button type="submit"><i class="fas fa-search"></i></button>
         </form>
@@ -19,30 +19,33 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 
 <script>
-
-    let data = [];
     let labels = [];
-    <c:forEach items="${chartData}" var="d">
-    data.push(${d.total});
-    labels.push('${d.productsProductId.productName}');
+    let datas = [];
+    <c:forEach items="${stat}" var="d">
+    labels.push('${d[0]}');
+    datas.push('${d[1]}');
     </c:forEach>
-    // Get chart data from the model
-    var chartData = data;
-
-    // Create a chart using Chart.js
+    console.log(labels);
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Dataset',
+                data: datas,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Màu nền của dữ liệu
+                borderColor: 'rgba(75, 192, 192, 1)', // Màu của đường
+                pointStyle: 'circle', // Kiểu điểm (circle là hình tròn)
+                pointRadius: 5, // Đường kính của điểm
+                pointBackgroundColor: 'red', // Màu sắc của điểm
+                pointBorderColor: 'blue', // Màu sắc của viền điểm
+                pointBorderWidth: 10
+            }
+        ]
+    };
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
-        type: 'bar', // Specify chart type (e.g., bar, line, pie)
-        data: {
-            labels,
-            datasets: [{
-                    label: 'My Chart',
-                    data: data,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Customize colors
-                    borderColor: 'rgba(75, 192, 192, 1)', // Customize colors
-                    borderWidth: 1
-                }]
-        },
+        type: 'line', // Loại biểu đồ là line chart
+        data: data,
         options: {
             scales: {
                 y: {
@@ -53,12 +56,12 @@
     });
 
 
-    // Lấy tham số truy vấn từ URL
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
-// Lấy giá trị tháng từ tham số truy vấn
+
     const monthParam = urlParams.get("month");
+    console.log(queryString);
 
     if (monthParam) {
         // Tách tháng từ chuỗi tham số truy vấn

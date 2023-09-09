@@ -45,7 +45,7 @@
                         <td>${u.phone}</td>
                         <td>${u.email}</td>
                         <td>
-                            <c:url value="/user/${u.userId}" var="api" />
+                            <c:url value="/api/user/${u.userId}" var="api" />
                             <button class="btn btn-danger" onclick="deleteProduct('${api}')">Delete</button>
                         </td>
 

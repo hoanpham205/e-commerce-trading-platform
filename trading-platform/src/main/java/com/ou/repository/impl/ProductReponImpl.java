@@ -70,65 +70,10 @@ public class ProductReponImpl implements ProductRepon {
     }
 
     @Override
-    public List<Products> getProduct(Store s, Map<String, String> params) {
+    public List<Products> getProduct(Store s) {
         Session session = this.sessionFactory.getObject().getCurrentSession();
-        CriteriaBuilder b = session.getCriteriaBuilder();
-        CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
-        CriteriaQuery<Store> queryStore = b.createQuery(Store.class);
-
-        Root<Products> root = query.from(Products.class);
-        Root<Store> rootStore = query.from(Store.class);
-
-        if (params != null) {
-            List<Predicate> predicates = new ArrayList<>();
-
-            if (s != null) {
-                predicates.add(b.equal(root.get("storeStoreId"), s));
-
-            }
-
-            String kw = params.get("kw");
-            if (kw != null && !kw.isEmpty()) {
-                predicates.add(b.like(root.get("productName").as(String.class), String.format("%%%s%%", kw)));
-            }
-
-            String fromPrice = params.get("fromPrice");
-            if (fromPrice != null && !fromPrice.isEmpty()) {
-                predicates.add(b.greaterThanOrEqualTo(root.get("price"), Double.parseDouble(fromPrice)));
-            }
-
-            String storeName = params.get("storeName");
-            if (storeName != null && !storeName.isEmpty()) {
-                predicates.add(b.equal(rootStore.get("storeId"), root.get("storeStoreId")));
-
-                predicates.add(b.like(rootStore.get("storeName").as(String.class),
-                        String.format("%%%s%%", storeName)));
-            }
-
-            String toPrice = params.get("toPrice");
-            if (toPrice != null && !toPrice.isEmpty()) {
-                predicates.add(b.lessThanOrEqualTo(root.get("price"), Double.parseDouble(toPrice)));
-            }
-
-            String cateId = params.get("cateId");
-            if (cateId != null && !cateId.isEmpty()) {
-                predicates.add(b.equal(root.get("categoriesCategoryId"), Integer.parseInt(cateId)));
-            }
-            query.where(predicates.toArray(Predicate[]::new));
-        }
-        query.orderBy(b.desc(root.get("productId")));
-        query.multiselect(root);
-
-        Query q = session.createQuery(query);
-
-        if (params != null) {
-            String page = params.get("page");
-            int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
-            if (page != null) {
-                q.setFirstResult((Integer.parseInt(page) - 1) * pageSize);
-                q.setMaxResults(pageSize);
-            }
-        }
+        Query q = session.createQuery(" From Products where storeStoreId=:s");
+        q.setParameter("s", s);
         return q.getResultList();
     }
 
@@ -137,6 +82,13 @@ public class ProductReponImpl implements ProductRepon {
         Session session = this.sessionFactory.getObject().getCurrentSession();
         Query q = session.createQuery("SELECT COUNT(*) From Products where storeStoreId=:s");
         q.setParameter("s", s);
+        return Integer.parseInt(q.getSingleResult().toString());
+    }
+
+    @Override
+    public int countAllProduct() {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        Query q = session.createQuery("SELECT COUNT(*) From Products ");
         return Integer.parseInt(q.getSingleResult().toString());
     }
 
@@ -273,10 +225,17 @@ public class ProductReponImpl implements ProductRepon {
 //                jsonResults.add(jsonResult);
 //            }
 
-            return  query.getResultList();
+            return query.getResultList();
 
         }
         return null;
+    }
+
+    @Override
+    public List<Products> getAllProduct() {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        Query q = session.createQuery(" From Products  ");
+        return q.getResultList();
     }
 
 }

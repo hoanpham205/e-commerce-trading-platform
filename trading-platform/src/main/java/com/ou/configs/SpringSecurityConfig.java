@@ -9,6 +9,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 
 import com.ou.service.userService;
+import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,6 +22,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -58,23 +60,26 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        http.formLogin()
-                .usernameParameter("username")
-                .passwordParameter("password");
-
-        http.formLogin().defaultSuccessUrl("/")
-                .failureUrl("/login?error");
-
         http.logout().logoutSuccessUrl("/login");
-        http.exceptionHandling()
-                .accessDeniedPage("/login?accessDenied");
 
-        http.authorizeRequests().antMatchers("/")
-                .access("hasRole('ADMIN')");
-        http.authorizeRequests().antMatchers("/stat/")
-                .access("hasAnyAuthority('EMPLOYEE')");
-        http.csrf().disable();
+        http
+                .authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .defaultSuccessUrl("/")
+                .failureUrl("/login?error")
+                .permitAll()
+                .successHandler((request, response, authentication) -> {
+                    for (GrantedAuthority auth : authentication.getAuthorities()) {
+                        if (auth.getAuthority().equals("ADMIN")) {
+                            response.sendRedirect("/trading-platform/");
+                        } else if (auth.getAuthority().equals("EMPLOYEE")) {
+                            response.sendRedirect("/trading-platform/stat/");
+                        }
+                    }
+                });
+
     }
 
     @Override
@@ -110,4 +115,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return auth;
     }
 
+    @Bean
+    public SimpleDateFormat simpleDateFormat() {
+        return new SimpleDateFormat("yyyy-MM-dd");
+    }
 }
