@@ -76,8 +76,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Products> getProduct(Store s, Map<String, String> params) {
-        return ProductRepon.getProduct(s, params);
+    public List<Products> getProduct(Store s) {
+        return ProductRepon.getProduct(s);
     }
 
     @Override

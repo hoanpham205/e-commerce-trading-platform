@@ -25,7 +25,7 @@ public interface ProductService {
 
     boolean updateProduct(Products p, int id);
 
-    public List<Products> getProduct(Store s, Map<String, String> params);
+    public List<Products> getProduct(Store s);
 
     int countProduct(Store s);
 

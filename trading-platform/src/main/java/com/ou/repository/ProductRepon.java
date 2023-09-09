@@ -19,7 +19,7 @@ public interface ProductRepon {
 
     Products addProduct(Products p);
 
-    List<Products> getProduct(Store s, Map<String, String> params);
+    List<Products> getProduct(Store s);
 
     int countProduct(Store s);
 
