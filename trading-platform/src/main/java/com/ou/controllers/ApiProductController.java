@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.ou.controllers;
 
 import com.ou.dto.ProductDto;
@@ -157,22 +154,7 @@ public class ApiProductController {
 
     }
     
-    //thêm prodcut vào store
-    @PostMapping("/product/")
-    @CrossOrigin
-    public ResponseEntity<?> addProduct(@RequestParam Map<String, String> params, @RequestPart MultipartFile file) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            Users userCuren = userSer.getUsers(userDetails.getUsername());
-            Store s = storeService.getStoreByUserID(userCuren);
-            ProductDto product = ProductService.addProduct(params, s, file);
-            return new ResponseEntity<>(product == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED) : product, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
 
-    }
 
 
     //cập nhật product
@@ -204,3 +186,4 @@ public class ApiProductController {
         return ResponseEntity.ok(ProductService.stats(params));
     }
 }
+

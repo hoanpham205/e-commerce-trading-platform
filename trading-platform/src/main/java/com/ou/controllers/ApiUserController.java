@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.ou.controllers;
 
 import com.ou.dto.logindto;
@@ -44,7 +41,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 
 @RequestMapping("/api")
-
 public class ApiUserController {
 
     @Autowired
@@ -151,3 +147,4 @@ public class ApiUserController {
     }
 
 }
+

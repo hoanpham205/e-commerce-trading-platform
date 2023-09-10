@@ -60,7 +60,7 @@
     const urlParams = new URLSearchParams(queryString);
 
 
-    const monthParam = urlParams.get("month");
+        const monthParam = urlParams.get("month");
     console.log(queryString);
 
     if (monthParam) {

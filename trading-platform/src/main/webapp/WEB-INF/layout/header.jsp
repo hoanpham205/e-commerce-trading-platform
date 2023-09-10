@@ -58,7 +58,7 @@
                                 <i class="fa-solid fa-user-plus" aria-hidden="true"></i> Đăng ký</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-success" href="<c:url value="/login" />">
+                            <a class="nav-link text-success" href="<c:url value="/login/" />">
                                 <i class="fa fa-user" aria-hidden="true"></i>  Đăng nhập</a>
                         </li>
                     </c:when>

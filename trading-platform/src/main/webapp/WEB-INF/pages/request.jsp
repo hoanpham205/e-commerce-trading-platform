@@ -26,7 +26,7 @@
                     <th></th>
                 </tr>
             </thead>
-              <tbody>
+            <tbody>
                 <c:forEach items="${request}" var="u">
                     <tr>
                         <td>
@@ -35,7 +35,7 @@
                                     <c:if test="${u.avatar != null}">
                                         <img src="${u.avatar}" style="height: 50px" />
                                     </c:if>
-                                    
+
                                 </div>
                             </div>
                         </td>
@@ -43,13 +43,14 @@
                         <td>${u.username}</td>
                         <td>${u.fullname}</td>
                         <td>${u.phone}</td>
-                         <td>
-                        <c:url value="/api/requestment/${u.userId}" var="api" />
-                        <button class="btn btn-danger" onclick="request('${api}')">Xác Nhận</button>
-                    </td>
+                        <td>
+                            <c:url value="/api/requestment/${u.userId}" var="api" />
+                            <button class="btn btn-danger" onclick="request('${api}')">Xác Nhận</button>
+                        </td>
 
-                </c:forEach>
+                    </c:forEach>
             </tbody>
         </table>
     </div>
 </div>
+<script src="<c:url value="/js/main.js"/>"></script>
