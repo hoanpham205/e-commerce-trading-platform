@@ -14,20 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  *
@@ -39,16 +36,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @ComponentScan(basePackages = {
     "com.ou.*"
 })
+@Order(2)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private userService userService;
-
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -59,27 +48,24 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.logout().logoutSuccessUrl("/login");
+    protected void configure(HttpSecurity http)
+            throws Exception {
 
-        http
-                .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .defaultSuccessUrl("/")
-                .failureUrl("/login?error")
-                .permitAll()
-                .successHandler((request, response, authentication) -> {
-                    for (GrantedAuthority auth : authentication.getAuthorities()) {
-                        if (auth.getAuthority().equals("ADMIN")) {
-                            response.sendRedirect("/trading-platform/");
-                        } else if (auth.getAuthority().equals("EMPLOYEE")) {
-                            response.sendRedirect("/trading-platform/stat/");
-                        }
-                    }
-                });
+        http.formLogin().loginPage("/login/")
+                .usernameParameter("username")
+                .passwordParameter("password");
 
+        http.formLogin().defaultSuccessUrl("/");
+
+        http.logout().logoutSuccessUrl("/login/");
+        http.exceptionHandling()
+                .accessDeniedPage("/login/?accessDenied");
+
+        http.authorizeRequests()
+                .antMatchers("/login/").permitAll()
+                .antMatchers("/stat/").access("hasAnyAuthority('EMPLOYEE')")
+                .antMatchers("/**").access("hasAnyAuthority('ADMIN')");
+        http.csrf().disable();
     }
 
     @Override
@@ -105,14 +91,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         resolver.setDefaultEncoding("UTF-8");
         return resolver;
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-        auth.setUserDetailsService(userService);
-        auth.setPasswordEncoder(passwordEncoder());
-        return auth;
     }
 
     @Bean

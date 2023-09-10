@@ -25,7 +25,7 @@
                 <tr>
                     <td>${s.storeName}</td>
                     <td>${s.description}</td>
-                    <c:url value="/store/${s.storeId}" var="api" />
+                    <c:url value="/api/store/${s.storeId}" var="api" />
                     <td>
                         <a href="${api}" class="btn btn-info">stat</a>
                     </td>
@@ -40,4 +40,4 @@
     </table>
 </div>
 
-<script src="<c:url value="/js/main.js" />"></script>
+<script src="<c:url value="/js/main.js"/>"></script>

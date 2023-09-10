@@ -44,7 +44,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 
 @RequestMapping("/api")
-
 public class ApiUserController {
 
     @Autowired

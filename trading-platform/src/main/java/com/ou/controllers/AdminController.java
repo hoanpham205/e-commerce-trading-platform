@@ -34,9 +34,6 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author ADMINasd
  */
 @Controller
-@ControllerAdvice
-@RequestMapping("/")
-
 public class AdminController {
 
     @Autowired
@@ -51,17 +48,16 @@ public class AdminController {
     @Autowired
     private CategoriService CategoriService;
 
-    @GetMapping
+    @GetMapping("/")
     public String getAllUSer(Model model) {
 
         model.addAttribute("user", this.userService.getAllUser());
         return "admin";
     }
 
-    @RequestMapping
-    public void actice(Model model) {
-        model.addAttribute("cate", this.CategoriService.getCates());
-    }
+
+
+   
 
     @GetMapping("/store-manager")
     public String getAllStore(@RequestParam Map<String, String> params, Model model) {
@@ -88,9 +84,9 @@ public class AdminController {
         return "request";
     }
 
-    @GetMapping("store/{id}")
+    @GetMapping("/store/{id}")
     public String stats(Model model, @RequestParam Map<String, String> params, @PathVariable int id) {
-        
+
         model.addAttribute("store", this.storeService.getStoreByID(id));
         model.addAttribute("stat", storeService.statsAdmin(params, this.storeService.getStoreByID(id)));
         return "statAdmin";

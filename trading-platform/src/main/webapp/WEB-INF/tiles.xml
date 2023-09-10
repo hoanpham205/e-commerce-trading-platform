@@ -16,13 +16,7 @@
     
     
     
-    <definition name="admin" extends="baseLayout">
-        <put-attribute name="titleAdmin" value="Trang quản lý" />
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/admin.jsp" />
-        <put-attribute name="footer" value="" />
 
-    </definition>
     <definition name="storeManager" extends="baseLayout">
         <put-attribute name="titleAdmin" value="Trang quản lý Store" />
         <put-attribute name="content"
@@ -56,5 +50,20 @@
         <put-attribute name="footer" value="" />
 
     </definition>
+    
+    <definition name="login" extends="baseLayout">
+        <put-attribute name="titleAdmin" value="Dang Nhap" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/login.jsp" />
+        <put-attribute name="footer" value="" />
 
+    </definition>
+    
+    <definition name="admin" extends="baseLayout">
+        <put-attribute name="titleAdmin" value="Trang quản lý" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/admin.jsp" />
+        <put-attribute name="footer" value="" />
+
+    </definition>
 </tiles-definitions>
