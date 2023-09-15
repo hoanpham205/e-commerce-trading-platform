@@ -4,7 +4,6 @@
  */
 package com.ou.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -15,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -57,15 +57,15 @@ public class Comments implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "evaluate")
     private Double evaluate;
-    @JsonIgnore
     @OneToMany(mappedBy = "commentsCommentId")
     private Set<Comments> commentsSet;
     @JoinColumn(name = "comments_comment_id", referencedColumnName = "comment_id")
     @ManyToOne
     private Comments commentsCommentId;
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
+    @JoinColumns({
+        @JoinColumn(name = "product_id", referencedColumnName = "product_id")})
     @ManyToOne
-    private Products productId;
+    private Products products;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne
     private Users userId;
@@ -126,12 +126,12 @@ public class Comments implements Serializable {
         this.commentsCommentId = commentsCommentId;
     }
 
-    public Products getProductId() {
-        return productId;
+    public Products getProducts() {
+        return products;
     }
 
-    public void setProductId(Products productId) {
-        this.productId = productId;
+    public void setProducts(Products products) {
+        this.products = products;
     }
 
     public Users getUserId() {

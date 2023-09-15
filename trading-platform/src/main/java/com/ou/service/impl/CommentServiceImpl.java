@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
             c.setCommentsCommentId(replyComment);
         }
         c.setUserId(userId);
-        c.setProductId(p);
+        c.setProducts(p);
 
         return CommentRepon.addComment(c);
     }
@@ -65,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
                     .id(c.getCommentId())
                     .text(c.getCommentText())
                     .user(c.getUserId())
-                    .product(c.getProductId())
+                    .product(c.getProducts())
                     .date(c.getCommentDate())
                     .evaluate(c.getEvaluate()).build();
             listDto.add(dto1);
@@ -75,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
                 .id(com.getCommentId())
                 .text(com.getCommentText())
                 .user(com.getUserId())
-                .product(com.getProductId())
+                .product(com.getProducts())
                 .date(com.getCommentDate())
                 .evaluate(com.getEvaluate())
                 .listReply(listDto).build();

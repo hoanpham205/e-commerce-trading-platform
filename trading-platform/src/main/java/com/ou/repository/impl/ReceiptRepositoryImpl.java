@@ -7,6 +7,7 @@ package com.ou.repository.impl;
 import com.ou.pojo.Orderdetails;
 import com.ou.pojo.Orders;
 import com.ou.pojo.Payment;
+import com.ou.pojo.Users;
 import com.ou.pojo.cart;
 import com.ou.repository.ProductRepon;
 import com.ou.repository.ReceiptRepository;
@@ -47,23 +48,23 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
 
     @Autowired
     private storeRepon storeRepon;
-    
+
     @Autowired
     private SimpleDateFormat f;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public boolean addReceipt(Map<String, cart> carts) {
+    public boolean addReceipt(Map<String, cart> carts, Users u) {
         Session s = this.factory.getObject().getCurrentSession();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
+
             Orders order = new Orders();
-            order.setUserId(this.userRepo.getUserByUsername(authentication.getName()));
-            order.setStoreStoreId(storeRepon.getStoreByUserID(this.userRepo.getUserByUsername(authentication.getName())));
+            order.setUserId(u);
             order.setOrderDate(new Date());
+       
+
             s.save(order);
             s.flush();
-
             for (cart c : carts.values()) {
                 Orderdetails d = new Orderdetails();
                 d.setQuantity(c.getCount());

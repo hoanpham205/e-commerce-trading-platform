@@ -40,5 +40,7 @@ public interface userService extends UserDetailsService {
     List<Users> getAllUser();
 
     List<Users> findUser(Map<String, String> params);
+    
+    Users updateOrAdd(Users u);
 
 }

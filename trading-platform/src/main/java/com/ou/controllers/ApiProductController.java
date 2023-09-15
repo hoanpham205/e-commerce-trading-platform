@@ -73,34 +73,44 @@ public class ApiProductController {
         this.ProductService.deleteProduct(id);
     }
 
-//    @GetMapping("/cart/{productId}/")
-//    @CrossOrigin
-//    public ResponseEntity<?> cart(@PathVariable(value = "productId") Integer productId, HttpSession session) {
-//        Map<Integer, cart> cart = (Map<Integer, cart>) session.getAttribute("cart");
-//        if (cart == null) {
-//            cart = new HashMap<>();
-//        }
-//        if (cart.containsKey(productId) == true) {
-//            cart c = cart.get(productId);
-//            c.setCount(c.getCount() + 1);
-//        } else {
-//            Products p = ProductService.getProductById(productId);
-//            cart c = new cart();
-//            c.setProductId(p.getProductId());
-//            c.setName(p.getProductName());
-//            c.setPrice(p.getPrice());
-//            c.setCount(1);
-//            cart.put(productId, c);
-//        }
-//        session.setAttribute("cart", cart);
-//        return new ResponseEntity<>(cart, HttpStatus.OK);
-//    }
+    @GetMapping("/cart/{productId}/")
+    @CrossOrigin
+    public ResponseEntity<?> cart(@PathVariable(value = "productId") Integer productId, HttpSession session) {
+        Map<Integer, cart> cart = (Map<Integer, cart>) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new HashMap<>();
+        }
+        if (cart.containsKey(productId) == true) {
+            cart c = cart.get(productId);
+            c.setCount(c.getCount() + 1);
+        } else {
+            Products p = ProductService.getProductById(productId);
+            cart c = new cart();
+            c.setProductId(p.getProductId());
+            c.setName(p.getProductName());
+            c.setPrice(p.getPrice());
+            c.setCount(1);
+            c.setS(p.getStoreStoreId());
+            cart.put(productId, c);
+        }
+        
+        session.setAttribute("cart", cart);
+        return new ResponseEntity<>(cart, HttpStatus.OK);
+    }
+
     //thanh toán
     @PostMapping("/pay/")
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin
-    public void add(@RequestBody Map<String, cart> carts) {
-        this.receiptService.addReceipt(carts);
+    public ResponseEntity<?> add(@RequestBody Map<String, cart> carts) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users userCuren = userSer.getUsers(userDetails.getUsername());
+            return new ResponseEntity<>(this.receiptService.addReceipt(carts,userCuren), HttpStatus.OK);
+        }
+        return null;
+
     }
 
 //    @DeleteMapping("/cart/delete/{id}/")
@@ -128,8 +138,6 @@ public class ApiProductController {
         return null;
 
     }
-    
-    
 
     //lấy tất cả prodcut
     @GetMapping("/allProducts/")
@@ -156,9 +164,6 @@ public class ApiProductController {
         }
 
     }
-    
-
-
 
     //cập nhật product
     @PutMapping("/product/{id}/")

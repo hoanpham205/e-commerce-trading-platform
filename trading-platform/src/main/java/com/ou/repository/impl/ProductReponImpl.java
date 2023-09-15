@@ -174,6 +174,7 @@ public class ProductReponImpl implements ProductRepon {
         Root rP = cr.from(Products.class);
         Root rOd = cr.from(Orderdetails.class);
         Root rOr = cr.from(Orders.class);
+        Root rS = cr.from(Store.class);
 
         String quarter = params.get("quarter");
         String year = params.get("year");
@@ -182,10 +183,9 @@ public class ProductReponImpl implements ProductRepon {
         if (params != null && year != null) {
             List<Predicate> predicates = new ArrayList<>();
 
-//            cr.where(builder.equal(rOd.get("productsProductId"), rP.get("productId")),
-//                    builder.equal(rOd.get("ordersOrderId"), rOr.get("orderId")));
             predicates.add(builder.equal(rOd.get("productsProductId"), rP.get("productId")));
             predicates.add(builder.equal(rOd.get("ordersOrderId"), rOr.get("orderId")));
+            predicates.add(builder.equal(rS.get("storeId"), rP.get("storeStoreId")));
 
             predicates.add(builder.equal(builder.function("year", Integer.class, rOr.get("orderDate")),
                     Integer.parseInt(year)));
@@ -207,23 +207,10 @@ public class ProductReponImpl implements ProductRepon {
                 System.out.println(cateId);
             }
             cr.where(predicates.toArray(Predicate[]::new));
-            cr.multiselect(rOd);
-//
-//            cr.multiselect(rP.get("productId"),
-//                    rP.get("productName"),
-//                    rOd.get("total"));
+
+            cr.multiselect(rP.get("productName"),
+                    rOd.get("total"));
             Query query = s.createQuery(cr);
-//            List<Object[]> list = query.getResultList();
-//            Gson gson = new Gson();
-//            List<Map<String, Object>> jsonResults = new ArrayList<>();
-//
-//            for (Object[] result : list) {
-//                Map<String, Object> jsonResult = new HashMap<>();
-//                jsonResult.put("productId", result[0]);
-//                jsonResult.put("productName", result[1]);
-//                jsonResult.put("total", result[2]);
-//                jsonResults.add(jsonResult);
-//            }
 
             return query.getResultList();
 

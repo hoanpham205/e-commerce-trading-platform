@@ -66,4 +66,21 @@
         <put-attribute name="footer" value="" />
 
     </definition>
+    
+    <definition name="User" extends="baseLayout">
+        <put-attribute name="titleAdmin" value="User" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/User.jsp" />
+        <put-attribute name="footer" value="" />
+
+    </definition>
+    
+    
+    <definition name="index" extends="baseLayout">
+        <put-attribute name="titleAdmin" value="index" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/User.jsp" />
+        <put-attribute name="footer" value="" />
+
+    </definition>
 </tiles-definitions>

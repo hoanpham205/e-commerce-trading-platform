@@ -5,6 +5,7 @@
 package com.ou.service.impl;
 
 import com.ou.pojo.Payment;
+import com.ou.pojo.Users;
 import com.ou.pojo.cart;
 import com.ou.repository.ReceiptRepository;
 import com.ou.service.ReceiptService;
@@ -27,9 +28,9 @@ public class ReceiptServiceImpl implements ReceiptService{
     private paymentService paymentService;
 
     @Override
-    public boolean addReceipt(Map<String, cart> carts) {
+    public boolean addReceipt(Map<String, cart> carts,Users u) {
         
-        return ReceiptRepository.addReceipt(carts);
+        return ReceiptRepository.addReceipt(carts,u);
     }
     
 }

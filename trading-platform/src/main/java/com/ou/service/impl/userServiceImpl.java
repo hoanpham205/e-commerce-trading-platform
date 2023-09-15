@@ -21,6 +21,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,6 +37,9 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service("userDetailsService")
 public class userServiceImpl implements userService {
+
+    @Autowired
+    private MailSender mailSender;
 
     @Autowired
     private userRepon userRepon;
@@ -105,9 +110,10 @@ public class userServiceImpl implements userService {
     @Override
     public boolean updateRoleUser(Users u) {
         try {
-
             u.setActive(Boolean.FALSE);
             u.setRole("EMPLOYEE");
+//            sendMail("2051050435tan@ou.edu.vn", "Ban Da Dang Ki Cua Hang", "cam on ban");
+
             userRepon.addUser(u);
             return true;
         } catch (Exception e) {
@@ -140,13 +146,13 @@ public class userServiceImpl implements userService {
 
     @Override
     public UserDto getUserByUsername(String username) {
-      Users user= userRepon.getUsers(username);
-      UserDto userdto=UserDto.builder()
-              .id(user.getUserId())
-              .userNaeme(user.getUsername())
-              .email(user.getEmail())
-              .avatar(user.getAvatar())
-              .role(user.getRole()).build();
+        Users user = userRepon.getUsers(username);
+        UserDto userdto = UserDto.builder()
+                .id(user.getUserId())
+                .userNaeme(user.getUsername())
+                .email(user.getEmail())
+                .avatar(user.getAvatar())
+                .role(user.getRole()).build();
         return userdto;
     }
 
@@ -158,6 +164,27 @@ public class userServiceImpl implements userService {
     @Override
     public List<Users> findUser(Map<String, String> params) {
         return this.userRepon.findUser(params);
+    }
+
+    public void sendMail(String to, String subject, String content) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(to);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(content);
+
+        mailSender.send(mailMessage);
+    }
+
+    @Override
+    public Users updateOrAdd(Users u) {
+        try {
+            Map res = this.cloudinary.uploader().upload(u.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+            u.setAvatar(res.get("secure_url").toString());
+
+        } catch (IOException ex) {
+            Logger.getLogger(userServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return this.userRepon.addUser(u);
     }
 
 }

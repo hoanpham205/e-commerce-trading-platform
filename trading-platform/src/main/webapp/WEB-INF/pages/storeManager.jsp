@@ -26,8 +26,9 @@
                     <td>${s.storeName}</td>
                     <td>${s.description}</td>
                     <c:url value="/api/store/${s.storeId}" var="api" />
+                    <c:url value="/store/${s.storeId}" var="url" />
                     <td>
-                        <a href="${api}" class="btn btn-info">stat</a>
+                        <a href="${url}" class="btn btn-info">stat</a>
                     </td>
                     <td>
                         <button class="btn btn-danger" onclick="deleteProduct('${api}')">Delete</button>
