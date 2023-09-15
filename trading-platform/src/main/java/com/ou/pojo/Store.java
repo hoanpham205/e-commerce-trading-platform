@@ -4,6 +4,7 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -55,6 +56,8 @@ public class Store implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne
     private Users userId;
+    @JsonIgnore
+
     @OneToMany(mappedBy = "storeStoreId")
     private Set<Products> productsSet;
 
@@ -138,5 +141,5 @@ public class Store implements Serializable {
     public String toString() {
         return "com.ou.pojo.Store[ storeId=" + storeId + " ]";
     }
-    
+
 }

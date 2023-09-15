@@ -24,5 +24,4 @@ public class cart {
     private String name;
     private BigDecimal price;
     private int count;
-    private Store s;
 }

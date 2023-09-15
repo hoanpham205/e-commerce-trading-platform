@@ -29,7 +29,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
  */
 public class JwtAuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final static String TOKEN_HEADER = "authorization";
+    private final static String TOKEN_HEADER = "Authorization";
     @Autowired
     private JwtService jwtService;
     @Autowired
@@ -40,6 +40,7 @@ public class JwtAuthenticationTokenFilter extends UsernamePasswordAuthentication
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String authToken = httpRequest.getHeader(TOKEN_HEADER);
+        System.out.println(authToken);
         if (jwtService.validateTokenLogin(authToken)) {
             String username = jwtService.getUsernameFromToken(authToken);
             Users user = userService.getUsers(username);

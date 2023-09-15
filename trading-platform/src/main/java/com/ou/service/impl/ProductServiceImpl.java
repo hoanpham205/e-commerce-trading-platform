@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
     private CategoriService CategoriService;
 
     @Override
-    public ProductDto addProduct(@RequestParam Map<String, String> params, Store s, MultipartFile file) {
+    public ProductDto addProduct( Map<String, String> params, Store s, MultipartFile file) {
         Products products = new Products();
 
         try {

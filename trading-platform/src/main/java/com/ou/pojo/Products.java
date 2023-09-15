@@ -4,6 +4,7 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -53,8 +54,12 @@ public class Products implements Serializable {
     @Size(max = 255)
     @Column(name = "image_url")
     private String imageUrl;
+    @JsonIgnore
+
     @OneToMany(mappedBy = "products")
     private Set<Comments> commentsSet;
+    @JsonIgnore
+
     @OneToMany(mappedBy = "productsProductId")
     private Set<Orderdetails> orderdetailsSet;
     @JoinColumn(name = "categories_category_id", referencedColumnName = "category_id")
@@ -161,5 +166,5 @@ public class Products implements Serializable {
     public String toString() {
         return "com.ou.pojo.Products[ productId=" + productId + " ]";
     }
-    
+
 }

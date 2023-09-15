@@ -54,7 +54,7 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public boolean addReceipt(Map<String, cart> carts, Users u) {
+    public boolean addReceipt(Map<Integer, cart> carts, Users u) {
         Session s = this.factory.getObject().getCurrentSession();
         try {
 

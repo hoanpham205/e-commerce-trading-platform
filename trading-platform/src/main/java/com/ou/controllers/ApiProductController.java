@@ -55,6 +55,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class ApiProductController {
 
     @Autowired
+    private HttpSession s;
+
+    @Autowired
     private ProductService ProductService;
     @Autowired
     private userService userSer;
@@ -90,10 +93,9 @@ public class ApiProductController {
             c.setName(p.getProductName());
             c.setPrice(p.getPrice());
             c.setCount(1);
-            c.setS(p.getStoreStoreId());
             cart.put(productId, c);
         }
-        
+
         session.setAttribute("cart", cart);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
@@ -102,12 +104,15 @@ public class ApiProductController {
     @PostMapping("/pay/")
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin
-    public ResponseEntity<?> add(@RequestBody Map<String, cart> carts) {
+    public ResponseEntity<?> add(@RequestBody Map<Integer, cart>  carts) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users userCuren = userSer.getUsers(userDetails.getUsername());
-            return new ResponseEntity<>(this.receiptService.addReceipt(carts,userCuren), HttpStatus.OK);
+            System.out.println("com.ou.controllers.ApiProductController.add()");
+            return new ResponseEntity<>(this.receiptService.addReceipt(carts, userCuren), HttpStatus.OK);
+            
         }
         return null;
 
