@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState,useEffect } from 'react'
 
 function Clock() {
 
@@ -10,7 +10,7 @@ function Clock() {
     let interval;
 
     const countDown =() => {
-        const destination = new Date('2023, Oct 30').getTime()
+        const destination = new Date('Oct 30, 2023').getTime()
         interval = setInterval(() =>{
             const now = new Date().getTime()
             const different = destination - now 

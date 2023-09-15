@@ -1,56 +1,43 @@
-import axios from "../configs/Apis";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import products from "../assets/data/products";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import ProductsList from "../components/UI/ProductsList";
-import { endpoints } from "../configs/Apis";
 import "../styles/shop.css";
 
 const Shop = () => {
-  const [productsData, setProductsData] = useState([]);
+  const [productsData, setProductsData] = useState(products);
   const [sortOption, setSortOption] = useState("ascending");
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const response = await axios.get(endpoints['products']);
-        setProductsData(response.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    loadProducts();
-  }, []);
   const handleFilter = (e) => {
     const filterValue = e.target.value;
     if (filterValue === "sofa") {
-      const filteredProducts = productsData.filter(
+      const filteredProducts = products.filter(
         (item) => item.category === "sofa"
       );
       setProductsData(filteredProducts);
     }
     if (filterValue === "mobile") {
-      const filteredProducts = productsData.filter(
+      const filteredProducts = products.filter(
         (item) => item.category === "mobile"
       );
       setProductsData(filteredProducts);
     }
     if (filterValue === "chair") {
-      const filteredProducts = productsData.filter(
+      const filteredProducts = products.filter(
         (item) => item.category === "chair"
       );
       setProductsData(filteredProducts);
     }
     if (filterValue === "watch") {
-      const filteredProducts = productsData.filter(
+      const filteredProducts = products.filter(
         (item) => item.category === "watch"
       );
       setProductsData(filteredProducts);
     }
     if (filterValue === "wireless") {
-      const filteredProducts = productsData.filter(
+      const filteredProducts = products.filter(
         (item) => item.category === "wireless"
       );
       setProductsData(filteredProducts);
@@ -58,7 +45,7 @@ const Shop = () => {
   };
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
-    const searchedProducts = productsData.filter((item) =>
+    const searchedProducts = products.filter((item) =>
       item.productName.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setProductsData(searchedProducts);
@@ -123,7 +110,7 @@ const Shop = () => {
             {productsData.length === 0 ? (
               <h1 className="text-center fs-4">No Products are found</h1>
             ) : (
-              <ProductsList data={productsData} shouldShowPagination={true}/>
+              <ProductsList data={productsData} />
             )}
           </Row>
         </Container>

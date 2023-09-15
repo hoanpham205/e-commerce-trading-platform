@@ -7,6 +7,7 @@ package com.ou.repository.impl;
 import com.ou.dto.ProductDto;
 import com.ou.pojo.Orderdetails;
 import com.ou.pojo.Orders;
+import com.ou.pojo.Products;
 import com.ou.pojo.Store;
 import com.ou.pojo.Users;
 import com.ou.repository.storeRepon;
@@ -66,10 +67,11 @@ public class storeReponImpl implements storeRepon {
 
     @Override
     public Store getStoreByUserID(Users id) {
+        System.out.println(id);
         Session session = this.sessionFactory.getObject().getCurrentSession();
 
-        Query q = session.createQuery("SELECT s FROM Store s WHERE s.userId = :un");
-        q.setParameter("un", id);
+        Query q = session.createQuery("SELECT s FROM Store s WHERE s.userId = :userId");
+        q.setParameter("userId", id);
 
         return (Store) q.getSingleResult();
 
@@ -138,6 +140,7 @@ public class storeReponImpl implements storeRepon {
         Root rS = cr.from(Store.class);
         Root rOd = cr.from(Orderdetails.class);
         Root rOr = cr.from(Orders.class);
+        Root rP = cr.from(Products.class);
 
         String year = params.get("year");
         String month = params.get("month");
@@ -145,9 +148,9 @@ public class storeReponImpl implements storeRepon {
         if (year != null) {
             List<Predicate> predicates = new ArrayList<>();
 
-            predicates.add(builder.equal(rOr.get("storeStoreId"), rS.get("storeId")));
+            predicates.add(builder.equal(rOd.get("productsProductId"), rP.get("productId")));
             predicates.add(builder.equal(rOd.get("ordersOrderId"), rOr.get("orderId")));
-            predicates.add(builder.equal(rS.get("storeId"), s.getStoreId()));
+            predicates.add(builder.equal(rS.get("storeId"), rP.get("storeStoreId")));
 
             predicates.add(builder.equal(builder.function("year", Integer.class, rOr.get("orderDate")),
                     Integer.parseInt(year)));
@@ -156,9 +159,9 @@ public class storeReponImpl implements storeRepon {
                 predicates.add(builder.equal(builder.function("month", Integer.class, rOr.get("orderDate")),
                         Integer.parseInt(month)));
             }
-            
+
             cr.orderBy(builder.asc(rOr.get("orderDate")));
-            
+
             cr.where(predicates.toArray(Predicate[]::new));
 
             cr.multiselect(rOr.get("orderDate"),

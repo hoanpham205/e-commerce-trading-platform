@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { Col, Container, Form, FormGroup, Row } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import Helmet from "../components/Helmet/Helmet";
+import "../styles/login.css";
 import cookie from "react-cookies";
+import axios from "axios";
 import { ProgressBar } from "react-loader-spinner";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Helmet from "../components/Helmet/Helmet";
-import axios, { endpoints } from "../configs/Apis";
 import {
   loginFailed,
   loginStart,
   loginSuccess,
 } from "../redux/slices/authSlice";
-import "../styles/login.css";
 
 const Login = () => {
   //const [email,setEmail] = useState('');
@@ -30,22 +30,13 @@ const Login = () => {
     dispatch(loginStart());
     try {
       const res = await axios.post(
-        endpoints['login'],
+        "http://localhost:8080/trading-platform/login/",
         newUser
       );
 
       cookie.save("token", res.data);
-
-      const userDataRes = await axios.get(
-        endpoints['current-user'],
-        {
-          headers: {
-            Authorization: res.data,
-          },
-        }
-      );
-
-      dispatch(loginSuccess(userDataRes.data));
+      console.log(res.data);
+      dispatch(loginSuccess(res.data));
 
       navigate("/home");
       setLoading(false);

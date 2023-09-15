@@ -10,6 +10,7 @@ import userIcon from "../../assets/img/user-icon.png";
 import { logOut } from "../../redux/slices/authSlice";
 import "./header.css";
 
+
 const nav__links = [
   {
     path: "home",
@@ -34,10 +35,13 @@ const Header = () => {
   const profileActionRef = useRef(null);
 
   useEffect(() => {
+    // const token = localStorage.getItem("accessToken");
+    // Gửi yêu cầu API để lấy dữ liệu người dùng
+
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/trading-platform/api/current-user/",
+          "http://localhost:8080/trading-platform/current-user/",
           {
             headers: {
               Authorization: cookie.load("token"),
@@ -45,7 +49,7 @@ const Header = () => {
           }
         );
         setCurrentUser(response.data);
-        console.log(response.data); 
+        console.log(response.data); // Cập nhật state với dữ liệu người dùng
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu người dùng:", error);
       }
@@ -71,7 +75,7 @@ const Header = () => {
     cookie.remove("token");
     dispatch(logOut());
     setCurrentUser(null);
-
+    
     navigate("/home");
   };
   useEffect(() => {

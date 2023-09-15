@@ -6,7 +6,9 @@
 <div class="main-table  container">
     <div class="search">
         <form action="<c:url value="/store/${store.storeId}"/>" class="form-search">
-            <input name="month" type="month"  />
+            <input name="month" type="text"  />
+            <input name="year" type="text"  />
+
             <button type="submit"><i class="fas fa-search"></i></button>
         </form>
     </div>
@@ -56,28 +58,6 @@
     });
 
 
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
 
-
-        const monthParam = urlParams.get("month");
-    console.log(queryString);
-
-    if (monthParam) {
-        // Tách tháng từ chuỗi tham số truy vấn
-        const parts = monthParam.split("-");
-        if (parts.length === 2) {
-            const month = parts[1];
-            const  year = parts[0];
-            console.log(parts);
-
-            // Tạo một tham số truy vấn mới với giá trị tháng
-            const newQueryString = "?month=" + month + "&year=" + year;
-            const newUrl = window.location.pathname + newQueryString;
-
-            // Chuyển hướng đến URL mới với tham số truy vấn mới
-            window.location.href = newUrl;
-        }
-    }
 
 </script>

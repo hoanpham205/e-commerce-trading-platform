@@ -50,7 +50,7 @@ public class Orderdetails implements Serializable {
     @ManyToOne(optional = false)
     private Orders ordersOrderId;
     @JoinColumn(name = "products_product_id", referencedColumnName = "product_id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Products productsProductId;
 
     public Orderdetails() {

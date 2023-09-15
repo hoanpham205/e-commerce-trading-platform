@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `shoppedb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `shoppedb`;
 -- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
 --
 -- Host: localhost    Database: shoppedb
@@ -118,13 +116,10 @@ CREATE TABLE `orders` (
   `user_id` int DEFAULT NULL,
   `order_date` date DEFAULT NULL,
   `payments_payment_id` int DEFAULT NULL,
-  `store_store_id` int DEFAULT NULL,
   PRIMARY KEY (`order_id`),
   KEY `user_id` (`user_id`),
   KEY `fk_orders_payments1_idx` (`payments_payment_id`),
-  KEY `fk_orders_store1_idx` (`store_store_id`),
   CONSTRAINT `fk_orders_payments1` FOREIGN KEY (`payments_payment_id`) REFERENCES `payment` (`payment_id`),
-  CONSTRAINT `fk_orders_store1` FOREIGN KEY (`store_store_id`) REFERENCES `store` (`store_id`) ON DELETE SET NULL,
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -135,7 +130,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (5,75,'2023-09-06',NULL,75),(6,75,'2023-09-05',NULL,75);
+INSERT INTO `orders` VALUES (5,75,'2023-09-06',NULL),(6,75,'2023-09-05',NULL);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,7 +195,7 @@ CREATE TABLE `products` (
   `product_id` int NOT NULL AUTO_INCREMENT,
   `product_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
-  `image_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `categories_category_id` int DEFAULT NULL,
   `store_store_id` int DEFAULT NULL,
   PRIMARY KEY (`product_id`),
@@ -261,9 +256,9 @@ CREATE TABLE `users` (
   `user_id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `fullname` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `fullname` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `role` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `active` tinyint(1) DEFAULT NULL,
@@ -298,4 +293,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-09 15:04:14
+-- Dump completed on 2023-09-12 18:13:40

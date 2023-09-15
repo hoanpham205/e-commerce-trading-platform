@@ -6,7 +6,6 @@ import { ProgressBar } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Helmet from "../Helmet/Helmet";
-import { endpoints } from "../../configs/Apis";
 //import "../style/login.css";
 
 const ShopCreate = () => {
@@ -41,7 +40,7 @@ const ShopCreate = () => {
     };
     try {
       const response = await axios.post(
-        endpoints['create-store'],
+        "http://localhost:8080/trading-platform/api/store/",
         shopData,
         {
           headers: {
@@ -50,14 +49,14 @@ const ShopCreate = () => {
         }
       );
       if (response.status === 200) {
-        toast.success("Create Shop Success.");
+        toast.success("Cửa hàng đã được tạo thành công.");
         navigate("/shop-login");
       } else {
-        toast.error("Can not create shop.");
+        toast.error("Có lỗi xảy ra khi tạo cửa hàng.");
       }
     } catch (error) {
       console.error("Error sending request:", error);
-      toast.error("Error not create shop.");
+      toast.error("Có lỗi xảy ra khi tạo cửa hàng.");
 
       // Xử lý lỗi ở đây, ví dụ hiển thị thông báo lỗi cho người dùng
     } finally {

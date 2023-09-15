@@ -4,12 +4,10 @@
  */
 package com.ou.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -55,11 +53,9 @@ public class Products implements Serializable {
     @Size(max = 255)
     @Column(name = "image_url")
     private String imageUrl;
-    @JsonIgnore
-    @OneToMany(mappedBy = "productId")
+    @OneToMany(mappedBy = "products")
     private Set<Comments> commentsSet;
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productsProductId")
+    @OneToMany(mappedBy = "productsProductId")
     private Set<Orderdetails> orderdetailsSet;
     @JoinColumn(name = "categories_category_id", referencedColumnName = "category_id")
     @ManyToOne

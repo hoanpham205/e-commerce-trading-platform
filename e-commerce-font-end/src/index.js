@@ -1,6 +1,5 @@
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import React from "react";
-import 'react-comments-section/dist/index.css';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";

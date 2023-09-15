@@ -2,12 +2,12 @@ import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import products from "../assets/data/products";
 import counterImg from "../assets/img/counter-timer-img.png";
 import heroImg from "../assets/img/hero-img.png";
 import Helmet from "../components/Helmet/Helmet";
 import Clock from "../components/UI/Clock";
 import ProductsList from "../components/UI/ProductsList";
-import axios, { endpoints } from "../configs/Apis";
 import Services from "../services/Services";
 import "../styles/home.css";
 const Home = () => {
@@ -19,31 +19,26 @@ const Home = () => {
   const year = new Date().getFullYear();
 
   useEffect(() => {
-    (async () => {
-      const response = await axios.get(endpoints["products"]);
-      const products = response.data;
-
-      const filterdTrendingProducts = products.filter(
-        (item) => item.categoriesCategoryId.categoryName === "chair"
-      );
-      const filterdBestSalesProducts = products.filter(
-        (item) => item.categoriesCategoryId.categoryName === "sofa"
-      );
-      const filterdMobileProducts = products.filter(
-        (item) => item.categoriesCategoryId.categoryName === "mobile"
-      );
-      const filterdWirelessProducts = products.filter(
-        (item) => item.categoriesCategoryId.categoryName === "wireless"
-      );
-      const filterdPopularProducts = products.filter(
-        (item) => item.categoriesCategoryId.categoryName === "watch"
-      );
-      setTrendingProducts(filterdTrendingProducts);
-      setBestSalesProducts(filterdBestSalesProducts);
-      setMobileProducts(filterdMobileProducts);
-      setWirelessProducts(filterdWirelessProducts);
-      setPopularProducts(filterdPopularProducts);
-    })();
+    const filterdTrendingProducts = products.filter(
+      (item) => item.category == "chair"
+    );
+    const filterdBestSalesProducts = products.filter(
+      (item) => item.category == "sofa"
+    );
+    const filterdMobileProducts = products.filter(
+      (item) => item.category == "mobile"
+    );
+    const filterdWirelessProducts = products.filter(
+      (item) => item.category == "wireless"
+    );
+    const filterdPopularProducts = products.filter(
+      (item) => item.category == "watch"
+    );
+    setTrendingProducts(filterdTrendingProducts);
+    setBestSalesProducts(filterdBestSalesProducts);
+    setMobileProducts(filterdMobileProducts);
+    setWirelessProducts(filterdWirelessProducts);
+    setPopularProducts(filterdPopularProducts);
   }, []);
   return (
     <Helmet title={"Home"}>

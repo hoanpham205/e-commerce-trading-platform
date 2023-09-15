@@ -4,7 +4,6 @@
  */
 package com.ou.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -17,9 +16,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -40,6 +41,20 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByRole", query = "SELECT u FROM Users u WHERE u.role = :role"),
     @NamedQuery(name = "Users.findByActive", query = "SELECT u FROM Users u WHERE u.active = :active")})
 public class Users implements Serializable {
+
+    /**
+     * @return the file
+     */
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -72,17 +87,16 @@ public class Users implements Serializable {
     private String role;
     @Column(name = "active")
     private Boolean active;
-    @JsonIgnore
     @OneToMany(mappedBy = "userId")
     private Set<Comments> commentsSet;
-    @JsonIgnore
-
     @OneToMany(mappedBy = "userId")
     private Set<Orders> ordersSet;
-    @JsonIgnore
-
     @OneToMany(mappedBy = "userId")
     private Set<Store> storeSet;
+    
+    @Transient
+    private MultipartFile file;
+
 
     public Users() {
     }
@@ -214,5 +228,5 @@ public class Users implements Serializable {
     public String toString() {
         return "com.ou.pojo.Users[ userId=" + userId + " ]";
     }
-
+    
 }

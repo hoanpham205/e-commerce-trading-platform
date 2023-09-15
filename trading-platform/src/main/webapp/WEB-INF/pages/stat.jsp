@@ -6,7 +6,9 @@
 <div class="main-table  container">
     <div class="search">
         <form action="<c:url value="/stat/"/>" class="form-search">
-            <input name="month" type="month"  />
+            <input name="month" type="text"  />
+            <input name="year" type="text"  />
+
             <button type="submit"><i class="fas fa-search"></i></button>
         </form>
     </div>
@@ -20,14 +22,16 @@
 
 <script>
 
-    let data = [];
+    let datas = [];
     let labels = [];
+
     <c:forEach items="${chartData}" var="d">
-    data.push(${d.total});
-    labels.push('${d.productsProductId.productName}');
+    labels.push('${d[0]}');
+    datas.push(${d[1]});
     </c:forEach>
     // Get chart data from the model
-    var chartData = data;
+    var chartData = datas;
+    console.log(chartData);
 
     // Create a chart using Chart.js
     var ctx = document.getElementById('myChart').getContext('2d');
@@ -37,7 +41,7 @@
             labels,
             datasets: [{
                     label: 'My Chart',
-                    data: data,
+                    data: datas,
                     backgroundColor: 'rgba(75, 192, 192, 0.2)', // Customize colors
                     borderColor: 'rgba(75, 192, 192, 1)', // Customize colors
                     borderWidth: 1
@@ -53,28 +57,6 @@
     });
 
 
-    // Lấy tham số truy vấn từ URL
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
 
-// Lấy giá trị tháng từ tham số truy vấn
-    const monthParam = urlParams.get("month");
-
-    if (monthParam) {
-        // Tách tháng từ chuỗi tham số truy vấn
-        const parts = monthParam.split("-");
-        if (parts.length === 2) {
-            const month = parts[1];
-            const  year = parts[0];
-            console.log(parts);
-
-            // Tạo một tham số truy vấn mới với giá trị tháng
-            const newQueryString = "?month=" + month + "&year=" + year;
-            const newUrl = window.location.pathname + newQueryString;
-
-            // Chuyển hướng đến URL mới với tham số truy vấn mới
-            window.location.href = newUrl;
-        }
-    }
 
 </script>

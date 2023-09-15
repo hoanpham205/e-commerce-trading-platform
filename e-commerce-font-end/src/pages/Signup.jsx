@@ -1,9 +1,9 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Col, Container, Form, FormGroup, Row } from "react-bootstrap";
 import { ProgressBar } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import Helmet from "../components/Helmet/Helmet";
-import axios, { endpoints } from "../configs/Apis";
 import "../styles/login.css";
 
 const Signup = () => {
@@ -30,7 +30,7 @@ const Signup = () => {
     body.append("password", password);
     body.append("file", file);
     const res = await axios({
-      url: endpoints['register'],
+      url: "http://localhost:8080/trading-platform/register/",
       method: "POST",
       data: body,
       headers: { "Content-Type": "multipart/form-data" },

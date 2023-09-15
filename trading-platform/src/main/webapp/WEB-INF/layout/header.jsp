@@ -4,10 +4,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<h1 class="site-heading text-center text-faded d-none d-lg-block">
-    <span class="site-heading-upper text-primary mb-3">THƯƠNG MẠI ĐIỆN TỬ</span>
-    <span class="site-heading-lower">SHOPPE OU</span>
-</h1>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
     <div class="container-fluid mb-0">

@@ -3,56 +3,69 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 
-<div class="main-table  container">
-    <div class="search">
-        <form action="<c:url value="/"/>" class="form-search">
-            <input name="username" type="text" placeholder="Nhập tên tài khoản để tìm..." />
-            <button type="submit"><i class="fas fa-search"></i></button>
-        </form>
-    </div>
-    <div class="main-title">
-        <h2 class="text-uppercase text-center text-info">DANH SÁCH TÀI KHOẢN HỆ THỐNG</h2>
-    </div>
-    <div class="user-table">
-        <table class="table">
-            <thead class="table-primary align-center">
-                <tr class="text-uppercase text-center">
-                    <th></th>
-                    <th class="name">User Name</th>
-                    <th>Họ Và Tên</th>
-                    <th>Số điện thoại</th>
-                    <th>Email</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody >
-                <c:forEach items="${user}" var="u">
-                    <tr>
-                        <td>
-                            <div class="avtar">
-                                <div class="avtar-img">
-                                    <c:if test="${u.avatar != null}">
-                                        <img src="${u.avatar}" style="height: 50px" />
-                                    </c:if>
+<c:url value="/" var="action" />
+<form:form method="post" action="${action}" modelAttribute="user" enctype="multipart/form-data">
+    <div class="main-table  container">
+        <div class="search">
+            <form action="<c:url value="/"/>" class="form-search">
+                <input name="username" type="text" placeholder="Nhập tên tài khoản để tìm..." />
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+        <div class="main-title">
+            <h2 class="text-uppercase text-center text-info">DANH SÁCH TÀI KHOẢN HỆ THỐNG</h2>
+        </div>
+        <div class="user-table">
+            <table class="table">
+                <thead class="table-primary align-center">
+                    <tr class="text-uppercase text-center">
+                        <th></th>
+                        <th class="name">User Name</th>
+                        <th>Họ Và Tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Email</th>
+                        <th></th>
+                        <th></th>
 
+                    </tr>
+                </thead>
+                <tbody >
+                    <c:forEach items="${user}" var="u">
+                        <tr>
+                            <td>
+                                <div class="avtar">
+                                    <div class="avtar-img">
+                                        <c:if test="${u.avatar != null}">
+                                            <img src="${u.avatar}" style="height: 50px" />
+                                        </c:if>
+
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td>${u.username}</td>
-                        <td>${u.fullname}</td>
-                        <td>${u.phone}</td>
-                        <td>${u.email}</td>
-                        <td>
-                            <c:url value="/api/user/${u.userId}" var="api" />
-                            <button class="btn btn-danger" onclick="deleteProduct('${api}')">Delete</button>
-                        </td>
+                            </td>
+                            <td>${u.username}</td>
+                            <td>${u.fullname}</td>
+                            <td>${u.phone}</td>
+                            <td>${u.email}</td>
+                            <td>
+                                <c:url value="/api/user/${u.userId}" var="api" />
+                                <button class="btn btn-danger" onclick="deleteProduct('${api}')">Delete</button>
+                            </td>
+                            <td>
+                                <a href="<c:url value="/${u.userId}" />" class="btn btn-success">Cập nhật</a>
+                            </td>
 
-                    </c:forEach>
-            </tbody>
-        </table>
+                        </c:forEach>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+
+</form:form>
+
+
+
 <script src="<c:url value="/js/main.js"/>"></script>
 

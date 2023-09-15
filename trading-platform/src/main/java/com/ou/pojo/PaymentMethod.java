@@ -4,7 +4,6 @@
  */
 package com.ou.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -42,7 +41,6 @@ public class PaymentMethod implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "discount")
     private Double discount;
-    @JsonIgnore
     @OneToMany(mappedBy = "paymentMethodId")
     private Set<Payment> paymentSet;
 

@@ -13,7 +13,6 @@ import {
     loginStart,
     loginSuccess,
 } from "../../redux/slices/authSlice";
-import { endpoints } from "../../configs/Apis";
 
 const Login = () => {
 
@@ -31,7 +30,7 @@ const Login = () => {
     dispatch(loginStart());
     try {
       const res = await axios.post(
-        endpoints['login'],
+        "http://localhost:8080/trading-platform/login/",
         newUser
       );
       dispatch(loginSuccess(res.data));
