@@ -4,6 +4,7 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -47,6 +48,8 @@ public class Orders implements Serializable {
     @Column(name = "order_date")
     @Temporal(TemporalType.DATE)
     private Date orderDate;
+    @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordersOrderId")
     private Set<Orderdetails> orderdetailsSet;
     @JoinColumn(name = "payments_payment_id", referencedColumnName = "payment_id")
@@ -128,5 +131,5 @@ public class Orders implements Serializable {
     public String toString() {
         return "com.ou.pojo.Orders[ orderId=" + orderId + " ]";
     }
-    
+
 }

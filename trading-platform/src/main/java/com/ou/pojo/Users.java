@@ -4,6 +4,7 @@
  */
 package com.ou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -87,16 +88,21 @@ public class Users implements Serializable {
     private String role;
     @Column(name = "active")
     private Boolean active;
+    @JsonIgnore
+
     @OneToMany(mappedBy = "userId")
     private Set<Comments> commentsSet;
+    @JsonIgnore
+
     @OneToMany(mappedBy = "userId")
     private Set<Orders> ordersSet;
+    @JsonIgnore
+
     @OneToMany(mappedBy = "userId")
     private Set<Store> storeSet;
-    
+
     @Transient
     private MultipartFile file;
-
 
     public Users() {
     }
@@ -228,5 +234,5 @@ public class Users implements Serializable {
     public String toString() {
         return "com.ou.pojo.Users[ userId=" + userId + " ]";
     }
-    
+
 }
