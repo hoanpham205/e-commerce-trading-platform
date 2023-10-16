@@ -5,6 +5,7 @@ import { ProgressBar } from "react-loader-spinner";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import imEmpty from 'validator/lib/isEmpty';
 import Helmet from "../components/Helmet/Helmet";
 import axios, { endpoints } from "../configs/Apis";
 import {
@@ -20,9 +21,25 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [validationMsg, setValidationMsg] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const validateAll = () => {
+    const msg = {};
+    if (imEmpty(username)) {
+      msg.username = "Username is required";
+    }
+    if (imEmpty(password)) {
+      msg.password = "Password is required";
+    }
+    setValidationMsg(msg);
+    if (Object.keys(msg).length > 0) return false;
+    return true;
+  }
   const signIn = async (e) => {
+    const isValid = validateAll();
+    if (!isValid) return;
     e.preventDefault();
     setLoading(true);
     const newUser = { username: username, password: password };
@@ -86,14 +103,16 @@ const Login = () => {
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                     />
+                    <p className="text-danger text-italic ">{validationMsg.username}</p>
                   </FormGroup>
                   <FormGroup className="form__group">
                     <input
                       type="password"
                       placeholder="Enter your password..."
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(e) => setPassword(e.target.value)}f
                     />
+                    <p className="text-danger text-italic ">{validationMsg.password}</p>
                   </FormGroup>
 
                   <button type="submit" className="buy__btn auth__btn">

@@ -1,20 +1,22 @@
 import axios from "axios";
 import cookie from "react-cookies";
 
-const SERVER_CONTEXT = "/trading-platform";
+
 const SERVER = "http://localhost:8080";
 
 export const endpoints = {
-  "categories": `${SERVER_CONTEXT}/api/categories/`,
-  "products": `${SERVER_CONTEXT}/api/allProducts/`,
-  "add-products": `${SERVER_CONTEXT}/api/product/`,
-  "login": `${SERVER_CONTEXT}/api/login/`,
-  "register": `${SERVER_CONTEXT}/api/register/`,
-  "current-user": `${SERVER_CONTEXT}/api/current-user/`,
-  "create-store": `${SERVER_CONTEXT}/api/store/`,
-  "payment": `${SERVER_CONTEXT}/api/pay/`,
-  "delete-product":(id) => `${SERVER_CONTEXT}/api/product/${id}/`,
-  "comment": (id) => `${SERVER_CONTEXT}/product/${id}/comment`,
+  "categories": `${SERVER}/api/categories/`,
+  "products": `${SERVER}/api/products/`,
+  "product-store":(productId) => `${SERVER}/api/product-store/${productId}`,
+  "add-products": `${SERVER}/api/product/`,
+  "login": `${SERVER}/api/signin/`,
+  "register": `${SERVER}/api/signup/`,
+  "current-user": `${SERVER}/api/current-user/`,
+  "create-store": `${SERVER}/api/store/`,
+  "users": `${SERVER}/api/user/`,
+  "payment": `${SERVER}/api/pay/`,
+  "delete-product":(id) => `${SERVER}/api/product/${id}/`,
+  "comment": (id) => `${SERVER}/product/${id}/comment`,
 };
 
 export const authApi = () => {

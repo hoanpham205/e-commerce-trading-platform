@@ -38,7 +38,7 @@ const ProductsList = ({ data, pageSize, shouldShowPagination }) => {
             pageSize={PAGE_SIZE}
             total={totalItems}
             current={currentPage}
-            onChange={(p, _) => handlePageChange(p)}
+            onChange={(p, _) => handlePageChange(p)}           
           />
         </div>
       )}

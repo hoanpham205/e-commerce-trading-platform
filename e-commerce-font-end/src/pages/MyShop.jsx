@@ -15,54 +15,65 @@ const MyShop = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [sortOption, setSortOption] = useState("ascending");
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
   const postId = id || null;
   const nav=useNavigate();
 
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const response = await axios.get(endpoints['products']);
+        const response = await axios.get(endpoints["products"]);
         const products = response.data;
-        const productFind = products.find((p) => p.productId == id);
+        const productFind = products.find((p) => p.productId === id);
         setProductsData(response.data);
         if (productFind) {
-            setProduct(productFind);
-            const filteredRelatedProducts = products.filter(
-                (item) => item.categoriesCategoryId.categoryName === productFind.categoriesCategoryId.categoryName
-            );
-            setRelatedProducts(filteredRelatedProducts);
+          setProduct(productFind);
+          const filteredRelatedProducts = products.filter(
+            (item) =>
+              item.categoriesCategoryId.categoryName ===
+              productFind.categoriesCategoryId.categoryName
+          );
+          setRelatedProducts(filteredRelatedProducts);
         } else {
-            console.error("Product not found with ID:", id);
-          }
-        } catch (error) {
-          console.error("Error fetching products:", error);
+          console.error("Product not found with ID:", id);
         }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+      setLoading(false);
     };
 
     loadProducts();
   }, []);
 
+  const handleEdit = (productId) => {
+
+  }
+
   const handleDeleteProduct = async (productId) => {
-    console.info("Product deleted:", productId);
-    try {
-      // Gọi API để xóa sản phẩm
-      await axios({
-        url: endpoints["delete-product"](productId),
-        method: "DELETE",
-        headers: {
-          Authorization: cookie.load("token"),
-        },
+    const confirmDelete = window.confirm('Are you sure you want to delete this product');
+    if(confirmDelete){
+        try {
+          // Gọi API để xóa sản phẩm
+          await axios({
+            url: endpoints["delete-product"](productId),
+            method: "DELETE",
+            headers: {
+              Authorization: cookie.load("token"),
+            },
+          });
+          nav("/dashboard");
+    
+          // Sau khi xóa sản phẩm thành công, bạn có thể cập nhật danh sách sản phẩm
+          // hoặc thực hiện các thao tác cần thiết tại đây.
+        } catch (error) {
+          console.error("Error deleting product:", error);
+          // Xử lý lỗi nếu cần thiết
+        }
+
+    }
+    else {
         
-      });
-      nav("/sellerDashboard");
-      
-
-      // Sau khi xóa sản phẩm thành công, bạn có thể cập nhật danh sách sản phẩm
-      // hoặc thực hiện các thao tác cần thiết tại đây.
-
-    } catch (error) {
-      console.error("Error deleting product:", error);
-      // Xử lý lỗi nếu cần thiết
     }
   };
 
@@ -80,15 +91,20 @@ const MyShop = () => {
                     <th>Image</th>
                     <th>Title</th>
                     <th>Price</th>
-                    <th>Qty</th>
+                    <th>Count</th>
                     <th>Delete</th>
+                    <th>Edit</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {productsData.map((item, index) => (
+                {loading ? (
+                    <h3 className="py-5 fw-bold text-center">Loaing...</h3>
+                  ) : (
+                    productsData.map((item, index) => (
                     <Tr item={item} key={index} onDeleteProduct={handleDeleteProduct} />
-                  ),)}
+                  ),)
+                  )}
                 </tbody>
               </table>
             )}
@@ -99,22 +115,25 @@ const MyShop = () => {
   );
 };
 
-const Tr = ({ item, onDeleteProduct }) => {
+const Tr = ({ item, onDeleteProduct,onEdit }) => {
 
   return (
     <tr>
       <td>
-        <img src={item.imageUrl} alt="" />
+        <img src={item.productImage[0]} alt="" />
       </td>
       <td>{item.productName}</td>
       <td>${item.price}</td>
-      <td>{item.quantity}px</td>
+      <td>{item.categoryId.name}</td>
       <td>
         <motion.i
           whileTap={{ scale: 1.2 }}
           onClick={() => onDeleteProduct(item.productId)} // Gọi hàm xóa sản phẩm khi người dùng nhấn vào biểu tượng "Xóa"
           className="ri-delete-bin-6-line"
         ></motion.i>
+      </td>
+      <td>
+        <button className="edit" onClick={() => onEdit(item.productId)}><i class="ri-pencil-line"></i></button>
       </td>
     </tr>
   );

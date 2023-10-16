@@ -15,14 +15,14 @@ const cartSlice = createSlice({
     addItem: (state, action) => {
       const newItem = action.payload;
       const existingItem = state.cartItems.find(
-        (item) => item.productId === newItem.productId
+        (item) => item.id === newItem.id
       );
       state.totalQuantity++;
       if (!existingItem) {
         state.cartItems.push({
-          productId: newItem.productId,
+          id: newItem.id,
           productName: newItem.productName,
-          imageUrl: newItem.imageUrl,
+          productImage: newItem.productImage,
           price: newItem.price,
           quantity: 1,
           totalPrice: newItem.price,
@@ -38,12 +38,40 @@ const cartSlice = createSlice({
         0
       );
     },
+    
+    //tăng số lượng sản phẩm
+    incrementQuantity: (state, action) => {
+      const itemId = action.payload;
+      const item = state.cartItems.find((item) => item.id === itemId);
+      if (item) {
+        item.quantity++;
+        item.totalPrice = item.quantity * item.price;
+        
+      }
+      state.totalAmount = state.cartItems.reduce(
+        (total, item) => total + item.totalPrice,
+        0
+      );
+    },
+    decrementQuantity: (state, action) => {
+      const itemId = action.payload;
+      const item = state.cartItems.find((item) => item.id === itemId);
+      if (item && item.quantity > 1) {
+        item.quantity--;
+        item.totalPrice = item.quantity * item.price;
+      }
+      state.totalAmount = state.cartItems.reduce(
+        (total, item) => total + item.totalPrice,
+        0
+      );
+    },
+
     //xoá một sp ra khỏi giỏ hàng
     deleteItem: (state, action) => {
       const id = action.payload;
-      const existingItem = state.cartItems.find((item) => item.productId === id);
+      const existingItem = state.cartItems.find((item) => item.id === id);
       if (existingItem) {
-        state.cartItems = state.cartItems.filter((item) => item.productId !== id);
+        state.cartItems = state.cartItems.filter((item) => item.id !== id);
         state.totalQuantity = state.totalQuantity - existingItem.quantity;
       }
       state.totalAmount = state.cartItems.reduce(
@@ -54,6 +82,7 @@ const cartSlice = createSlice({
     resetTotalQuantity: (state) => {
       state.cartItems  = [];
       state.totalQuantity = 0;
+      state.totalAmount= 0;
     },
   },
 });

@@ -8,12 +8,26 @@ import CommonSection from "../components/UI/CommonSection";
 import axios, { endpoints } from "../configs/Apis";
 import "../styles/checkout.css";
 
-const Checkout = () => {
+const Checkout = (props) => {
+  const {product} = props;
   const [productsData,setProductsData] = useState([])
   const [id,setId] = useState("")
   const [productName,setProductName] = useState("")
   const [price,setPrice] = useState("")
   const [count,setCount] = useState("")
+  const [paidFor,setPaidFor] = useState(false)
+  const [error,setError] = useState(null)
+  
+  const handleApprove= (orderID) =>{
+    
+    setPaidFor(true);
+  };
+  if(paidFor) {
+    alert('Thank you for your purchase')
+  }
+  if(error) {
+    alert(error)
+  }
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -35,7 +49,7 @@ const Checkout = () => {
     body.append("price", price);
     body.append("count", count);
     const res = await axios({
-      url: endpoints['register'],
+      url: endpoints['payments'],
       method: "POST",
       data: body,
       headers: { "Content-Type": "multipart/form-data" },
@@ -69,11 +83,47 @@ const Checkout = () => {
                 <h4>
                   Total Cost: <span>${totalAmount}</span>
                 </h4>
-                <button className="buy__btn auth__btn w-100">
-                  <Link to="/home">Place an order</Link>
+                <h6>Voucher: 
+                  <input type="text" placeholder="Enter your voucher" />
+                </h6>
+                <button className="buy__btn auth__btn w-100" onClick={handleSubmit}>
+                  <Link to="/home">Submit</Link>
                 </button>
-                <PayPalScriptProvider options={{ clientId: "test" }}>
-                  <PayPalButtons className="mt-2" style={{}} />
+                <PayPalScriptProvider options={{ clientId: "AQ9yLHB6AUNt4bxdgZwEatf-J6QppNS4DQxBlZ9UETqI7M0Lf5AQuXVO8C6IvoLNW6jxKuBZqIUx_mX4" }}>
+                  <PayPalButtons onClick={(data,actions)=>{
+                    const hasAlreadyBoughtCourse = false;
+                    if(hasAlreadyBoughtCourse) {
+                      setError('You already bought this course. Please go to your account to view this course');
+                      return actions.reject();
+                    }else {
+                      return actions.resolve();
+                    }
+                  }} className="mt-2" style={{ tagline: false, shape: 'pill'}} createOrder={(data,actions) =>{
+                    return actions.order.create( {
+                      purchase_units: [
+                        {
+                          description: product.description,
+                          amount:{
+                          value: totalAmount
+                          
+                        }
+                        }
+                      ]
+                    })
+                  }}
+                    onApprove={async (data,actions) =>{
+                      const order = await actions.order.capture();
+                      console.log('order: ' , order);
+                      handleApprove(data.orderID);
+                    }}
+                    onError={(error) =>{
+                      setError(error)
+                      console.log('Paypal checkout onError ' , error)
+                    }}
+                    onCancel={()=>{
+                      
+                    }}
+                  />
                 </PayPalScriptProvider>
               </div>
             </Col>

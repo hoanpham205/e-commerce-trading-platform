@@ -8,6 +8,7 @@ import axios, { endpoints } from "../configs/Apis";
 function AddProduct() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [file, setFile] = useState(null);
 
@@ -28,7 +29,8 @@ function AddProduct() {
     const formData = new FormData();
     formData.append("productName", name);
     formData.append("price", price);
-    formData.append("categories", category);
+    formData.append("count", amount);
+    formData.append("cateid", category);
     formData.append("file", file); // Đưa hình ảnh vào FormData
 
     console.log(cookie.load('token'));
@@ -62,6 +64,7 @@ function AddProduct() {
                   onChange={(e) => setName(e.target.value)}
                 />
               </FormGroup>
+              
               <div className="d-flex align-items-center justify-content-between gap-5">
                 <FormGroup className="form__group w-50">
                   <span>Price</span>
@@ -81,11 +84,20 @@ function AddProduct() {
                   >
                     <option value="chair">Chair</option>
                     <option value="sofa">Sofa</option>
-                    <option value="mobile">Mobile</option>
+                    <option value="1">Iphone</option>
                     <option value="watch">Watch</option>
                     <option value="wireless">Wireless</option>
                   </select>
                 </FormGroup>
+                <FormGroup className="form__group">
+                <span>Quantity </span>
+                <input
+                  type="number"
+                  placeholder="Enter amount"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                />
+              </FormGroup>
               </div>
               <div>
                 <FormGroup className="form__group">
@@ -95,7 +107,7 @@ function AddProduct() {
               </div>
               <button
                 type="submit"
-                className="buy__btn auth__btn"
+                className="buy__btn"
                 onClick={handleSubmit}
               >
                 {" "}

@@ -1,61 +1,54 @@
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import cookie from "react-cookies";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import axios, { endpoints } from "../configs/Apis";
 import { cartActions } from "../redux/slices/cartSlice";
 import "../styles/cart.css";
-import  cookie  from "react-cookies";
+import { set } from "react-hook-form";
 
-
-  
 const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
-
   const handlePayment = async () => {
     try {
-  
       // Tạo một đối tượng chứa thông tin thanh toán
       const cartData = {};
 
-    // Duyệt qua danh sách sản phẩm trong giỏ hàng
-    cartItems.forEach(item => {
-      const productId = item.productId;
-      cartData[productId] = {
-        productId: item.productId,
-        name: item.productName,
-        price: item.price,
-        count: item.quantity
-      };
-    });
-      
-  
+      // Duyệt qua danh sách sản phẩm trong giỏ hàng
+      cartItems.forEach((item) => {
+        const id = item.id;
+        cartData[id] = {
+          id: item.id,
+          name: item.productName,
+          price: item.price,
+          count: item.quantity,
+        };
+      });
+
       // Gọi API thanh toán
-      const response = await axios.post(endpoints['payment'], cartData,
-      {headers: {
-        Authorization: cookie.load("token")
-      }});
-  
+      const response = await axios.post(endpoints["payment"], cartData, {
+        headers: {
+          Authorization: cookie.load("token"),
+        },
+      });
+
       // Xử lý kết quả từ máy chủ (nếu cần)
       const data = response.data;
       console.log("Payment Result:", data);
       dispatch(cartActions.resetTotalQuantity());
-      navigate('/');
+      navigate("/");
     } catch (error) {
       console.error("Error processing payment:", error);
     }
   };
-
-  
-
-  
 
   return (
     <Helmet title="Cart">
@@ -81,7 +74,7 @@ const Cart = () => {
                   <tbody>
                     {cartItems.map((item, index) => (
                       <Tr item={item} key={index} />
-                    ),)}
+                    ))}
                   </tbody>
                 </table>
               )}
@@ -97,7 +90,7 @@ const Cart = () => {
                 taxes and shipping will calculate in checkout
               </p>
               <div>
-                <button className="buy__btn w-100" onClick={handlePayment}>
+                <button className="buy__btn w-100" onClick={handlePayment} >
                   PayMent
                 </button>
                 <PayPalScriptProvider options={{ clientId: "test" }}>
@@ -117,16 +110,26 @@ const Cart = () => {
 const Tr = ({ item }) => {
   const dispatch = useDispatch();
   const deleteProduct = () => {
-    dispatch(cartActions.deleteItem(item.productId));
+    dispatch(cartActions.deleteItem(item.id));
+  };
+  const incrementQuantity = () => {
+    dispatch(cartActions.incrementQuantity(item.id));
+  };
+  const decrementQuantity = () => {
+    dispatch(cartActions.decrementQuantity(item.id));
   };
   return (
     <tr>
       <td>
-        <img src={item.imageUrl} alt="" />
+        <img src={item.productImage} alt="" />
       </td>
       <td>{item.productName}</td>
       <td>${item.price}</td>
-      <td>{item.quantity}px</td>
+      <td>
+        <button className="btn-amount" onClick={incrementQuantity}><i class="ri-arrow-drop-up-line"></i></button>
+        {item.quantity}
+        <button className="btn-amount" onClick={decrementQuantity}><i class="ri-arrow-drop-down-line"></i></button>
+      </td>
       <td>
         <motion.i
           whileTap={{ scale: 1.2 }}
