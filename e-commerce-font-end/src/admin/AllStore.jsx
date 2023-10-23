@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import axios, { endpoints } from "../configs/Apis";
 
-const Users = () => {
+const AllStore = () => {
 
     const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
@@ -20,7 +20,7 @@ const Users = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const response = await axios.get(endpoints["users"]);
+        const response = await axios.get(endpoints["all-store"]);
         const products = response.data;
         console.log(products);
         const productFind = products.find((p) => p.id == id);
@@ -77,16 +77,16 @@ const Users = () => {
         <Row>
           <Col lg="12">
             {userData.length === 0 ? (
-              <h2>No user in the shop</h2>
+              <h2>No store in the shop</h2>
             ) : (
               <table className="table bordered">
                 <thead>
                   <tr>
-                    <th>Image</th>
-                    <th>User Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
+                    <th>Store Name</th>
+                    <th>Address</th>
                     <th>Delete</th>
+                    <th>Active</th>
+                    <th>Revenue</th>
                   </tr>
                 </thead>
 
@@ -109,20 +109,22 @@ const Users = () => {
 };
 
 const Tr = ({ item, onDeleteProduct }) => {
-
+    const active = (
+        (item.active == 1) ? <button className="btn btn-success" >Active</button> : <button className="btn btn-danger" >Pending</button>
+    )
     return (
       <tr>
-        <td>
-          <img src={item.avatar} alt="" />
-        </td>
-        <td>{item.username}</td>
-        <td>{item.email}</td>
-        <td>{item.phone}</td>
+        <td> {item.storeName}</td>
+        <td>{item.adress}</td>
         <td>
         <button className="btn btn-danger" onClick={() => onDeleteProduct(item.id)}>Delete</button>
+        </td>
+        <td>{active}</td>
+        <td>
+        <span ><i class="ri-bar-chart-2-line"></i></span>
         </td>
       </tr>
     );
   };
 
-export default Users;
+export default AllStore;

@@ -11,6 +11,8 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    applyDiscount: (state, action) => {
+      const discountAmount = action.payload;},
     // thêm sanpham
     addItem: (state, action) => {
       const newItem = action.payload;

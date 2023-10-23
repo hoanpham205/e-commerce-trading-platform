@@ -21,20 +21,16 @@ function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // // Kiểm tra xem các trường cần thiết đã được điền đầy đủ hay chưa
-    // if (!name || !price || !category || !selectedImage) {
-    //   return alert("Please fill out all the fields");
-    // }
+    
 
     const formData = new FormData();
     formData.append("productName", name);
     formData.append("price", price);
     formData.append("count", amount);
     formData.append("cateid", category);
-    formData.append("file", file); // Đưa hình ảnh vào FormData
+    formData.append("file", file); 
 
     console.log(cookie.load('token'));
-    // Gọi API để tạo sản phẩm
     await axios({
       url: endpoints["add-products"],
       method: "POST",
@@ -44,7 +40,7 @@ function AddProduct() {
         Authorization: cookie.load("token"),
       },
     });
-    navigate("/");
+    navigate("/sellerDashboard");
     toast.success("Add Product Sucessfully");
   };
 
@@ -82,11 +78,11 @@ function AddProduct() {
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                   >
-                    <option value="chair">Chair</option>
-                    <option value="sofa">Sofa</option>
-                    <option value="1">Iphone</option>
-                    <option value="watch">Watch</option>
-                    <option value="wireless">Wireless</option>
+                    <option value="1">Smart Phone</option>
+                    <option value="11">Wireless</option>
+                    <option value="3">Iphone</option>
+                    <option value="4">Sofa</option>
+                    <option value="8">Chair</option>
                   </select>
                 </FormGroup>
                 <FormGroup className="form__group">

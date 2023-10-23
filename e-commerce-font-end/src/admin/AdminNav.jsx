@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Container, Row } from "react-bootstrap";
 import cookie from "react-cookies";
 import { useSelector } from "react-redux";
-import  { endpoints } from "../configs/Apis";
-import "../styles/admin-nav.css";
 import { NavLink } from "react-router-dom";
+import { endpoints } from "../configs/Apis";
+import "../styles/admin-nav.css";
 
 const admin__nav = [
   {
@@ -17,16 +17,12 @@ const admin__nav = [
     path: "/dashboard/chart",
   },
   {
-    display: "All-Products",
-    path: "/dashboard/all-products",
-  },
-  {
-    display: "Orders",
-    path: "/dashboard/orders",
-  },
-  {
     display: "Users",
     path: "/dashboard/users",
+  },
+  {
+    display: "Stores",
+    path: "/dashboard/all-stores",
   },
 ];
 

@@ -8,6 +8,7 @@ import {
     Tooltip,
 } from 'chart.js';
 import React from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
 import { Bar } from 'react-chartjs-2';
 
 ChartJS.register(
@@ -27,7 +28,7 @@ const options = {
     },
     title: {
       display: true,
-      text: 'Chart.js Bar Chart',
+      text: 'Shop HT',
     },
   },
 };
@@ -39,7 +40,7 @@ const data = {
   datasets: [
     
     {
-      label: 'Dataset 2',
+      label: 'revenue',
       data: labels.map(() => Math.floor(Math.random() * 1000)), // Thay faker bằng dữ liệu ngẫu nhiên từ 0 đến 1000
       backgroundColor: 'rgba(53, 162, 235, 0.5)',
     },
@@ -47,7 +48,17 @@ const data = {
 };
 
 const Chart = () => {
-    return <Bar options={options} data={data} />;
+    return(
+      <section>
+        <Container>
+          <Row>
+            <Col lg ='12'>
+              <Bar options={options} data={data} />;
+            </Col>
+          </Row>
+        </Container>
+      </section>
+    ) 
 }
 
 export default Chart;

@@ -155,7 +155,6 @@ const Header = () => {
                         <i class="ri-login-box-line"></i> Login
                       </Link>
                       <Link to="/signup">Sign Up</Link>
-                      <Link to="/dashboard-admin">Dashboard</Link>
                     </div>
                   )}
                 </div>

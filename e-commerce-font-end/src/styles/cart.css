@@ -19,3 +19,13 @@ td,th{
     align-items: center;
     justify-content: center;
 }
+.voucher__btn {
+    background: rgb(229, 104, 14);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 70%;
+}

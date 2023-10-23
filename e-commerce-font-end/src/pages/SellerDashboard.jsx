@@ -8,6 +8,12 @@ const SellerDashboard = () => {
   const [sortValue, setSortValue] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [productsData, setProductsData] = useState([]);
+  const [showHeader, setShowHeader] = useState(true);
+
+  const hideHeader = () => {
+    setShowHeader(false);
+    console.log('ádas');
+  };
 
   const handleFilter = (e) => {
     const selectedValue = e.target.value;
@@ -15,7 +21,7 @@ const SellerDashboard = () => {
   };
 
   const handleSort = (e) => {
-    const selectedValue = e.target.value;
+    const selectedValue = e.target.value; 
     setSortValue(selectedValue);
   };
 
@@ -37,11 +43,12 @@ const SellerDashboard = () => {
             <NavLink to="add" className={"text-black"}>
               <ListGroup.Item>Add Product</ListGroup.Item>
             </NavLink>
-            <ListGroup.Item>Users</ListGroup.Item>
           </ListGroup>
         </Col>
         <Col lg="8">
-          <Outlet></Outlet>
+        {showHeader ? <h1>{showHeader}</h1> : <div>hahahaha</div>}
+        <Outlet onNavigate={hideHeader}></Outlet>
+         
         </Col>
       </Row>
     </Container>

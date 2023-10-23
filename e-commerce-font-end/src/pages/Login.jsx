@@ -64,8 +64,7 @@ const Login = () => {
       cookie.save("user", userDataRes.data);
 
       dispatch(loginSuccess(userDataRes.data));
-
-      navigate("/home");
+      (userDataRes.data.roleId.roleName === "ADMIN") ? navigate("/dashboard"):navigate("/home");
       setLoading(false);
       toast.success("User signed in successfully");
     } catch (e) {

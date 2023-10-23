@@ -77,6 +77,7 @@ const ProductDetails = () => {
     const process = async () => {
       try {
         let { data } = await authApi().post(endpoints[`comment`]);
+        console.log(data);
       } catch (ex) {
         console.error(ex);
       }

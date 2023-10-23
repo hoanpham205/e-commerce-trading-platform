@@ -17,11 +17,56 @@ const Checkout = (props) => {
   const [count,setCount] = useState("")
   const [paidFor,setPaidFor] = useState(false)
   const [error,setError] = useState(null)
+
+  const [show, setShow] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [ErrorMessage, setErrorMessage] = useState("");
+    const [orderID, setOrderID] = useState(false);
+
+    // creates a paypal order
+    const createOrder = (data, actions) => {
+      console.log('data: ' , data);
+        return actions.order.create({
+            purchase_units: [
+                {
+                    description: productName,
+                    amount: {
+                        currency_code: "USD",
+                        value: 20,
+                    },
+                },
+            ],
+        }).then((orderID) => {
+                setOrderID(orderID);
+                return orderID;
+            });
+    };
+
+    // check Approval
+    const onApprove = (data, actions) => {
+      console.log('data: ' , data);
+        return actions.order.capture().then(function (details) {
+            const { payer } = details;
+            setSuccess(true);
+        });
+    };
+
+    //capture likely error
+    const onError = (data, actions) => {
+        setErrorMessage("An Error occured with your payment ");
+    };
+
+    useEffect(() => {
+        if (success) {
+            alert("Payment successful!!");
+            console.log('Order successful . Your order id is--', orderID);
+        }
+    },[success]);
   
-  const handleApprove= (orderID) =>{
+  // const handleApprove= (orderID) =>{
     
-    setPaidFor(true);
-  };
+  //   setPaidFor(true);
+  // };
   if(paidFor) {
     alert('Thank you for your purchase')
   }
@@ -56,7 +101,9 @@ const Checkout = (props) => {
     });
     
   };
-
+  const handleClick = () => {
+    console.log('click');
+  }
 
 
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
@@ -89,8 +136,9 @@ const Checkout = (props) => {
                 <button className="buy__btn auth__btn w-100" onClick={handleSubmit}>
                   <Link to="/home">Submit</Link>
                 </button>
+                ádasdas
                 <PayPalScriptProvider options={{ clientId: "AQ9yLHB6AUNt4bxdgZwEatf-J6QppNS4DQxBlZ9UETqI7M0Lf5AQuXVO8C6IvoLNW6jxKuBZqIUx_mX4" }}>
-                  <PayPalButtons onClick={(data,actions)=>{
+                  {/* <PayPalButtons onClick={(data,actions)=>{
                     const hasAlreadyBoughtCourse = false;
                     if(hasAlreadyBoughtCourse) {
                       setError('You already bought this course. Please go to your account to view this course');
@@ -104,7 +152,8 @@ const Checkout = (props) => {
                         {
                           description: product.description,
                           amount:{
-                          value: totalAmount
+                          value: 20,
+                          currency_code: 'USD'
                           
                         }
                         }
@@ -123,7 +172,13 @@ const Checkout = (props) => {
                     onCancel={()=>{
                       
                     }}
-                  />
+                  /> */}
+                  <PayPalButtons
+                        style={{ layout: "vertical" }}
+                        createOrder={createOrder}
+                        onClick={handleClick}
+                        onApprove={onApprove}
+                    />
                 </PayPalScriptProvider>
               </div>
             </Col>

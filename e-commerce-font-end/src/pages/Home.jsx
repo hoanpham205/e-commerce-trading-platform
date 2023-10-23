@@ -25,7 +25,7 @@ const Home = () => {
       console.log(products);
 
       const filterdTrendingProducts = products.filter(
-        (item) => item.categoryId.name === "SamSung"
+        (item) => item.categoryId.name === "SmartPhone"
       );
       const filterdBestSalesProducts = products.filter(
         (item) => item.categoryId.name === "Sofa"
