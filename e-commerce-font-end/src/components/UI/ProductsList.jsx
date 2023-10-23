@@ -1,29 +1,39 @@
 import { Pagination } from "antd";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { endpoints } from "../../configs/Apis";
 import ProductCard from "./ProductCard";
-const PAGE_SIZE = 8;
 
 const ProductsList = ({ data, pageSize, shouldShowPagination }) => {
   const [totalPage, setTotalPage] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [dataShow, setDataShow] = useState([]);
+  const {p} = useParams();
+
+  const fetchData = async (page) => {
+    try {
+      const response = await axios.get(endpoints.page(page));
+      const { listProduct, totalPage } = response.data;
+
+      setTotalItems(totalPage * listProduct.length);
+      setTotalPage(totalPage);
+      setDataShow(listProduct);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    const count = data.length;
-    const pageCount = Math.ceil(count / PAGE_SIZE);
-
-    setTotalItems(count);
-    setTotalPage(pageCount);
-    handlePageChange(1);
-  }, [data]);
+    fetchData(currentPage); // Fetch data for page 2.
+  }, [p, currentPage]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-
-    const temp = data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-    setDataShow(temp);
+    fetchData(page);
   };
+
 
   return (
     <>
@@ -35,10 +45,10 @@ const ProductsList = ({ data, pageSize, shouldShowPagination }) => {
           <Pagination
             className="d-flex align-items-center"
             responsive={true}
-            pageSize={PAGE_SIZE}
+            pageSize={dataShow.length}
             total={totalItems}
             current={currentPage}
-            onChange={(p, _) => handlePageChange(p)}
+            onChange={(page, pageSize) => handlePageChange(page)}           
           />
         </div>
       )}

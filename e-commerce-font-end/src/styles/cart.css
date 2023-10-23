@@ -9,3 +9,23 @@ td i {
 td,th{
     color: var(--primary-color);
 }
+.btn-amount{
+    width: 30px;
+    height: 20px;
+    outline: none;
+    background: none;
+    border: 1px solid rgb(182, 166, 166);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.voucher__btn {
+    background: rgb(229, 104, 14);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 70%;
+}

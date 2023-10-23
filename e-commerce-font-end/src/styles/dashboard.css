@@ -1,0 +1,16 @@
+.revenue__box , .orders__box, .products__box, .users__box {
+    padding: 20px;
+    border-radius: 5px;
+}
+.revenue__box {
+    background: rgb(240, 169, 169);
+}
+.orders__box {
+    background: rgb(184, 240, 169);
+}
+.products__box {
+    background: rgb(169, 178, 240);
+}
+.users__box {
+    background: rgb(238, 240, 169);
+}

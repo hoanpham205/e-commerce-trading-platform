@@ -31,13 +31,13 @@ const ShopCreate = () => {
     // Lấy token từ local storage sau khi người dùng đăng nhập
     const token = cookie.load("token");
     if (!token) {
-      toast.error("Vui lòng đăng nhập để tạo cửa hàng.");
+      toast.error("Please login to create a store.");
       setLoading(false);
       return;
     }
     const shopData = {
       storeName: shopname,
-      description: address,
+      adress: address,
     };
     try {
       const response = await axios.post(
@@ -49,16 +49,11 @@ const ShopCreate = () => {
           },
         }
       );
-      if (response.status === 200) {
-        toast.success("Create Shop Success.");
-        navigate("/shop-login");
-      } else {
-        toast.error("Can not create shop.");
-      }
-    } catch (error) {
-      console.error("Error sending request:", error);
-      toast.error("Error not create shop.");
-
+    } catch (e) {
+      setLoading(false);
+      console.error("Waiting for response...");
+      toast.error("Waiting for response..");
+      navigate("/shop-login");
       // Xử lý lỗi ở đây, ví dụ hiển thị thông báo lỗi cho người dùng
     } finally {
       setLoading(false);
@@ -114,7 +109,7 @@ const ShopCreate = () => {
                   </button>
 
                   <p>
-                    Already have account? <Link to="/shop-login">Login</Link>
+                    Already have account? <Link to="/">Login</Link>
                   </p>
                 </Form>
               </Col>

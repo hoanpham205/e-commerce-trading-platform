@@ -2,6 +2,9 @@ import React from "react";
 
 import { Navigate, Route, Routes } from "react-router-dom";
 
+import AddProducts from "../admin/AddProducts";
+import AllProducts from "../admin/AllProducts";
+import Users from "../admin/Users";
 import AddProduct from "../pages/AddProduct";
 import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
@@ -13,9 +16,13 @@ import SellerDashboard from "../pages/SellerDashboard";
 import Shop from "../pages/Shop";
 import ShopCreatePage from "../pages/ShopCreatePage";
 
+import Chart from "../admin/Chart";
+import Dashboard from "../admin/Dashboard";
+import MyShop from "../pages/MyShop";
 import ShopLoginPage from "../pages/ShopLoginPage";
 import Signup from "../pages/Signup";
 import ProtectedRoute from "./ProtectedRoute";
+import AllStore from "../admin/AllStore";
 //import SellerDashboard from '../pages/SellerDashboard'
 
 function Routers() {
@@ -31,6 +38,7 @@ function Routers() {
       
       <Route path="/sellerDashboard" element={<SellerDashboard />}>
         <Route path="add" element={<AddProduct />} />
+        <Route path="my-shop" element={<MyShop />} />
       </Route>
       <Route path="/shop-login" element={<ShopLoginPage />} />
       {/* <Route
@@ -41,11 +49,17 @@ function Routers() {
             </SellerProtectedRoute>
           }
         /> */}
-
+      
 
       <Route path="/*" element={<ProtectedRoute />}>
         {/* {auth.login.role === "admin" ? <></> : auth.login.role === "store" ? <></> : <></>} */}
-      <Route path="checkout" element={<Checkout />} />
+      
+      <Route path="dashboard" element={<Dashboard />} />
+      <Route path="dashboard/add-products" element={<AddProducts />} />
+      <Route path="dashboard/chart" element={<Chart />} />
+      <Route path="dashboard/all-products" element={<AllProducts />} />
+      <Route path="dashboard/all-stores" element={<AllStore />} />
+      <Route path="dashboard/users" element={<Users />} />
 
         {/* <Route path="seller/addproduct" element={<AddProduct />} /> */}
       </Route>

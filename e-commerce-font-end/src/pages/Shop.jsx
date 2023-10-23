@@ -1,21 +1,24 @@
-import axios from "../configs/Apis";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import ProductsList from "../components/UI/ProductsList";
-import { endpoints } from "../configs/Apis";
+import axios, { endpoints } from "../configs/Apis";
 import "../styles/shop.css";
 
 const Shop = () => {
+  const [allProducts, setAllProducts] = useState([]); 
   const [productsData, setProductsData] = useState([]);
   const [sortOption, setSortOption] = useState("ascending");
+  
 
   useEffect(() => {
     const loadProducts = async () => {
       try {
         const response = await axios.get(endpoints['products']);
+        setAllProducts(response.data);
         setProductsData(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -25,40 +28,42 @@ const Shop = () => {
   }, []);
   const handleFilter = (e) => {
     const filterValue = e.target.value;
-    if (filterValue === "sofa") {
-      const filteredProducts = productsData.filter(
-        (item) => item.category === "sofa"
+    let filteredProducts = [...allProducts];
+    if (filterValue === "Sofa") {
+       filteredProducts = productsData.filter(
+        (item) => item.categoryId.name === "Sofa"
       );
       setProductsData(filteredProducts);
     }
-    if (filterValue === "mobile") {
-      const filteredProducts = productsData.filter(
-        (item) => item.category === "mobile"
+    if (filterValue === "Iphone") {
+       filteredProducts = allProducts.filter(
+        (item) => item.categoryId.name === "Iphone"
       );
       setProductsData(filteredProducts);
     }
     if (filterValue === "chair") {
-      const filteredProducts = productsData.filter(
-        (item) => item.category === "chair"
+      const filteredProducts = allProducts.filter(
+        (item) => item.categoryId.name === "chair"
       );
       setProductsData(filteredProducts);
     }
     if (filterValue === "watch") {
-      const filteredProducts = productsData.filter(
-        (item) => item.category === "watch"
+      const filteredProducts = allProducts.filter(
+        (item) => item.categoryId.name === "watch"
       );
       setProductsData(filteredProducts);
     }
     if (filterValue === "wireless") {
-      const filteredProducts = productsData.filter(
-        (item) => item.category === "wireless"
+      const filteredProducts = allProducts.filter(
+        (item) => item.categoryId.name === "wireless"
       );
       setProductsData(filteredProducts);
     }
+    setProductsData(filteredProducts);
   };
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
-    const searchedProducts = productsData.filter((item) =>
+    const searchedProducts = allProducts.filter((item) =>
       item.productName.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setProductsData(searchedProducts);
@@ -66,13 +71,14 @@ const Shop = () => {
   const handleSort = (e) => {
     const sortValue = e.target.value;
     setSortOption(sortValue);
-    let sortedProducts = [...productsData];
+    let sortedProducts = [...allProducts];
     if (sortValue === "ascending") {
       sortedProducts = sortedProducts.sort((a, b) => a.price - b.price);
     } else if (sortValue === "descending") {
       sortedProducts = sortedProducts.sort((a, b) => b.price - a.price);
     }
     setProductsData(sortedProducts);
+
   };
 
   return (
@@ -85,8 +91,8 @@ const Shop = () => {
               <div className="filter__widget">
                 <select onChange={handleFilter}>
                   <option>Filter by Category</option>
-                  <option value="sofa">Sofa</option>
-                  <option value="mobile">Mobile</option>
+                  <option value="Sofa">Sofa</option>
+                  <option value="Iphone">Iphone</option>
                   <option value="chair">Chair</option>
                   <option value="watch">Watch</option>
                   <option value="wireless">Wireless</option>

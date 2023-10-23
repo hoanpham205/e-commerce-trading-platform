@@ -11,6 +11,8 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    applyDiscount: (state, action) => {
+      const discountAmount = action.payload;},
     // thêm sanpham
     addItem: (state, action) => {
       const newItem = action.payload;
@@ -22,7 +24,7 @@ const cartSlice = createSlice({
         state.cartItems.push({
           id: newItem.id,
           productName: newItem.productName,
-          imgUrl: newItem.imgUrl,
+          productImage: newItem.productImage,
           price: newItem.price,
           quantity: 1,
           totalPrice: newItem.price,
@@ -38,6 +40,34 @@ const cartSlice = createSlice({
         0
       );
     },
+    
+    //tăng số lượng sản phẩm
+    incrementQuantity: (state, action) => {
+      const itemId = action.payload;
+      const item = state.cartItems.find((item) => item.id === itemId);
+      if (item) {
+        item.quantity++;
+        item.totalPrice = item.quantity * item.price;
+        
+      }
+      state.totalAmount = state.cartItems.reduce(
+        (total, item) => total + item.totalPrice,
+        0
+      );
+    },
+    decrementQuantity: (state, action) => {
+      const itemId = action.payload;
+      const item = state.cartItems.find((item) => item.id === itemId);
+      if (item && item.quantity > 1) {
+        item.quantity--;
+        item.totalPrice = item.quantity * item.price;
+      }
+      state.totalAmount = state.cartItems.reduce(
+        (total, item) => total + item.totalPrice,
+        0
+      );
+    },
+
     //xoá một sp ra khỏi giỏ hàng
     deleteItem: (state, action) => {
       const id = action.payload;
@@ -52,7 +82,9 @@ const cartSlice = createSlice({
       );
     },
     resetTotalQuantity: (state) => {
+      state.cartItems  = [];
       state.totalQuantity = 0;
+      state.totalAmount= 0;
     },
   },
 });

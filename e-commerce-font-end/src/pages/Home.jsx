@@ -7,7 +7,7 @@ import heroImg from "../assets/img/hero-img.png";
 import Helmet from "../components/Helmet/Helmet";
 import Clock from "../components/UI/Clock";
 import ProductsList from "../components/UI/ProductsList";
-import axios, { endpoints } from "../configs/Apis";
+import axios from "../configs/Apis";
 import Services from "../services/Services";
 import "../styles/home.css";
 const Home = () => {
@@ -20,24 +20,26 @@ const Home = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get(endpoints["products"]);
+      const response = await axios.get('http://localhost:8080/api/products/');
       const products = response.data;
+      console.log(products);
 
       const filterdTrendingProducts = products.filter(
-        (item) => item.categoriesCategoryId.categoryName === "chair"
+        (item) => item.categoryId.name === "SmartPhone"
       );
       const filterdBestSalesProducts = products.filter(
-        (item) => item.categoriesCategoryId.categoryName === "sofa"
+        (item) => item.categoryId.name === "Sofa"
       );
       const filterdMobileProducts = products.filter(
-        (item) => item.categoriesCategoryId.categoryName === "mobile"
+        (item) => item.categoryId.name === "Iphone"
       );
       const filterdWirelessProducts = products.filter(
-        (item) => item.categoriesCategoryId.categoryName === "wireless"
+        (item) => item.categoryId.name === "Chair"
       );
       const filterdPopularProducts = products.filter(
-        (item) => item.categoriesCategoryId.categoryName === "watch"
+        (item) => item.categoryId.name === "wireless"
       );
+      console.log(filterdWirelessProducts)
       setTrendingProducts(filterdTrendingProducts);
       setBestSalesProducts(filterdBestSalesProducts);
       setMobileProducts(filterdMobileProducts);

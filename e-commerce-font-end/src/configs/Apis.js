@@ -1,26 +1,35 @@
 import axios from "axios";
 import cookie from "react-cookies";
 
-const SERVER_CONTEXT = "/trading-platform";
+
 const SERVER = "http://localhost:8080";
 
 export const endpoints = {
-    "categories": `${SERVER_CONTEXT}/api/categories/`,
-    "products": `${SERVER_CONTEXT}/api/allProducts/`,
-    "login": `${SERVER_CONTEXT}/api/login/`,
-    "register": `${SERVER_CONTEXT}/api/register/`,
-    "current-user": `${SERVER_CONTEXT}/api/current-user/`,
-    "create-store": `${SERVER_CONTEXT}/api/store/`,
-    comment: (id) => `${SERVER_CONTEXT}/product/${id}/comment`,
+  "categories": `${SERVER}/api/categories/`,
+  "products": `${SERVER}/api/products/`,
+  "product-store":(id) => `${SERVER}/api/product-store/${id}`,
+  "add-products": `${SERVER}/api/product/`,
+  "login": `${SERVER}/api/signin/`,
+  "register": `${SERVER}/api/signup/`,
+  "current-user": `${SERVER}/api/current-user/`,
+  "voucher":(code)=> `${SERVER}/api/voucher/code/?code=${code}`,
+  "create-store": `${SERVER}/api/store/`,
+  "all-store": `${SERVER}/api/stores/`,
+  "users": `${SERVER}/api/users/`,
+  "payment": `${SERVER}/api/pay/`,
+  "delete-product":(id) => `${SERVER}/api/product/${id}`,
+  "comment": (id) => `${SERVER}/product/${id}/comment`,
+  "page": (page) =>`${SERVER}/api/product/?page=${page}`,
+
 };
 
 export const authApi = () => {
-    return axios.create({
-        baseURL: SERVER,
-        headers: {
-            Authorization: cookie.load("token"),
-        },
-    });
+  return axios.create({
+    baseURL: SERVER,
+    headers: {
+      Authorization: cookie.load("token"),
+    },
+  });
 };
 
 // export const loginUser = async (user,dispatch, navigate) => {
@@ -28,5 +37,5 @@ export const authApi = () => {
 // }
 
 export default axios.create({
-    baseURL: SERVER,
+  baseURL: SERVER,
 });

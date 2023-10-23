@@ -1,42 +1,43 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import cookie from "react-cookies";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Helmet from "../components/Helmet/Helmet";
 import CommentBox from "../components/UI/CommentBox";
 import CommonSection from "../components/UI/CommonSection";
+import ProductsList from "../components/UI/ProductsList";
 import axios, { authApi, endpoints } from "../configs/Apis";
 import { cartActions } from "../redux/slices/cartSlice";
 import "../styles/product-details.css";
-import ProductsList from "../components/UI/ProductsList";
 
 const ProductDetails = () => {
   const [tab, setTab] = useState("desc");
   const reviewUser = useRef("");
   const reviewMsg = useRef("");
   const dispatch = useDispatch();
-  const [relatedProducts,setRelatedProducts] = useState()
-
+  const [relatedProducts, setRelatedProducts] = useState();
+  const [currentUser, setCurrentUser] = useState(cookie.load("store") || null);
   const [rating, setRating] = useState(null);
   const { id } = useParams();
   const [product, setProduct] = useState();
   const [sortOption, setSortOption] = useState("ascending");
+  const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
 
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const response = await axios.get(endpoints["products"]);
+        const response = await axios.get(endpoints["product-store"](id));
         const products = response.data;
-        const productFind = products.find((p) => p.productId == id);
+        //const productFind = products.find((p) => p.id == id);
+        setProduct(products);
 
-        setProduct(productFind);
-
-    const filterdRelatedProducts = products.filter(
-      (item) => item.categoriesCategoryId.categoryName === productFind.categoriesCategoryId.categoryName
-    );
-    setRelatedProducts(filterdRelatedProducts);
+      //    const filterdRelatedProducts = products.filter(
+      //      (item) => item.id === products.id
+      //    );
+      //  setRelatedProducts(filterdRelatedProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -44,6 +45,23 @@ const ProductDetails = () => {
 
     loadProducts();
   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(endpoints["current-user"], {
+          headers: {
+            Authorization: cookie.load("token"),
+          },
+        });
+        setCurrentUser(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu người dùng:", error);
+      }
+    };
+
+    if (isLoggedIn) fetchData();
+  }, [isLoggedIn]);
   // const relatedProducts = products.filter((item) => item.categoriesCategoryId.categoryName === productsData.categoriesCategoryId.categoryName);
   const submitHandler = (e) => {
     e.preventDefault();
@@ -59,6 +77,7 @@ const ProductDetails = () => {
     const process = async () => {
       try {
         let { data } = await authApi().post(endpoints[`comment`]);
+        console.log(data);
       } catch (ex) {
         console.error(ex);
       }
@@ -68,21 +87,14 @@ const ProductDetails = () => {
   const addToCart = () => {
     dispatch(
       cartActions.addItem({
-        id,
-        image: product.imageUrl,
+        id: product.id,
+        productImage: product.productImage,
         productName: product.productName,
         price: product.price,
       })
     );
     toast.success("Product added successfully");
   };
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, [product]);
-
-  useEffect(() => {
-    const loadComment = () => {};
-  });
 
   return (
     <>
@@ -93,7 +105,7 @@ const ProductDetails = () => {
             <Container>
               <Row>
                 <Col lg="6">
-                  <img src={product.imageUrl} alt="" />
+                  <img src={product.productImage[0]} alt="" />
                 </Col>
                 <Col lg="6">
                   <div className="product__details">
@@ -121,8 +133,7 @@ const ProductDetails = () => {
                     <div className="d-flex align-items-center gap-5 mb-3">
                       <span className="product__price">${product.price}</span>
                       <span>
-                        Category:{" "}
-                        {product.categoriesCategoryId.categoryName.toUpperCase()}
+                        Category: {product.categoryId.name.toUpperCase()}
                       </span>
                     </div>
                     <p>{product.shortDesc}</p>
@@ -134,6 +145,28 @@ const ProductDetails = () => {
                       Add to Cart
                     </motion.button>
                   </div>
+                </Col>
+              </Row>
+            </Container>
+          </section>
+
+          <section>
+            <Container>
+              <Row>
+                <Col lg='2'>
+                  <div className="d-flex align-items-center justify-content-end gap-1 mb-3 ">
+                    <img
+                      className="avatar__shop"
+                      src={product.store.userId.avatar}
+                      alt=""
+                    />
+                  </div>
+                </Col>
+                <Col >
+                <div className="infor__shop">
+                  <h4 >{product.store.storeName}</h4>
+                  <span>{product.store.adress}</span>      
+                </div>
                 </Col>
               </Row>
             </Container>
@@ -176,7 +209,7 @@ const ProductDetails = () => {
                 <Col lg="12" className="mt-5">
                   <h2 className="related__title">You might also like</h2>
                 </Col>
-                <ProductsList data={relatedProducts} />
+                {/* //<ProductsList data={relatedProducts} /> */}
               </Row>
             </Container>
           </section>
